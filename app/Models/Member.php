@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['user_id', 'birth_date'])]
 class Member extends Model
@@ -22,5 +23,10 @@ class Member extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function memberships(): HasMany
+    {
+        return $this->hasMany(MemberMembership::class, 'member_id', 'user_id');
     }
 }

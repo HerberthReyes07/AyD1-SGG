@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['role_id', 'first_name', 'last_name', 'email', 'password', 'phone_number', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
@@ -46,5 +47,20 @@ class User extends Authenticatable
     public function member(): HasOne
     {
         return $this->hasOne(Member::class, 'user_id', 'id');
+    }
+
+    public function registeredFreezes(): HasMany
+    {
+        return $this->hasMany(MembershipFreeze::class, 'registered_by', 'id');
+    }
+
+    public function authorizedPromotions(): HasMany
+    {
+        return $this->hasMany(Promotion::class, 'authorized_by', 'id');
+    }
+
+    public function registeredPayments(): HasMany
+    {
+        return $this->hasMany(MembershipPayment::class, 'registered_by', 'id');
     }
 }
