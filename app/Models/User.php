@@ -7,15 +7,19 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['role_id', 'first_name', 'last_name', 'email', 'password', 'phone_number', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -28,5 +32,55 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    public function trainer(): HasOne
+    {
+        return $this->hasOne(Trainer::class, 'user_id', 'id');
+    }
+
+    public function member(): HasOne
+    {
+        return $this->hasOne(Member::class, 'user_id', 'id');
+    }
+
+    public function registeredFreezes(): HasMany
+    {
+        return $this->hasMany(MembershipFreeze::class, 'registered_by', 'id');
+    }
+
+    public function authorizedPromotions(): HasMany
+    {
+        return $this->hasMany(Promotion::class, 'authorized_by', 'id');
+    }
+
+    public function registeredPayments(): HasMany
+    {
+        return $this->hasMany(MembershipPayment::class, 'registered_by', 'id');
+    }
+
+    public function registeredGuestPasses(): HasMany
+    {
+        return $this->hasMany(GuestPass::class, 'registered_by', 'id');
+    }
+
+    public function trainerAssignments(): HasMany
+    {
+        return $this->hasMany(TrainerAssignment::class, 'assigned_by', 'id');
+    }
+
+    public function definedCalorieGoals(): HasMany
+    {
+        return $this->hasMany(CalorieGoal::class, 'defined_by', 'id');
+    }
+
+    public function changedMembershipStatuses(): HasMany
+    {
+        return $this->hasMany(MembershipStatusHistory::class, 'changed_by', 'id');
     }
 }
