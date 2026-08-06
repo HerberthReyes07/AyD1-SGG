@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trainer_specialties', function (Blueprint $table) {
+        Schema::create('nutritional_observations', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150)->unique();
-            $table->string('description', 255)->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->date('date');
+            $table->text('observation');
+            $table->foreignId('trainer_assignment_id')->constrained()->restrictOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trainer_specialties');
+        Schema::dropIfExists('nutritional_observations');
     }
 };

@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CalorieGoal::class, 'defined_by', 'id');
     }
+
+    public function changedMembershipStatuses(): HasMany
+    {
+        return $this->hasMany(MembershipStatusHistory::class, 'changed_by', 'id');
+    }
 }

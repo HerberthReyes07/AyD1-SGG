@@ -47,4 +47,9 @@ class TrainerAssignment extends Model
     {
         return $this->hasMany(TrainerRating::class, 'trainer_assignment_id', 'id');
     }
+
+    public function nutritionalObservations(): HasMany
+    {
+        return $this->hasMany(NutritionalObservation::class, 'trainer_assignment_id', 'id');
+    }
 }

@@ -40,4 +40,9 @@ class MemberMembership extends Model
     {
         return $this->hasMany(MembershipPayment::class, 'member_membership_id', 'id');
     }
+
+    public function statusHistories(): HasMany
+    {
+        return $this->hasMany(MembershipStatusHistory::class, 'member_membership_id', 'id');
+    }
 }
