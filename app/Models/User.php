@@ -73,4 +73,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TrainerAssignment::class, 'assigned_by', 'id');
     }
+
+    public function definedCalorieGoals(): HasMany
+    {
+        return $this->hasMany(CalorieGoal::class, 'defined_by', 'id');
+    }
 }

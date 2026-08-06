@@ -49,4 +49,14 @@ class Member extends Model
     {
         return $this->hasMany(TrainerAssignment::class, 'member_id', 'user_id');
     }
+
+    public function meals(): HasMany
+    {
+        return $this->hasMany(Meal::class, 'member_id', 'user_id');
+    }
+
+    public function calorieGoals(): HasMany
+    {
+        return $this->hasMany(CalorieGoal::class, 'member_id', 'user_id');
+    }
 }
