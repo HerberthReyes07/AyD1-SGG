@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GuestPass::class, 'registered_by', 'id');
     }
+
+    public function trainerAssignments(): HasMany
+    {
+        return $this->hasMany(TrainerAssignment::class, 'assigned_by', 'id');
+    }
 }

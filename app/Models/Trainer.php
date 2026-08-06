@@ -28,4 +28,9 @@ class Trainer extends Model
         return $this->hasMany(GroupClass::class, 'trainer_id', 'user_id');
     }
 
+    public function trainerAssignments(): HasMany
+    {
+        return $this->hasMany(TrainerAssignment::class, 'trainer_id', 'user_id');
+    }
+
 }

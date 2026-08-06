@@ -44,4 +44,9 @@ class Member extends Model
     {
         return $this->hasMany(Attendance::class, 'member_id', 'user_id');
     }
+
+    public function trainerAssignments(): HasMany
+    {
+        return $this->hasMany(TrainerAssignment::class, 'member_id', 'user_id');
+    }
 }
