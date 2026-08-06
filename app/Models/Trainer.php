@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['user_id', 'specialty_id'])]
 class Trainer extends Model
@@ -21,4 +22,10 @@ class Trainer extends Model
     {
         return $this->belongsTo(TrainerSpecialty::class, 'specialty_id', 'id');
     }
+
+    public function groupClasses(): HasMany
+    {
+        return $this->hasMany(GroupClass::class, 'trainer_id', 'user_id');
+    }
+
 }

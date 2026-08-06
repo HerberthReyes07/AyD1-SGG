@@ -29,4 +29,19 @@ class Member extends Model
     {
         return $this->hasMany(MemberMembership::class, 'member_id', 'user_id');
     }
+
+    public function classEnrollments(): HasMany
+    {
+        return $this->hasMany(ClassEnrollment::class, 'member_id', 'user_id');
+    }
+
+    public function classWaitlists(): HasMany
+    {
+        return $this->hasMany(ClassWaitlist::class, 'member_id', 'user_id');
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class, 'member_id', 'user_id');
+    }
 }

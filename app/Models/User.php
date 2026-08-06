@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MembershipPayment::class, 'registered_by', 'id');
     }
+
+    public function registeredGuestPasses(): HasMany
+    {
+        return $this->hasMany(GuestPass::class, 'registered_by', 'id');
+    }
 }

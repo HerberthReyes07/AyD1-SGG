@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'description'])]
-class MembershipStatus extends Model
+class ClassCategory extends Model
 {
-    public function memberships(): HasMany
+    public function groupClasses(): HasMany
     {
-        return $this->hasMany(MemberMembership::class, 'status_id', 'id');
+        return $this->hasMany(GroupClass::class, 'category_id', 'id');
     }
 }
