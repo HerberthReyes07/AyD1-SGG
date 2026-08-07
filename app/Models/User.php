@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\TwoFactorChannel;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -21,11 +22,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -82,5 +78,56 @@ class User extends Authenticatable
     public function changedMembershipStatuses(): HasMany
     {
         return $this->hasMany(MembershipStatusHistory::class, 'changed_by', 'id');
+    }
+
+
+    public function twoFactorCode(): HasOne
+    {
+        return $this->hasOne(TwoFactorCode::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------
+    | Métodos de 2FA
+    |--------------------------------------------------------------------
+    */
+
+  
+    public function generateTwoFactorCode(TwoFactorChannel $channel): string
+    {
+        // random_int es criptográficamente seguro (a diferencia de rand()).
+        $code = (string) random_int(100000, 999999);
+
+        // updateOrCreate: si ya existia un código para este usuario, lo
+        // sobreescribe; si no, crea el registro. Así solo hay un código
+        // "vigente" por usuario en la tabla en todo momento.
+        $this->twoFactorCode()->updateOrCreate(
+            ['user_id' => $this->id],
+            [
+                'code' => $code,
+                'channel' => $channel,
+                'expires_at' => now()->addMinutes(10),
+            ]
+        );
+
+        return $code;
+    }
+
+    /*
+      Verifica el código ingresado contra el registro guardado en
+      two_factor_codes (delegado a TwoFactorCode::isValid()).
+     */
+    public function hasValidTwoFactorCode(string $code): bool
+    {
+        return $this->twoFactorCode?->isValid($code) ?? false;
+    }
+
+    /*
+      Borra el registro de two_factor_codes una vez usado (o para
+      invalidarlo manualmente).
+     */
+    public function clearTwoFactorCode(): void
+    {
+        $this->twoFactorCode()->delete();
     }
 }
