@@ -21,6 +21,8 @@ class FoodCatalogTest extends TestCase
     {
         parent::setUp();
 
+        $this->withoutVite();
+
         $this->adminRole = Role::create([
             'name' => 'admin',
             'description' => 'Administrador',
