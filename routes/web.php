@@ -3,6 +3,7 @@
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GuestPassController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,6 +48,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::patch('/foods/{food}/toggle-status', [FoodController::class, 'toggleStatus'])
         ->name('foods.toggle-status');
+});
+
+Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
+    Route::get('/guest-passes', [GuestPassController::class, 'index'])
+        ->name('guest-passes.index');
+
+    Route::get('/guest-passes/create', [GuestPassController::class, 'create'])
+        ->name('guest-passes.create');
+
+    Route::post('/guest-passes', [GuestPassController::class, 'store'])
+        ->name('guest-passes.store');
 });
 
 

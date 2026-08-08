@@ -30,6 +30,15 @@
                     </x-nav-link>
                 @endif
 
+                @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
+                    <x-nav-link
+                        :href="route('guest-passes.index')"
+                        :active="request()->routeIs('guest-passes.*')"
+                    >
+                        Pases de invitado
+                    </x-nav-link>
+                @endif
+
             </div>
 
             <!-- Settings Dropdown (desktop) -->
