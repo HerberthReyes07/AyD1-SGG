@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MemberController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -36,11 +38,18 @@ Route::middleware('guest')->group(function () {
 });
 
 
-use App\Http\Controllers\EmployeeController;
 
 Route::middleware('guest')->group(function () {
+    // --- Employess Management Routes ---
     Route::resource('employees', EmployeeController::class);
     Route::post('employees/{id}/activate/', [EmployeeController::class, 'activate'])->name('employees.activate');
+    // ---
+    // --- Member Management Routes ---
+    Route::resource('members', MemberController::class);
+    Route::post('members/{id}/activate/', [MemberController::class, 'activate'])->name('members.activate');
+    // ---
+
+
 });
 
 Route::middleware('auth')->group(function () {

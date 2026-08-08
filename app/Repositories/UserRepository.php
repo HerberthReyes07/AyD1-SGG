@@ -13,6 +13,18 @@ class UserRepository
     }
 
     /**
+     * Get all members with their relations.
+     */
+    public function getMembers()
+    {
+        return User::whereHas('role', function ($query) {
+            $query->whereIn('name', ['member']);
+        })
+        ->with(['role'])
+        ->get();
+    }
+
+    /**
      * Get all employees (trainers and receptionists) with their relations.
      */
     public function getEmployees()
