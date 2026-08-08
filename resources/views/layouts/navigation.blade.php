@@ -13,9 +13,23 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <!-- Navigation Links -->
             <div class="navbar-nav me-auto">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+
+                <x-nav-link
+                    :href="route('dashboard')"
+                    :active="request()->routeIs('dashboard')"
+                >
+                    Dashboard
                 </x-nav-link>
+
+                @if (Auth::user()->role?->name === 'admin')
+                    <x-nav-link
+                        :href="route('foods.index')"
+                        :active="request()->routeIs('foods.*')"
+                    >
+                        Catalogo de Alimentos
+                    </x-nav-link>
+                @endif
+
             </div>
 
             <!-- Settings Dropdown (desktop) -->
@@ -23,7 +37,7 @@
                 <x-dropdown align="right">
                     <x-slot name="trigger">
                         <button class="btn btn-light d-flex align-items-center">
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <svg class="ms-1" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -50,7 +64,7 @@
             <!-- Responsive Settings Options (mobile, dentro del collapse) -->
             <div class="d-sm-none pt-3 border-top mt-3">
                 <div class="px-2">
-                    <div class="fw-medium">{{ Auth::user()->name }}</div>
+                    <div class="fw-medium">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
                     <div class="text-muted small">{{ Auth::user()->email }}</div>
                 </div>
 
