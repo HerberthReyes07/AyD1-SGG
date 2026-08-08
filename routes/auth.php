@@ -36,7 +36,11 @@ Route::middleware('guest')->group(function () {
 });
 
 
-Route::middleware('admin')->group(function () {
+use App\Http\Controllers\EmployeeController;
+
+Route::middleware('guest')->group(function () {
+    Route::resource('employees', EmployeeController::class);
+    Route::post('employees/{id}/activate/', [EmployeeController::class, 'activate'])->name('employees.activate');
 });
 
 Route::middleware('auth')->group(function () {
