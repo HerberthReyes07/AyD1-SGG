@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Enums\Weekday;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['weekday', 'start_time', 'group_class_id'])]
 class GroupClassSchedule extends Model
@@ -14,13 +14,15 @@ class GroupClassSchedule extends Model
     {
         return [
             'weekday' => Weekday::class,
-            'start_time' => 'time',
         ];
     }
 
     public function groupClass(): BelongsTo
     {
-        return $this->belongsTo(GroupClass::class, 'group_class_id', 'id');
+        return $this->belongsTo(
+            GroupClass::class,
+            'group_class_id',
+            'id'
+        );
     }
-
 }

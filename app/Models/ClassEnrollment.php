@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['enrollment_date', 'member_id', 'status', 'class_session_id'])]
 class ClassEnrollment extends Model
@@ -32,6 +33,15 @@ class ClassEnrollment extends Model
     public function classRatings(): HasMany
     {
         return $this->hasMany(ClassRating::class, 'class_enrollment_id', 'id');
+    }
+
+        public function classRating(): HasOne
+    {
+        return $this->hasOne(
+            ClassRating::class,
+            'class_enrollment_id',
+            'id'
+        );
     }
 
 }

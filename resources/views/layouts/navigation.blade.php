@@ -39,6 +39,50 @@
                     </x-nav-link>
                 @endif
 
+                @if (Auth::user()->role?->name === 'admin')
+                    <x-nav-link
+                        :href="route('group-classes.index')"
+                        :active="request()->routeIs('group-classes.*')"
+                    >
+                        Clases grupales
+                    </x-nav-link>
+
+                    <x-nav-link
+                    :href="route('group-class-reports.index')"
+                    :active="request()->routeIs('group-class-reports.*')"
+                >
+                    Reportes de clases
+                </x-nav-link>
+                @endif
+
+
+                @if (Auth::user()->role?->name === 'member')
+
+                    <x-nav-link
+                        :href="route('member-classes.index')"
+                        :active="request()->routeIs('member-classes.index')"
+                    >
+                        Clases disponibles
+                    </x-nav-link>
+
+                    <x-nav-link
+                        :href="route('member-classes.history')"
+                        :active="request()->routeIs('member-classes.history')"
+                    >
+                        Historial de clases
+                    </x-nav-link>
+
+                @endif
+
+                        @if (Auth::user()->role?->name === 'trainer')
+                <x-nav-link
+                    :href="route('trainer-classes.index')"
+                    :active="request()->routeIs('trainer-classes.*')"
+                >
+                    Mis clases
+                </x-nav-link>
+            @endif
+
             </div>
 
             <!-- Settings Dropdown (desktop) -->
