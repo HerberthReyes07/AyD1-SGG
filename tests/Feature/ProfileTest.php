@@ -28,7 +28,9 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
+                'phone_number' => '55555555',
                 'email' => 'test@example.com',
             ]);
 
@@ -38,19 +40,41 @@ class ProfileTest extends TestCase
 
         $user->refresh();
 
-        $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame(
+            'Test',
+            $user->first_name
+        );
+
+        $this->assertSame(
+            'User',
+            $user->last_name
+        );
+
+        $this->assertSame(
+            '55555555',
+            $user->phone_number
+        );
+
+        $this->assertSame(
+            'test@example.com',
+            $user->email
+        );
+
+        $this->assertNull(
+            $user->email_verified_at
+        );
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
+    public function test_email_verification_status_is_unchanged_when_email_is_unchanged(): void
     {
         $user = User::factory()->create();
 
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'phone_number' => $user->phone_number,
                 'email' => $user->email,
             ]);
 
@@ -58,7 +82,9 @@ class ProfileTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        $this->assertNotNull($user->refresh()->email_verified_at);
+        $this->assertNotNull(
+            $user->refresh()->email_verified_at
+        );
     }
 
     public function test_user_can_delete_their_account(): void
@@ -76,7 +102,13 @@ class ProfileTest extends TestCase
             ->assertRedirect('/');
 
         $this->assertGuest();
-        $this->assertNull($user->fresh());
+
+        $this->assertSoftDeleted(
+            'users',
+            [
+                'id' => $user->id,
+            ]
+        );
     }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
@@ -91,9 +123,18 @@ class ProfileTest extends TestCase
             ]);
 
         $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
+            ->assertSessionHasErrorsIn(
+                'userDeletion',
+                'password'
+            )
             ->assertRedirect('/profile');
 
-        $this->assertNotNull($user->fresh());
+        $this->assertDatabaseHas(
+            'users',
+            [
+                'id' => $user->id,
+                'deleted_at' => null,
+            ]
+        );
     }
 }
