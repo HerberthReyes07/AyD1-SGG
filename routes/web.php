@@ -11,6 +11,8 @@ use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberClassController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainerClassController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -213,6 +215,14 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/class-sessions/{session}/enrollments/{member}/cancel',
         [ClassEnrollmentController::class, 'cancel']
     )->name('class-enrollments.cancel');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Memberships & Payments
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('memberships', MembershipController::class);
+    Route::resource('payments', PaymentController::class);
 });
 
 /*

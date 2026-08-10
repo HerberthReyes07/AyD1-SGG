@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Role;
+use App\Models\Member;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -56,6 +57,11 @@ class MemberService
 
             $user = $this->userRepository->create($userData);
 
+            Member::create([
+                'user_id' => $user->id,
+                'birth_date' => $data['birth_date'],
+            ]);
+
             return $user;
         });
     }
@@ -96,6 +102,13 @@ class MemberService
             }
 
             $this->userRepository->update($user->id, $userData);
+
+            if (isset($data['birth_date'])) {
+                $user->member()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    ['birth_date' => $data['birth_date']]
+                );
+            }
 
             return $user;
         });

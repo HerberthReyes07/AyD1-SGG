@@ -40,6 +40,13 @@
                             <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
                         </div>
 
+                        <!-- Birth Date -->
+                        <div class="mb-3">
+                            <x-input-label for="birth_date" :value="__('Fecha de Nacimiento')" />
+                            <x-text-input id="birth_date" name="birth_date" type="date" class="mt-1 d-block w-100" :value="old('birth_date')" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('birth_date')" />
+                        </div>
+
                         <!-- Password -->
                         <div class="mb-3">
                             <x-input-label for="password" :value="__('Contraseña')" />

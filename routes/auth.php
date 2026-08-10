@@ -39,7 +39,7 @@ Route::middleware('guest')->group(function () {
 
 
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     // --- Employess Management Routes ---
     Route::resource('employees', EmployeeController::class);
     Route::post('employees/{id}/activate/', [EmployeeController::class, 'activate'])->name('employees.activate');
@@ -51,6 +51,10 @@ Route::middleware('guest')->group(function () {
 
 
 });
+
+Route::middleware(['auth', 'role:receptionist'])->group(function () {
+
+});    
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
