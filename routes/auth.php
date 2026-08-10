@@ -37,21 +37,6 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
-
-
-Route::middleware('guest')->group(function () {
-    // --- Employess Management Routes ---
-    Route::resource('employees', EmployeeController::class);
-    Route::post('employees/{id}/activate/', [EmployeeController::class, 'activate'])->name('employees.activate');
-    // ---
-    // --- Member Management Routes ---
-    Route::resource('members', MemberController::class);
-    Route::post('members/{id}/activate/', [MemberController::class, 'activate'])->name('members.activate');
-    // ---
-
-
-});
-
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)

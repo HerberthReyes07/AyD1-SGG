@@ -22,8 +22,11 @@ class AuthenticatedSessionController extends Controller
         //Valida email y password sin iniciar sesion
         $request->authenticate();
 
-        //se Busca al usuario para generarle su código de 2FA después.
         $user = User::where('email', $request->string('email'))->firstOrFail();
+
+        if (! config('auth.two_factor.enabled')) {
+            return $this->completeLogin($request, $user);
+        }
 
         //se  guarda como "pendiente de verificación" en sesión.
         $request->session()->put('two_factor.user_id', $user->id);
@@ -31,6 +34,15 @@ class AuthenticatedSessionController extends Controller
 
         //se mandamos a elegir el canal e ingresar el código.
         return redirect()->route('two-factor.challenge');
+    }
+
+    private function completeLogin(Request $request, User $user): RedirectResponse
+    {
+        Auth::login($user, $request->boolean('remember'));
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function destroy(Request $request): RedirectResponse

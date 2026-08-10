@@ -13,4 +13,15 @@ class Role extends Model
     {
         return $this->hasMany(User::class, 'role_id', 'id');
     }
+
+    public function label(): string
+    {
+        return match ($this->name) {
+            'admin' => 'Administrador',
+            'receptionist' => 'Recepcionista',
+            'trainer' => 'Entrenador',
+            'member' => 'Socio',
+            default => $this->name,
+        };
+    }
 }

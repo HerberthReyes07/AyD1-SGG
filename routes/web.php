@@ -11,6 +11,9 @@ use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberClassController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainerClassController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TrainerAssignmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -168,6 +171,48 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         '/group-classes/{groupClass}/sessions/{session}/cancel',
         [ClassSessionController::class, 'cancel']
     )->name('class-sessions.cancel');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employee and member management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('employees', EmployeeController::class);
+
+    Route::post(
+        '/employees/{id}/activate/',
+        [EmployeeController::class, 'activate']
+    )->name('employees.activate');
+
+    Route::resource('members', MemberController::class);
+
+    Route::post(
+        '/members/{id}/activate/',
+        [MemberController::class, 'activate']
+    )->name('members.activate');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Trainer assignments
+    |--------------------------------------------------------------------------
+    */
+    Route::get(
+        'trainer-assignments/{trainerAssignment}/reassign',
+        [TrainerAssignmentController::class, 'reassignCreate']
+    )->name('trainer-assignments.reassign.create');
+
+    Route::post(
+        'trainer-assignments/{trainerAssignment}/reassign',
+        [TrainerAssignmentController::class, 'reassignStore']
+    )->name('trainer-assignments.reassign.store');
+
+    Route::get(
+        'trainer-assignments/history',
+        [TrainerAssignmentController::class, 'history']
+    )->name('trainer-assignments.history');
+
+    Route::resource('trainer-assignments', TrainerAssignmentController::class);
 });
 
 /*
@@ -286,4 +331,4 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
