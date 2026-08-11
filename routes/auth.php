@@ -10,9 +10,9 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MemberController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -37,24 +37,6 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
 
-
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    // --- Employess Management Routes ---
-    Route::resource('employees', EmployeeController::class);
-    Route::post('employees/{id}/activate/', [EmployeeController::class, 'activate'])->name('employees.activate');
-    // ---
-    // --- Member Management Routes ---
-    Route::resource('members', MemberController::class);
-    Route::post('members/{id}/activate/', [MemberController::class, 'activate'])->name('members.activate');
-    // ---
-
-
-});
-
-Route::middleware(['auth', 'role:receptionist'])->group(function () {
-
-});    
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');

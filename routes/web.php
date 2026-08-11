@@ -3,16 +3,18 @@
 use App\Http\Controllers\ClassEnrollmentController;
 use App\Http\Controllers\ClassRatingController;
 use App\Http\Controllers\ClassSessionController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\GroupClassController;
 use App\Http\Controllers\GroupClassReportController;
 use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberClassController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TrainerClassController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TrainerClassController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -170,6 +172,35 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         '/group-classes/{groupClass}/sessions/{session}/cancel',
         [ClassSessionController::class, 'cancel']
     )->name('class-sessions.cancel');
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Employee management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('employees', EmployeeController::class);
+
+    Route::post(
+        '/employees/{id}/activate',
+        [EmployeeController::class, 'activate']
+    )->name('employees.activate');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Member management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('members', MemberController::class);
+
+    Route::post(
+        '/members/{id}/activate',
+        [MemberController::class, 'activate']
+    )->name('members.activate');
 });
 
 /*
@@ -221,8 +252,8 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
     | Memberships & Payments
     |--------------------------------------------------------------------------
     */
-    Route::resource('memberships', MembershipController::class);
-    Route::resource('payments', PaymentController::class);
+    Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'show', 'destroy']);
+    Route::resource('payments', PaymentController::class)->only(['index', 'create', 'store', 'show']);
 });
 
 /*
@@ -296,4 +327,4 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

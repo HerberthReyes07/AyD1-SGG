@@ -36,7 +36,14 @@
                         <!-- Phone -->
                         <div class="mb-3">
                             <x-input-label for="phone_number" :value="__('Teléfono')" />
-                            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 d-block w-100" :value="old('phone_number')" />
+                            <x-text-input
+                                id="phone_number"
+                                name="phone_number"
+                                type="text"
+                                inputmode="tel"
+                                oninput="this.value = this.value.replace(/[^0-9+\-() ]/g, '')"
+                                class="mt-1 d-block w-100"
+                                :value="old('phone_number')" />
                             <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
                         </div>
 

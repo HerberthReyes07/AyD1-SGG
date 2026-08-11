@@ -31,7 +31,7 @@ class MemberController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'phone_number' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|regex:/^[0-9+\-() ]+$/|max:20',
             'password' => 'required|string|min:6',
             'birth_date' => 'required|date|before:today',
         ]);
@@ -52,7 +52,7 @@ class MemberController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'phone_number' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|regex:/^[0-9+\-() ]+$/|max:20',
             'password' => 'nullable|string|min:6',
             'birth_date' => 'required|date|before:today',
             'is_active' => 'required|in:0,1',
