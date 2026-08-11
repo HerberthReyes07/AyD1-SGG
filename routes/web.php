@@ -14,6 +14,7 @@ use App\Http\Controllers\TrainerClassController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TrainerAssignmentController;
+use App\Http\Controllers\Trainer\AssignmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -323,6 +324,17 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         '/trainer/classes/sessions/{session}/complete',
         [TrainerClassController::class, 'complete']
     )->name('trainer-classes.complete');
+
+    // Ver socios asignados al entrenador
+    Route::get(
+        '/trainer/assignments',
+        [AssignmentController::class, 'index']
+    )->name('assignments.index');
+
+    Route::get(
+        '/trainer/assignments/history',
+        [AssignmentController::class, 'history']
+    )->name('assignments.history');
 });
 
 /*

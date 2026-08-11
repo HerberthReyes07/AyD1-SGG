@@ -1,4 +1,47 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
+@php
+    $roleName = Auth::user()->role?->name;
+
+    $navbarThemes = [
+        'admin' => [
+            'navbar' => 'navbar-dark bg-primary border-primary',
+            'dropdown' => 'badge text-bg-light',
+            'mobileName' => 'text-white',
+            'mobileEmail' => 'text-white-50',
+            'mobileBorder' => 'border-light',
+        ],
+        'receptionist' => [
+            'navbar' => 'navbar-dark bg-success border-success',
+            'dropdown' => 'badge text-bg-light',
+            'mobileName' => 'text-white',
+            'mobileEmail' => 'text-white-50',
+            'mobileBorder' => 'border-light',
+        ],
+        'trainer' => [
+            'navbar' => 'navbar-dark bg-info border-info',
+            'dropdown' => 'badge text-bg-light',
+            'mobileName' => 'text-white',
+            'mobileEmail' => 'text-white-50',
+            'mobileBorder' => 'border-light',
+        ],
+        'member' => [
+            'navbar' => 'navbar-dark bg-warning border-warning',
+            'dropdown' => 'badge text-bg-light',
+            'mobileName' => 'text-white',
+            'mobileEmail' => 'text-white-50',
+            'mobileBorder' => 'border-light',
+        ],
+    ];
+
+    $theme = $navbarThemes[$roleName] ?? [
+        'navbar' => 'navbar-light bg-white border-bottom',
+        'dropdown' => 'btn btn-light',
+        'mobileName' => 'text-dark',
+        'mobileEmail' => 'text-muted',
+        'mobileBorder' => 'border-bottom',
+    ];
+@endphp
+
+<nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
     <div class="container-fluid px-4">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('dashboard') }}">
@@ -73,6 +116,10 @@
                 <x-nav-link :href="route('trainer-classes.index')" :active="request()->routeIs('trainer-classes.*')">
                     Mis clases
                 </x-nav-link>
+
+                <x-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')">
+                    Mis socios asignados
+                </x-nav-link>
                 @endif
 
             </div>
@@ -81,7 +128,7 @@
             <div class="navbar-nav ms-auto d-none d-sm-flex">
                 <x-dropdown align="right">
                     <x-slot name="trigger">
-                        <button class="btn btn-light d-flex align-items-center">
+                        <button class="{{ $theme['dropdown'] }} d-flex align-items-center">
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <svg class="ms-1" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -93,14 +140,14 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Mi Perfil') }}
                         </x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -108,10 +155,10 @@
             </div>
 
             <!-- Responsive Settings Options (mobile, dentro del collapse) -->
-            <div class="d-sm-none pt-3 border-top mt-3">
+            <div class="d-sm-none pt-3 mt-3 border-top {{ $theme['mobileBorder'] }}">
                 <div class="px-2">
-                    <div class="fw-medium">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-                    <div class="text-muted small">{{ Auth::user()->email }}</div>
+                    <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                    <div class="small {{ $theme['mobileEmail'] }}">{{ Auth::user()->email }}</div>
                 </div>
 
                 <div class="navbar-nav mt-2">

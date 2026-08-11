@@ -39,7 +39,6 @@ class TrainerAssignmentController extends Controller
      */
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'member_id' => 'required|exists:members,user_id',
             'trainer_id' => 'required|exists:trainers,user_id',

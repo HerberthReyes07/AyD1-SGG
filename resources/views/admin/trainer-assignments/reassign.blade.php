@@ -8,7 +8,7 @@
                 </small>
             </div>
 
-            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-secondary">
                 {{ __('Volver al listado') }}
             </a>
         </div>

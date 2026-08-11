@@ -9,7 +9,7 @@
             </div>
 
             <div class="d-flex gap-2">
-                <a href="{{ route('trainer-assignments.history') }}" class="btn btn-outline-info">
+                <a href="{{ route('trainer-assignments.history') }}" class="btn btn-info">
                     {{ __('Historial') }}
                 </a>
                 <a href="{{ route('trainer-assignments.create') }}" class="btn btn-primary">
