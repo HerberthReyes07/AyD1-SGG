@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupClassReportController;
 use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberClassController;
+use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainerClassController;
 use Illuminate\Support\Facades\Route;
@@ -246,6 +247,30 @@ Route::middleware(['auth', 'role:member'])->group(function () {
         '/my-classes/enrollments/{enrollment}/rating',
         [ClassRatingController::class, 'store']
     )->name('member-classes.rating.store');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Meal tracking
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/my-meals', [MemberMealController::class, 'index'])
+        ->name('member-meals.index');
+
+    Route::get('/my-meals/create', [MemberMealController::class, 'create'])
+        ->name('member-meals.create');
+
+    Route::post('/my-meals', [MemberMealController::class, 'store'])
+        ->name('member-meals.store');
+
+    Route::get('/my-meals/{meal}/edit', [MemberMealController::class, 'edit'])
+        ->name('member-meals.edit');
+
+    Route::put('/my-meals/{meal}', [MemberMealController::class, 'update'])
+        ->name('member-meals.update');
+
+    Route::delete('/my-meals/{meal}', [MemberMealController::class, 'destroy'])
+        ->name('member-meals.destroy');
 });
 
 /*
