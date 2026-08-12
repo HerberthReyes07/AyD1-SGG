@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClassEnrollmentController;
 use App\Http\Controllers\ClassRatingController;
 use App\Http\Controllers\ClassSessionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\GroupClassController;
 use App\Http\Controllers\GroupClassReportController;
@@ -29,9 +30,7 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})
+Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
