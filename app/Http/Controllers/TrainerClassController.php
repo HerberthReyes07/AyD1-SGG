@@ -172,6 +172,20 @@ class TrainerClassController extends Controller
                 $enrollment->update([
                     'status' => $status,
                 ]);
+
+                if (
+                    $status ===
+                    ClassEnrollmentStatus::Attended->value
+                ) {
+                    $enrollment->classAttendance()->firstOrCreate(
+                        [],
+                        [
+                            'check_in_at' => now(),
+                        ]
+                    );
+                } else {
+                    $enrollment->classAttendance()->delete();
+                }
             }
         });
 

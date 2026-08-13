@@ -19,6 +19,7 @@ use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\MeasurementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClassAttendanceReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/group-classes/reports', [GroupClassReportController::class, 'index'])
         ->name('group-class-reports.index');
+
+        Route::get(
+        '/group-classes/attendance-report',
+        [ClassAttendanceReportController::class, 'index']
+    )->name('class-attendance-reports.index');
 
     /*
     |--------------------------------------------------------------------------

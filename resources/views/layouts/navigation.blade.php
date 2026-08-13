@@ -96,7 +96,16 @@
                     :active="request()->routeIs('group-class-reports.*')">
                     Reportes de clases
                 </x-nav-link>
+
+                <x-nav-link
+                    :href="route('class-attendance-reports.index')"
+                    :active="request()->routeIs('class-attendance-reports.*')"
+                >
+                    Asistencia por clase
+                </x-nav-link>
                 @endif
+
+                
 
 
                 @if (Auth::user()->role?->name === 'member')

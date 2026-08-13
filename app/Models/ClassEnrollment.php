@@ -44,4 +44,13 @@ class ClassEnrollment extends Model
         );
     }
 
+    public function classAttendance(): HasOne
+    {
+        return $this->hasOne(
+            ClassAttendance::class,
+            'class_enrollment_id',
+            'id'
+        );
+    }
+
 }
