@@ -110,6 +110,13 @@
                     Historial de clases
                 </x-nav-link>
 
+                    <x-nav-link
+                        :href="route('member-meals.index')"
+                        :active="request()->routeIs('member-meals.*')"
+                    >
+                        Mis comidas
+                    </x-nav-link>
+
                 @endif
 
                 @if (Auth::user()->role?->name === 'trainer')
