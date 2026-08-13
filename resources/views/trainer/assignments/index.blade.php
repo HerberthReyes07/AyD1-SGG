@@ -33,6 +33,7 @@
                                     <th class="py-3">{{ __('Teléfono') }}</th>
                                     <th class="py-3">{{ __('Objetivo') }}</th>
                                     <th class="py-3">{{ __('Fecha de asignación') }}</th>
+                                    <th class="px-4 py-3 text-end">{{ __('Acciones') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,6 +54,14 @@
                                     </td>
                                     <td>
                                         {{ $assignment->assignment_date?->format('d/m/Y') ?? '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1 flex-nowrap">
+                                            <a href="{{ route('assignments.show', $assignment) }}"
+                                                class="btn btn-sm btn-outline-primary">
+                                                Ver detalle
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty

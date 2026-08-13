@@ -133,4 +133,23 @@ class TrainerAssignmentService
             ->get();
     }
 
+    public function getMeasuresForAssignment(TrainerAssignment $trainerAssignment)
+    {
+        return $trainerAssignment->periodicMeasurements()
+            ->orderByDesc('date')
+            ->get();
+    }
+
+    public function register(int $trainerAssignmentId, array $validated): void
+    {
+        $trainerAssignment = TrainerAssignment::findOrFail($trainerAssignmentId);
+
+        $trainerAssignment->periodicMeasurements()->create([
+            'date' => $validated['date'],
+            'weight' => $validated['weight'],
+            'waist_measurement' => $validated['waist_measurement'] ?? null,
+            'arm_measurement' => $validated['arm_measurement'] ?? null,
+            'leg_measurement' => $validated['leg_measurement'] ?? null,
+        ]);
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\Trainer\AssignmentController;
+use App\Http\Controllers\Trainer\MeasurementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -335,6 +336,16 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         '/trainer/assignments/history',
         [AssignmentController::class, 'history']
     )->name('assignments.history');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}',
+        [AssignmentController::class, 'show']
+    )->name('assignments.show');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/measurements',
+        [MeasurementController::class, 'store']
+    )->name('assignments.measurements.store');
 });
 
 /*
