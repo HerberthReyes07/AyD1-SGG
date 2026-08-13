@@ -44,7 +44,7 @@
                                         <td>{{ $employee->phone_number ?? '-' }}</td>
                                         <td>
                                             <span class="badge bg-secondary">
-                                                {{ ucfirst($employee->role->name) }}
+                                                {{ ucfirst($employee->role->label()) }}
                                             </span>
                                         </td>
                                         <td>
