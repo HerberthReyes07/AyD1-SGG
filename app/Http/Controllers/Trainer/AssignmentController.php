@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Trainer;
 
 use App\Services\TrainerAssignmentService;
+use App\Services\RoutineService;
 use App\Models\TrainerAssignment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ class AssignmentController extends Controller
 
     public function __construct(
         private readonly TrainerAssignmentService $trainerAssignmentService,
+        private readonly RoutineService $routineService,
     ) {}
 
     /**
@@ -32,19 +34,13 @@ class AssignmentController extends Controller
 
     public function show(TrainerAssignment $trainerAssignment)
     {
-        if (! $this->trainerAssignmentService->isActive($trainerAssignment)) {
-            return redirect()->route('assignments.index')
-                ->with('error', 'Esta asignación ya no está activa.');
-        }
+        abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
 
-        if ($trainerAssignment->trainer_id !== Auth::id()) {
-            return redirect()->route('assignments.index')
-                ->with('error', 'No tienes permiso para ver esta asignación.');
-        }
-
+        $trainerAssignment->load(['member.user']);
         $measurements = $this->trainerAssignmentService->getMeasuresForAssignment($trainerAssignment);
+        $routines = $this->routineService->getForAssignment($trainerAssignment->id);
 
-        return view('trainer.assignments.show', compact('trainerAssignment', 'measurements'));
+        return view('trainer.assignments.show', compact('trainerAssignment', 'measurements', 'routines'));
     }
 
     public function store(Request $request, TrainerAssignment $trainerAssignment)

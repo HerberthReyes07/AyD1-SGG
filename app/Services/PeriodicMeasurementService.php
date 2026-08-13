@@ -25,4 +25,15 @@ class PeriodicMeasurementService
             'leg_measurement' => $data['leg_measurement'] ?? null,
         ]);
     }
+
+    public function getHistoryForMember(int $memberId): Collection
+    {
+        return PeriodicMeasurement::whereHas('trainerAssignment', function ($query) use ($memberId) {
+            $query->where('member_id', $memberId)
+                ->whereNotNull('end_date');
+        })
+            ->with('trainerAssignment.trainer.user')
+            ->orderByDesc('date')
+            ->get();
+    }
 }

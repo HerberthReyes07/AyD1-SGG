@@ -1,8 +1,13 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Historial de mediciones</h2>
-    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#new-measurement">
-        <i class="bi bi-plus-lg"></i> Registrar medición
-    </button>
+    <h2 class="h6 mb-0">Historial de mediciones durante la asignación</h2>
+    <div class="d-flex gap-2">
+        <a href="{{ route('assignments.measurements.history', $trainerAssignment) }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-clock-history"></i> Historial completo
+        </a>
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#new-measurement">
+            <i class="bi bi-plus-lg"></i> Registrar medición
+        </button>
+    </div>
 </div>
 
 <div class="card">

@@ -16,6 +16,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\MeasurementController;
+use App\Http\Controllers\Trainer\RoutineController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -199,18 +200,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     | Trainer assignments
     |--------------------------------------------------------------------------
     */
+
     Route::get(
-        'trainer-assignments/{trainerAssignment}/reassign',
+        '/trainer-assignments/{trainerAssignment}/reassign',
         [TrainerAssignmentController::class, 'reassignCreate']
     )->name('trainer-assignments.reassign.create');
 
     Route::post(
-        'trainer-assignments/{trainerAssignment}/reassign',
+        '/trainer-assignments/{trainerAssignment}/reassign',
         [TrainerAssignmentController::class, 'reassignStore']
     )->name('trainer-assignments.reassign.store');
 
     Route::get(
-        'trainer-assignments/history',
+        '/trainer-assignments/history',
         [TrainerAssignmentController::class, 'history']
     )->name('trainer-assignments.history');
 
@@ -326,7 +328,12 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         [TrainerClassController::class, 'complete']
     )->name('trainer-classes.complete');
 
-    // Ver socios asignados al entrenador
+    /*
+    |--------------------------------------------------------------------------
+    | Trainer assignments
+    |--------------------------------------------------------------------------
+    */
+
     Route::get(
         '/trainer/assignments',
         [AssignmentController::class, 'index']
@@ -346,6 +353,46 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         '/trainer/assignments/{trainerAssignment}/measurements',
         [MeasurementController::class, 'store']
     )->name('assignments.measurements.store');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/measurements/history',
+        [MeasurementController::class, 'history']
+    )->name('assignments.measurements.history');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/routines/create',
+        [RoutineController::class, 'create']
+    )->name('assignments.routines.create');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/routines',
+        [RoutineController::class, 'store']
+    )->name('assignments.routines.store');
+
+    Route::get(
+        '/trainer/routines/{routine}/edit',
+        [RoutineController::class, 'edit']
+    )->name('routines.edit');
+
+    Route::put(
+        '/trainer/routines/{routine}',
+        [RoutineController::class, 'update']
+    )->name('routines.update');
+
+    Route::patch(
+        '/trainer/routines/{routine}/toggle-active',
+        [RoutineController::class, 'toggleActive']
+    )->name('routines.toggle-active');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/routines/history',
+        [RoutineController::class, 'history']
+    )->name('trainer.assignments.routines.history');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/routines/{routine}/duplicate',
+        [RoutineController::class, 'duplicate']
+    )->name('trainer.assignments.routines.duplicate');
 });
 
 /*

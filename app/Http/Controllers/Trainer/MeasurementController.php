@@ -29,4 +29,13 @@ class MeasurementController extends Controller
 
         return back()->with('status', 'Medición registrada correctamente.');
     }
+
+    public function history(TrainerAssignment $trainerAssignment)
+    {
+        abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
+
+        $measurementHistory = $this->service->getHistoryForMember($trainerAssignment->member_id);
+
+        return view('trainer.measurements.history', compact('trainerAssignment', 'measurementHistory'));
+    }
 }

@@ -33,7 +33,7 @@
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#routine" type="button">
-                    Rutina
+                    Rutinas
                 </button>
             </li>
             <li class="nav-item">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="tab-pane fade" id="routine">
-                <p class="text-secondary">Próximamente.</p>
+                @include('trainer.assignments.partials.routines')
             </div>
 
             <div class="tab-pane fade" id="measurements">
