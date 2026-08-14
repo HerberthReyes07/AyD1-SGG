@@ -13,9 +13,11 @@ use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberNutritionHistoryController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\CalorieGoalController as TrainerCalorieGoalController;
@@ -184,23 +186,29 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [ClassSessionController::class, 'cancel']
     )->name('class-sessions.cancel');
 
+
+
     /*
     |--------------------------------------------------------------------------
-    | Employee and member management
+    | Employee management
     |--------------------------------------------------------------------------
     */
-
     Route::resource('employees', EmployeeController::class);
 
     Route::post(
-        '/employees/{id}/activate/',
+        '/employees/{id}/activate',
         [EmployeeController::class, 'activate']
     )->name('employees.activate');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Member management
+    |--------------------------------------------------------------------------
+    */
     Route::resource('members', MemberController::class);
 
     Route::post(
-        '/members/{id}/activate/',
+        '/members/{id}/activate',
         [MemberController::class, 'activate']
     )->name('members.activate');
 
@@ -226,6 +234,24 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('trainer-assignments', TrainerAssignmentController::class);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Receptionist
+|--------------------------------------------------------------------------
+*/
+
+// Route::middleware(['auth', 'role:receptionist'])->group(function () {
+//     /*
+//     |--------------------------------------------------------------------------
+//     | Payments
+//     |--------------------------------------------------------------------------
+//     */
+//     Route::resource('payments', PaymentController::class)
+//         ->only(
+//             ['index', 'create', 'store', 'show']
+//         );
+// 
 
 /*
 |--------------------------------------------------------------------------
@@ -270,6 +296,26 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/class-sessions/{session}/enrollments/{member}/cancel',
         [ClassEnrollmentController::class, 'cancel']
     )->name('class-enrollments.cancel');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Memberships
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'destroy']);
+    Route::resource('payments', PaymentController::class)
+    ->only(
+        ['index', 'create', 'store', 'show']
+    );
+    Route::get(
+        '/memberships/member/{memberId}',
+        [MembershipController::class, 'memberMemberships']
+    )->name('memberships.member');
+
+    Route::get(
+        '/memberships/{id}/{memberId}',
+        [MembershipController::class, 'show']
+    )->name('memberships.show');
 });
 
 /*
