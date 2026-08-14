@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\MealType;
 use App\Models\Food;
 use App\Models\Meal;
+use App\Services\CalorieGoalService;
 use App\Services\MealService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ use Illuminate\Validation\Rule;
 class MemberMealController extends Controller
 {
     public function __construct(
-        private readonly MealService $mealService
+        private readonly MealService $mealService,
+        private readonly CalorieGoalService $calorieGoalService
     ) {}
 
     public function index(Request $request)
@@ -35,13 +37,21 @@ class MemberMealController extends Controller
 
         $summary = $this->mealService->getDailySummary($member, $date);
 
+        $goal = $this->calorieGoalService->getCurrentGoal($member, $date);
+
+        $comparison = $goal
+            ? $this->calorieGoalService->compare($summary['totals']['calories'], $goal)
+            : null;
+
         $mealService = $this->mealService;
 
         return view('member-meals.index', compact(
             'meals',
             'summary',
             'date',
-            'mealService'
+            'mealService',
+            'goal',
+            'comparison'
         ));
     }
 
