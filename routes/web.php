@@ -19,6 +19,8 @@ use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\MeasurementController;
 use App\Http\Controllers\Trainer\RoutineController;
+use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TrainerRatingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -330,6 +332,22 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 
     Route::delete('/my-meals/{meal}', [MemberMealController::class, 'destroy'])
         ->name('member-meals.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Training
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/my-training',
+        [TrainingController::class, 'index']
+    )->name('member-training.index');
+
+    Route::post(
+        'trainer-assignments/{trainerAssignment}/rate',
+        [TrainerRatingController::class, 'store']
+    )->name('trainer-assignments.rate');
 });
 
 /*

@@ -1,44 +1,44 @@
 @php
-    $roleName = Auth::user()->role?->name;
+$roleName = Auth::user()->role?->name;
 
-    $navbarThemes = [
-        'admin' => [
-            'navbar' => 'navbar-dark bg-primary border-primary',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'receptionist' => [
-            'navbar' => 'navbar-dark bg-success border-success',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'trainer' => [
-            'navbar' => 'navbar-dark bg-info border-info',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'member' => [
-            'navbar' => 'navbar-dark bg-warning border-warning',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-    ];
+$navbarThemes = [
+'admin' => [
+'navbar' => 'navbar-dark bg-primary border-primary',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'receptionist' => [
+'navbar' => 'navbar-dark bg-success border-success',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'trainer' => [
+'navbar' => 'navbar-dark bg-info border-info',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'member' => [
+'navbar' => 'navbar-dark bg-warning border-warning',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+];
 
-    $theme = $navbarThemes[$roleName] ?? [
-        'navbar' => 'navbar-light bg-white border-bottom',
-        'dropdown' => 'btn btn-light',
-        'mobileName' => 'text-dark',
-        'mobileEmail' => 'text-muted',
-        'mobileBorder' => 'border-bottom',
-    ];
+$theme = $navbarThemes[$roleName] ?? [
+'navbar' => 'navbar-light bg-white border-bottom',
+'dropdown' => 'btn btn-light',
+'mobileName' => 'text-dark',
+'mobileEmail' => 'text-muted',
+'mobileBorder' => 'border-bottom',
+];
 @endphp
 
 <nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
@@ -75,7 +75,8 @@
                     Miembros
                 </x-nav-link>
 
-                <x-nav-link :href="route('trainer-assignments.index')" :active="request()->routeIs('trainer-assignments.*')">
+                <x-nav-link :href="route('trainer-assignments.index')"
+                    :active="request()->routeIs('trainer-assignments.*')">
                     Asignaciones de entrenadores
                 </x-nav-link>
 
@@ -110,12 +111,13 @@
                     Historial de clases
                 </x-nav-link>
 
-                    <x-nav-link
-                        :href="route('member-meals.index')"
-                        :active="request()->routeIs('member-meals.*')"
-                    >
-                        Mis comidas
-                    </x-nav-link>
+                <x-nav-link :href="route('member-training.index')" :active="request()->routeIs('member-training.*')">
+                    Mi Entrenamiento
+                </x-nav-link>
+
+                <x-nav-link :href="route('member-meals.index')" :active="request()->routeIs('member-meals.*')">
+                    Mis comidas
+                </x-nav-link>
 
                 @endif
 
@@ -164,7 +166,8 @@
             <!-- Responsive Settings Options (mobile, dentro del collapse) -->
             <div class="d-sm-none pt-3 mt-3 border-top {{ $theme['mobileBorder'] }}">
                 <div class="px-2">
-                    <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                    <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{
+                        Auth::user()->last_name }}</div>
                     <div class="small {{ $theme['mobileEmail'] }}">{{ Auth::user()->email }}</div>
                 </div>
 

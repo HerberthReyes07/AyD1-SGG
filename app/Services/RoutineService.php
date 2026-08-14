@@ -103,4 +103,12 @@ class RoutineService
             return $copy;
         });
     }
+
+    public function getActiveForAssignment(int $trainerAssignmentId): Collection
+    {
+        return Routine::where('trainer_assignment_id', $trainerAssignmentId)
+            ->where('is_active', true)
+            ->with('routineExercises')
+            ->get();
+    }
 }

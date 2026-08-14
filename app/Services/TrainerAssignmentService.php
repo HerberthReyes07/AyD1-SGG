@@ -8,6 +8,7 @@ use App\Models\Trainer;
 use App\Models\TrainerAssignment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class TrainerAssignmentService
 {
@@ -182,5 +183,13 @@ class TrainerAssignmentService
 
             return $assignments->count();
         });
+    }
+
+    public function getAllForMemberWithRatings(int $memberId): Collection
+    {
+        return TrainerAssignment::where('member_id', $memberId)
+            ->with(['trainer.user', 'trainerRating'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 }

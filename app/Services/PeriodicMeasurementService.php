@@ -36,4 +36,13 @@ class PeriodicMeasurementService
             ->orderByDesc('date')
             ->get();
     }
+
+    public function getFullHistoryForMember(int $memberId): Collection
+    {
+        return PeriodicMeasurement::whereHas('trainerAssignment', function ($query) use ($memberId) {
+            $query->where('member_id', $memberId);
+        })
+            ->orderBy('date')
+            ->get();
+    }
 }
