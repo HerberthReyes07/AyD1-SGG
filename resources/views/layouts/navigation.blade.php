@@ -126,6 +126,20 @@
                         Mis comidas
                     </x-nav-link>
 
+                    <x-nav-link
+                        :href="route('calorie-goals.edit')"
+                        :active="request()->routeIs('calorie-goals.*')"
+                    >
+                        Meta calorica
+                    </x-nav-link>
+
+                    <x-nav-link
+                        :href="route('nutrition-history.index')"
+                        :active="request()->routeIs('nutrition-history.*')"
+                    >
+                        Historial nutricional
+                    </x-nav-link>
+
                 @endif
 
                 @if (Auth::user()->role?->name === 'trainer')

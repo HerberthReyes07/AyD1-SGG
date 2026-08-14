@@ -42,6 +42,11 @@
                 </button>
             </li>
             <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nutrition" type="button">
+                    Nutricion
+                </button>
+            </li>
+            <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nutritional-observations" type="button">
                     Observaciones nutricionales
                 </button>
@@ -61,8 +66,12 @@
                 @include('trainer.assignments.partials.measurements')
             </div>
 
+            <div class="tab-pane fade" id="nutrition">
+                @include('trainer.assignments.partials.nutrition')
+            </div>
+
             <div class="tab-pane fade" id="nutritional-observations">
-                <p class="text-secondary">Próximamente.</p>
+                @include('trainer.assignments.partials.nutritional-observations')
             </div>
         </div>
     </div>

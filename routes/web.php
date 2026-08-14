@@ -1,25 +1,29 @@
 <?php
 
+use App\Http\Controllers\ClassAttendanceReportController;
 use App\Http\Controllers\ClassEnrollmentController;
 use App\Http\Controllers\ClassRatingController;
 use App\Http\Controllers\ClassSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\GroupClassController;
 use App\Http\Controllers\GroupClassReportController;
 use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
+use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
-use App\Http\Controllers\MemberMealController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TrainerClassController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MemberController;
-use App\Http\Controllers\TrainerAssignmentController;
+use App\Http\Controllers\MemberMealController;
+use App\Http\Controllers\MemberNutritionHistoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
+use App\Http\Controllers\Trainer\CalorieGoalController as TrainerCalorieGoalController;
 use App\Http\Controllers\Trainer\MeasurementController;
+use App\Http\Controllers\Trainer\NutritionalObservationController;
+use App\Http\Controllers\TrainerAssignmentController;
+use App\Http\Controllers\TrainerClassController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClassAttendanceReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,7 +103,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/group-classes/reports', [GroupClassReportController::class, 'index'])
         ->name('group-class-reports.index');
 
-        Route::get(
+    Route::get(
         '/group-classes/attendance-report',
         [ClassAttendanceReportController::class, 'index']
     )->name('class-attendance-reports.index');
@@ -324,6 +328,27 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 
     Route::delete('/my-meals/{meal}', [MemberMealController::class, 'destroy'])
         ->name('member-meals.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calorie goal
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/my-calorie-goal', [MemberCalorieGoalController::class, 'edit'])
+        ->name('calorie-goals.edit');
+
+    Route::put('/my-calorie-goal', [MemberCalorieGoalController::class, 'update'])
+        ->name('calorie-goals.update');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nutrition history
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/my-nutrition-history', [MemberNutritionHistoryController::class, 'index'])
+        ->name('nutrition-history.index');
 });
 
 /*
@@ -376,6 +401,16 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         '/trainer/assignments/{trainerAssignment}/measurements',
         [MeasurementController::class, 'store']
     )->name('assignments.measurements.store');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/calorie-goal',
+        [TrainerCalorieGoalController::class, 'store']
+    )->name('assignments.calorie-goal.store');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/nutritional-observations',
+        [NutritionalObservationController::class, 'store']
+    )->name('assignments.nutritional-observations.store');
 });
 
 /*
