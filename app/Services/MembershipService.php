@@ -20,94 +20,162 @@ class MembershipService
     }
 
     /**
-     * Create a new membership for a member.
+     * Process membership state change or extension based on payment.
      */
-    public function createMembership(int|string $memberId, int|string $planId, int|string $registeredById): MemberMembership
+    public function processMembershipPayment(int|string $memberId, int|string $planId, int|string $registeredById): MemberMembership
     {
-        // Reject if member already has an active membership
-        $activeMembership = $this->membershipRepository->findActiveByMemberId($memberId);
-        if ($activeMembership) {
-            throw new Exception('El miembro ya tiene una membresía activa.');
-        }
-
         $plan = MembershipPlan::findOrFail($planId);
-        $startDate = now()->startOfDay();
-        $endDate = $startDate->copy()->addMonths($plan->duration_months);
+        $currentMembership = $this->membershipRepository->findCurrentByMemberId($memberId);
 
-        return DB::transaction(function () use ($memberId, $planId, $startDate, $endDate, $registeredById) {
-            // Create membership
-            $membership = $this->membershipRepository->create([
-                'member_id' => $memberId,
-                'plan_id' => $planId,
-                'status' => MembershipStatus::Active,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
-            ]);
+        return DB::transaction(function () use ($memberId, $planId, $registeredById, $plan, $currentMembership) {
+            // No previous active/frozen membership
+            if (!$currentMembership) {
+                return $this->createNewMembership($memberId, $plan, $registeredById);
+            }
 
-            // Create status history log
-            MembershipStatusHistory::create([
-                'previous_status' => null,
-                'new_status' => MembershipStatus::Active,
-                'change_date' => now(),
-                'reason' => 'Alta de membresía',
-                'changed_by' => $registeredById,
-                'member_membership_id' => $membership->id,
-            ]);
+            // Active + Same Plan
+            if ($currentMembership->status === MembershipStatus::Active && $currentMembership->plan_id == $planId) {
+                $oldEndDate = $currentMembership->end_date;
+                $newEndDate = $oldEndDate->copy()->addMonths($plan->duration_months);
 
-            return $membership;
+                $this->membershipRepository->update($currentMembership->id, [
+                    'end_date' => $newEndDate,
+                ]);
+
+                // Log status history (status remains Active, but we record the extension)
+                MembershipStatusHistory::create([
+                    'previous_status' => MembershipStatus::Active,
+                    'new_status' => MembershipStatus::Active,
+                    'change_date' => now(),
+                    'reason' => 'Extensión de membresía por pago (mismo plan)',
+                    'changed_by' => $registeredById,
+                    'member_membership_id' => $currentMembership->id,
+                ]);
+
+                return $currentMembership->fresh();
+            }
+
+            // Active + Different Plan
+            if ($currentMembership->status === MembershipStatus::Active && $currentMembership->plan_id != $planId) {
+                // Cancel current membership
+                $this->membershipRepository->update($currentMembership->id, [
+                    'status' => MembershipStatus::Cancelled,
+                    'cancellation_reason' => 'Cancelada automáticamente por cambio de plan',
+                    'cancellation_date' => now(),
+                ]);
+
+                MembershipStatusHistory::create([
+                    'previous_status' => MembershipStatus::Active,
+                    'new_status' => MembershipStatus::Cancelled,
+                    'change_date' => now(),
+                    'reason' => 'Cancelación automática por cambio de plan',
+                    'changed_by' => $registeredById,
+                    'member_membership_id' => $currentMembership->id,
+                ]);
+
+                // Create new membership starting today
+                return $this->createNewMembership($memberId, $plan, $registeredById);
+            }
+
+            // Frozen + Same Plan
+            if ($currentMembership->status === MembershipStatus::Frozen && $currentMembership->plan_id == $planId) {
+                // Calculate frozen days
+                $activeFreeze = $currentMembership->freezes()->whereNull('reactivation_date')->first();
+                $frozenDays = 0;
+                if ($activeFreeze) {
+                    $reactivationDate = now()->startOfDay();
+                    $frozenDays = $activeFreeze->start_date->diffInDays($reactivationDate);
+                    
+                    $activeFreeze->update([
+                        'reactivation_date' => $reactivationDate,
+                        'frozen_days' => $frozenDays,
+                    ]);
+                }
+
+                // Recalculate end_date: original end_date + frozen days + plan duration
+                $newEndDate = $currentMembership->end_date->copy()->addDays($frozenDays)->addMonths($plan->duration_months);
+
+                $this->membershipRepository->update($currentMembership->id, [
+                    'status' => MembershipStatus::Active,
+                    'end_date' => $newEndDate,
+                ]);
+
+                // Log status history for reactivation
+                MembershipStatusHistory::create([
+                    'previous_status' => MembershipStatus::Frozen,
+                    'new_status' => MembershipStatus::Active,
+                    'change_date' => now(),
+                    'reason' => 'Reactivación de membresía y pago (mismo plan)',
+                    'changed_by' => $registeredById,
+                    'member_membership_id' => $currentMembership->id,
+                ]);
+
+                return $currentMembership->fresh();
+            }
+
+            // Frozen + Different Plan
+            if ($currentMembership->status === MembershipStatus::Frozen && $currentMembership->plan_id != $planId) {
+                // Close any active freeze record if exists
+                $activeFreeze = $currentMembership->freezes()->whereNull('reactivation_date')->first();
+                if ($activeFreeze) {
+                    $reactivationDate = now()->startOfDay();
+                    $frozenDays = $activeFreeze->start_date->diffInDays($reactivationDate);
+                    $activeFreeze->update([
+                        'reactivation_date' => $reactivationDate,
+                        'frozen_days' => $frozenDays,
+                    ]);
+                }
+
+                // Cancel current membership
+                $this->membershipRepository->update($currentMembership->id, [
+                    'status' => MembershipStatus::Cancelled,
+                    'cancellation_reason' => 'Cancelada automáticamente por cambio de plan desde estado congelado',
+                    'cancellation_date' => now(),
+                ]);
+
+                MembershipStatusHistory::create([
+                    'previous_status' => MembershipStatus::Frozen,
+                    'new_status' => MembershipStatus::Cancelled,
+                    'change_date' => now(),
+                    'reason' => 'Cancelación automática por cambio de plan (desde congelado)',
+                    'changed_by' => $registeredById,
+                    'member_membership_id' => $currentMembership->id,
+                ]);
+
+                // Create new membership starting today
+                return $this->createNewMembership($memberId, $plan, $registeredById);
+            }
+
+            throw new Exception('Estado de membresía no compatible.');
         });
     }
 
     /**
-     * Renew a membership for a member.
+     * Helper to create a new membership starting today.
      */
-    public function renewMembership(int|string $memberId, int|string $planId, int|string $registeredById): MemberMembership
+    protected function createNewMembership(int|string $memberId, MembershipPlan $plan, int|string $registeredById): MemberMembership
     {
-        $plan = MembershipPlan::findOrFail($planId);
-        $activeMembership = $this->membershipRepository->findActiveByMemberId($memberId);
+        $startDate = now()->startOfDay();
+        $endDate = $startDate->copy()->addMonths($plan->duration_months);
 
-        return DB::transaction(function () use ($memberId, $planId, $registeredById, $plan, $activeMembership) {
-            // If active membership exists, expire it first to keep history
-            if ($activeMembership) {
-                $this->membershipRepository->update($activeMembership->id, [
-                    'status' => MembershipStatus::Expired,
-                ]);
+        $membership = $this->membershipRepository->create([
+            'member_id' => $memberId,
+            'plan_id' => $plan->id,
+            'status' => MembershipStatus::Active,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
-                // Create status history log for the expired one
-                MembershipStatusHistory::create([
-                    'previous_status' => MembershipStatus::Active,
-                    'new_status' => MembershipStatus::Expired,
-                    'change_date' => now(),
-                    'reason' => 'Renovación de membresía',
-                    'changed_by' => $registeredById,
-                    'member_membership_id' => $activeMembership->id,
-                ]);
-            }
+        MembershipStatusHistory::create([
+            'previous_status' => null,
+            'new_status' => MembershipStatus::Active,
+            'change_date' => now(),
+            'reason' => 'Compra de membresía',
+            'changed_by' => $registeredById,
+            'member_membership_id' => $membership->id,
+        ]);
 
-            $startDate = now()->startOfDay();
-            $endDate = $startDate->copy()->addMonths($plan->duration_months);
-
-            // Create new membership record
-            $newMembership = $this->membershipRepository->create([
-                'member_id' => $memberId,
-                'plan_id' => $planId,
-                'status' => MembershipStatus::Active,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
-            ]);
-
-            // Create status history log for new membership
-            MembershipStatusHistory::create([
-                'previous_status' => null,
-                'new_status' => MembershipStatus::Active,
-                'change_date' => now(),
-                'reason' => 'Renovación de membresía',
-                'changed_by' => $registeredById,
-                'member_membership_id' => $newMembership->id,
-            ]);
-
-            return $newMembership;
-        });
+        return $membership;
     }
 
     /**
@@ -150,4 +218,5 @@ class MembershipService
         });
     }
 }
+
 

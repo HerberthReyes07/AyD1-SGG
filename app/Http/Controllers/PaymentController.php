@@ -43,7 +43,7 @@ class PaymentController extends Controller
             ->whereDate('start_date', '<=', now())
             ->whereDate('end_date', '>=', now())
             ->get();
-            
+
         $members = \App\Models\User::whereHas('role', function ($q) {
             $q->where('name', 'member');
         })->with('member')->get();
@@ -64,17 +64,12 @@ class PaymentController extends Controller
             'plan_id' => 'required|exists:membership_plans,id',
             'payment_method_id' => 'required|exists:payment_methods,id',
             'promotion_id' => 'nullable|exists:promotions,id',
-            'is_renewal' => 'nullable|boolean',
         ]);
 
         $validated['registered_by'] = $request->user()->id;
 
         try {
-            if ($request->boolean('is_renewal')) {
-                $payment = $this->paymentService->registerRenewalPayment($validated);
-            } else {
-                $payment = $this->paymentService->registerPayment($validated);
-            }
+            $this->paymentService->registerPayment($validated);
 
             return redirect()
                 ->route('payments.index')
@@ -99,4 +94,3 @@ class PaymentController extends Controller
         return view('payments.show', compact('payment'));
     }
 }
-

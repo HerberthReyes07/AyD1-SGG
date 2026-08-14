@@ -52,5 +52,15 @@ class MembershipRepository
         $membership = MemberMembership::findOrFail($id);
         return $membership->update($data);
     }
-}
 
+    public function findCurrentByMemberId(int|string $memberId): ?MemberMembership
+    {
+        return MemberMembership::where('member_id', $memberId)
+            ->whereIn('status', [
+                MembershipStatus::Active,
+                MembershipStatus::Frozen,
+            ])
+            ->with('plan')
+            ->first();
+    }
+}

@@ -95,17 +95,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Checkbox de Renovación -->
-                            <div class="form-check form-switch mb-4">
-                                <input class="form-check-input" type="checkbox" id="is_renewal" name="is_renewal" value="1" @checked(old('is_renewal', $isRenewal))>
-                                <label class="form-check-label fw-semibold" for="is_renewal">
-                                    Es renovación de membresía (marcar si el socio ya posee un historial activo/previo)
-                                </label>
-                                @error('is_renewal')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ route('payments.index') }}" class="btn btn-secondary">
                                     Cancelar
