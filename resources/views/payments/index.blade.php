@@ -18,21 +18,21 @@
     <div class="container-xl py-4">
 
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
         @endif
 
         <div class="card shadow-sm">
@@ -57,55 +57,60 @@
                         </thead>
                         <tbody>
                             @forelse ($payments as $payment)
-                                <tr>
-                                    <td class="ps-4">
-                                        <strong>#{{ $payment->id }}</strong>
-                                    </td>
-                                    <td>
-                                        <strong>
-                                            {{ $payment->memberMembership?->member?->user?->first_name }} 
-                                            {{ $payment->memberMembership?->member?->user?->last_name }}
-                                        </strong>
-                                        <div class="text-muted small">
-                                            {{ $payment->memberMembership?->member?->user?->email }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('memberships.show', $payment->member_membership_id) }}" class="text-decoration-none">
-                                            Membresía #{{ $payment->member_membership_id }}
-                                        </a>
-                                        <div class="text-muted small">
-                                            Plan: {{ $payment->memberMembership?->plan?->name }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <strong class="text-success">Q{{ number_format($payment->amount, 2) }}</strong>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark border">
-                                            {{ $payment->paymentMethod?->name }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if($payment->promotion)
-                                            <span class="text-info-emphasis">{{ $payment->promotion->name }}</span>
-                                        @else
-                                            <span class="text-muted small">Ninguna</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $payment->payment_date?->format('d/m/Y') }}
-                                    </td>
-                                    <td class="pe-4">
-                                        {{ $payment->registeredBy?->first_name }} {{ $payment->registeredBy?->last_name }}
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td class="ps-4">
+                                    <strong>#{{ $payment->id }}</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        {{ $payment->memberMembership?->member?->user?->first_name }}
+                                        {{ $payment->memberMembership?->member?->user?->last_name }}
+                                    </strong>
+                                    <div class="text-muted small">
+                                        {{ $payment->memberMembership?->member?->user?->email }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a
+                                        href="{{ route('memberships.show', [
+                                            'id' => $payment->member_membership_id,
+                                            'memberId' => $payment->memberMembership->member_id,
+                                        ]) }}"
+                                        class="text-decoration-none">
+                                        Membresía #{{ $payment->member_membership_id }}
+                                    </a>
+                                    <div class="text-muted small">
+                                        Plan: {{ $payment->memberMembership?->plan?->name }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong class="text-success">Q{{ number_format($payment->amount, 2) }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ $payment->paymentMethod?->name }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($payment->promotion)
+                                    <span class="text-info-emphasis">{{ $payment->promotion->name }}</span>
+                                    @else
+                                    <span class="text-muted small">Ninguna</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $payment->payment_date?->format('d/m/Y') }}
+                                </td>
+                                <td class="pe-4">
+                                    {{ $payment->registeredBy?->first_name }} {{ $payment->registeredBy?->last_name }}
+                                </td>
+                            </tr>
                             @empty
-                                <tr>
-                                    <td colspan="8" class="text-center py-4 text-muted">
-                                        No se encontraron registros de pagos.
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    No se encontraron registros de pagos.
+                                </td>
+                            </tr>
                             @endforelse
                         </tbody>
                     </table>

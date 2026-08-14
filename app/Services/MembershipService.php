@@ -85,7 +85,7 @@ class MembershipService
                 if ($activeFreeze) {
                     $reactivationDate = now()->startOfDay();
                     $frozenDays = $activeFreeze->start_date->diffInDays($reactivationDate);
-                    
+
                     $activeFreeze->update([
                         'reactivation_date' => $reactivationDate,
                         'frozen_days' => $frozenDays,
@@ -217,6 +217,12 @@ class MembershipService
             return $updated;
         });
     }
+
+    /**
+     * Get all memberships for a specific member.
+     */
+    public function getMemberMemberships(int|string $memberId)
+    {
+        return $this->membershipRepository->findByMemberId($memberId);
+    }
 }
-
-

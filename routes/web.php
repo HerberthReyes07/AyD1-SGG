@@ -180,7 +180,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     | Employee management
     |--------------------------------------------------------------------------
     */
-
     Route::resource('employees', EmployeeController::class);
 
     Route::post(
@@ -188,13 +187,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [EmployeeController::class, 'activate']
     )->name('employees.activate');
 
-
     /*
     |--------------------------------------------------------------------------
     | Member management
     |--------------------------------------------------------------------------
     */
-
     Route::resource('members', MemberController::class);
 
     Route::post(
@@ -202,6 +199,25 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [MemberController::class, 'activate']
     )->name('members.activate');
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Receptionist
+|--------------------------------------------------------------------------
+*/
+
+// Route::middleware(['auth', 'role:receptionist'])->group(function () {
+//     /*
+//     |--------------------------------------------------------------------------
+//     | Payments
+//     |--------------------------------------------------------------------------
+//     */
+//     Route::resource('payments', PaymentController::class)
+//         ->only(
+//             ['index', 'create', 'store', 'show']
+//         );
+// });
 
 /*
 |--------------------------------------------------------------------------
@@ -249,11 +265,23 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Memberships & Payments
+    | Memberships
     |--------------------------------------------------------------------------
     */
-    Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'show', 'destroy']);
-    Route::resource('payments', PaymentController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'destroy']);
+    Route::resource('payments', PaymentController::class)
+    ->only(
+        ['index', 'create', 'store', 'show']
+    );
+    Route::get(
+        '/memberships/member/{memberId}',
+        [MembershipController::class, 'memberMemberships']
+    )->name('memberships.member');
+
+    Route::get(
+        '/memberships/{id}/{memberId}',
+        [MembershipController::class, 'show']
+    )->name('memberships.show');
 });
 
 /*

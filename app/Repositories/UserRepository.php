@@ -20,8 +20,36 @@ class UserRepository
         return User::whereHas('role', function ($query) {
             $query->whereIn('name', ['member']);
         })
-        ->with(['role'])
-        ->get();
+            ->with(['role'])
+            ->get();
+    }
+
+    /**
+     * Get all members, optionally filtered by name or email.
+     */
+    public function getMembersFiltering(?string $search = null)
+    {
+        $query = User::whereHas('role', function ($query) {
+            $query->where('name', 'member');
+        })
+            ->with(['role', 'member']);
+
+        if (!empty($search)) {
+            $search = trim($search);
+
+            if ($search !== '') {
+                $query->where(function ($query) use ($search) {
+                    $query->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            }
+        }
+
+        return $query
+            ->orderBy('first_name')
+            ->orderBy('last_name')
+            ->get();
     }
 
     /**
@@ -32,8 +60,8 @@ class UserRepository
         return User::whereHas('role', function ($query) {
             $query->whereIn('name', ['trainer', 'receptionist']);
         })
-        ->with(['role', 'trainer.specialty'])
-        ->get();
+            ->with(['role', 'trainer.specialty'])
+            ->get();
     }
 
     /**

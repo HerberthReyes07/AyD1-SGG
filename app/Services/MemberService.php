@@ -26,6 +26,14 @@ class MemberService
     }
 
     /**
+     * Get all members, will be used with filtering
+     */
+    public function getAllMembersFiltering(?string $search = null)
+    {
+        return $this->userRepository->getMembersFiltering($search);
+    }
+
+    /**
      * Get a member by ID.
      */
     public function getMemberById(int|string $id)

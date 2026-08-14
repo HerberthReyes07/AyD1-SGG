@@ -8,7 +8,7 @@
                 </small>
             </div>
             <div>
-                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
+                <a href="{{ route('memberships.member', $member->id) }}" class="btn btn-secondary">
                     Volver al Listado
                 </a>
             </div>

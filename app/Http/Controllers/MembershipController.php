@@ -6,6 +6,7 @@ use App\Models\MembershipPlan;
 use App\Models\MemberMembership;
 use App\Services\MembershipService;
 use App\Repositories\MembershipRepository;
+use App\Services\MemberService;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -13,13 +14,16 @@ class MembershipController extends Controller
 {
     protected MembershipService $membershipService;
     protected MembershipRepository $membershipRepository;
+    protected MemberService $memberService;
 
     public function __construct(
         MembershipService $membershipService,
-        MembershipRepository $membershipRepository
+        MembershipRepository $membershipRepository,
+        MemberService $memberService
     ) {
         $this->membershipService = $membershipService;
         $this->membershipRepository = $membershipRepository;
+        $this->memberService = $memberService;
     }
 
     /**
@@ -31,7 +35,10 @@ class MembershipController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('memberships.index', compact('memberships'));
+        $search = $request->input('search');
+        $members = $this->memberService->getAllMembersFiltering($search);
+
+        return view('memberships.control.index', compact('memberships', 'members', 'search'));
     }
 
     /**
@@ -44,20 +51,22 @@ class MembershipController extends Controller
             $q->where('name', 'member');
         })->with('member')->get();
 
-        return view('memberships.create', compact('plans', 'members'));
+        return view('memberships.control.create', compact('plans', 'members'));
     }
 
     /**
      * Display the specified membership.
      */
-    public function show(string|int $id)
+    public function show(string|int $id, int|string $memberId)
     {
         $membership = $this->membershipRepository->findById($id);
+
+        $member = $this->memberService->getMemberById($memberId);
         if (!$membership) {
             abort(404, 'Membresía no encontrada.');
         }
 
-        return view('memberships.show', compact('membership'));
+        return view('memberships.control.show', compact('membership', 'member'));
     }
 
     /**
@@ -78,5 +87,24 @@ class MembershipController extends Controller
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-}
 
+
+    /**
+     * Get member memberships
+     */
+    public function memberMemberships(int|string $memberId)
+    {
+        $member = $this->memberService->getMemberById($memberId);
+
+        if (!$member || !$member->member) {
+            abort(404, 'Socio no encontrado.');
+        }
+
+        $memberships = $this->membershipService->getMemberMemberships($memberId);
+
+        return view('memberships.control.member-memberships', compact(
+            'member',
+            'memberships'
+        ));
+    }
+}

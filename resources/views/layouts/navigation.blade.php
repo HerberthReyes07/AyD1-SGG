@@ -16,41 +16,49 @@
 
                 <x-nav-link
                     :href="route('dashboard')"
-                    :active="request()->routeIs('dashboard')"
-                >
+                    :active="request()->routeIs('dashboard')">
                     Dashboard
                 </x-nav-link>
 
                 @if (Auth::user()->role?->name === 'admin')
-                    <x-nav-link
-                        :href="route('foods.index')"
-                        :active="request()->routeIs('foods.*')"
-                    >
-                        Catalogo de Alimentos
-                    </x-nav-link>
+                <x-nav-link
+                    :href="route('foods.index')"
+                    :active="request()->routeIs('foods.*')">
+                    Catalogo de Alimentos
+                </x-nav-link>
+                @endif
+
+                @if (in_array(Auth::user()->role?->name, ['receptionist']))
+                <x-nav-link
+                    :href="route('payments.index')"
+                    :active="request()->routeIs('foods.*')">
+                    Pagos
+                </x-nav-link>
                 @endif
 
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
-                    <x-nav-link
-                        :href="route('guest-passes.index')"
-                        :active="request()->routeIs('guest-passes.*')"
-                    >
-                        Pases de invitado
-                    </x-nav-link>
+                <x-nav-link
+                    :href="route('guest-passes.index')"
+                    :active="request()->routeIs('guest-passes.*')">
+                    Pases de invitado
+                </x-nav-link>
+                <x-nav-link
+                    :href="route('memberships.index')"
+                    :active="request()->routeIs('foods.*')">
+                    Membresías
+                </x-nav-link>
                 @endif
 
                 @if (Auth::user()->role?->name === 'admin')
-                    <x-nav-link
-                        :href="route('group-classes.index')"
-                        :active="request()->routeIs('group-classes.*')"
-                    >
-                        Clases grupales
-                    </x-nav-link>
+                <x-nav-link
+                    :href="route('group-classes.index')"
+                    :active="request()->routeIs('group-classes.*')">
+                    Clases grupales
+                </x-nav-link>
 
-                    <x-nav-link
+                <x-nav-link
                     :href="route('group-class-reports.index')"
-                    :active="request()->routeIs('group-class-reports.*')"
-                >
+                    :active="request()->routeIs('group-class-reports.*')">
                     Reportes de clases
                 </x-nav-link>
                 @endif
@@ -58,30 +66,27 @@
 
                 @if (Auth::user()->role?->name === 'member')
 
-                    <x-nav-link
-                        :href="route('member-classes.index')"
-                        :active="request()->routeIs('member-classes.index')"
-                    >
-                        Clases disponibles
-                    </x-nav-link>
+                <x-nav-link
+                    :href="route('member-classes.index')"
+                    :active="request()->routeIs('member-classes.index')">
+                    Clases disponibles
+                </x-nav-link>
 
-                    <x-nav-link
-                        :href="route('member-classes.history')"
-                        :active="request()->routeIs('member-classes.history')"
-                    >
-                        Historial de clases
-                    </x-nav-link>
+                <x-nav-link
+                    :href="route('member-classes.history')"
+                    :active="request()->routeIs('member-classes.history')">
+                    Historial de clases
+                </x-nav-link>
 
                 @endif
 
-                        @if (Auth::user()->role?->name === 'trainer')
+                @if (Auth::user()->role?->name === 'trainer')
                 <x-nav-link
                     :href="route('trainer-classes.index')"
-                    :active="request()->routeIs('trainer-classes.*')"
-                >
+                    :active="request()->routeIs('trainer-classes.*')">
                     Mis clases
                 </x-nav-link>
-            @endif
+                @endif
 
             </div>
 
@@ -105,7 +110,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -129,7 +134,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault();
+                            onclick="event.preventDefault();
                                             this.closest('form').submit();">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
