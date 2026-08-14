@@ -59,4 +59,17 @@ class AssignmentController extends Controller
 
         return back()->with('status', 'Medición registrada correctamente.');
     }
+
+    public function updateGoal(Request $request, TrainerAssignment $trainerAssignment)
+    {
+        abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
+
+        $validated = $request->validate([
+            'goal' => 'required|string|max:1000',
+        ]);
+
+        $this->trainerAssignmentService->updateGoal($trainerAssignment, $validated['goal']);
+
+        return back()->with('status', 'Objetivo actualizado correctamente.');
+    }
 }

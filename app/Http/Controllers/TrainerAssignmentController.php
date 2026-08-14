@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TrainerAssignment;
+use App\Models\Trainer;
 use App\Services\TrainerAssignmentService;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -11,8 +12,7 @@ class TrainerAssignmentController extends Controller
 {
     public function __construct(
         private readonly TrainerAssignmentService $trainerAssignmentService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -93,5 +93,36 @@ class TrainerAssignmentController extends Controller
         $assignments = $this->trainerAssignmentService->getHistoryAssignments();
 
         return view('admin.trainer-assignments.history', compact('assignments'));
+    }
+
+    public function bulkReassignCreate()
+    {
+        $trainers = Trainer::with([
+            'user' => fn ($query) => $query->where('is_active', true),
+            'trainerAssignments' => function ($query) {
+                $query->whereNull('end_date')->with('member.user');
+            },
+        ])
+            ->whereHas('user', fn ($query) => $query->where('is_active', true))
+            ->withCount(['trainerAssignments as active_members_count' => fn($q) => $q->whereNull('end_date')])
+            ->get();
+
+        return view('admin.trainer-assignments.bulk-reassign', compact('trainers'));
+    }
+
+    public function bulkReassignStore(Request $request)
+    {
+        $validated = $request->validate([
+            'old_trainer_id' => 'required|exists:trainers,user_id',
+            'assignment_ids' => 'required|array|min:1',
+            'assignment_ids.*' => 'exists:trainer_assignments,id',
+            'new_trainer_id' => ['required', 'exists:trainers,user_id', Rule::notIn([$request->old_trainer_id])],
+            'reassignment_reason' => 'required|string|max:500',
+        ]);
+
+        $count = $this->trainerAssignmentService->bulkReassign($validated);
+
+        return redirect()->route('trainer-assignments.index')
+            ->with('status', "$count socio(s) reasignado(s) correctamente.");
     }
 }

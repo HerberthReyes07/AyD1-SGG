@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Rutinas</h2>
+    <h2 class="h6 mb-0">Rutinas y ejercicios</h2>
     <div class="d-flex gap-2">
         <a href="{{ route('assignments.routines.create', $trainerAssignment) }}" class="btn btn-sm btn-primary">
             <i class="bi bi-plus-lg"></i> Nueva rutina

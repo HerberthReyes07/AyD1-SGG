@@ -15,6 +15,9 @@
                 <a href="{{ route('trainer-assignments.create') }}" class="btn btn-primary">
                     {{ __('Nueva asignación') }}
                 </a>
+                <a href="{{ route('trainer-assignments.bulk-reassign.create') }}" class="btn btn-warning">
+                    {{ __('Reasignar socios') }}
+                </a>
             </div>
         </div>
     </x-slot>

@@ -212,6 +212,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     )->name('trainer-assignments.reassign.store');
 
     Route::get(
+        'trainer-assignments/bulk-reassign',
+        [TrainerAssignmentController::class, 'bulkReassignCreate']
+    )->name('trainer-assignments.bulk-reassign.create');
+
+    Route::post(
+        'trainer-assignments/bulk-reassign',
+        [TrainerAssignmentController::class, 'bulkReassignStore']
+    )->name('trainer-assignments.bulk-reassign.store');
+
+    Route::get(
         '/trainer-assignments/history',
         [TrainerAssignmentController::class, 'history']
     )->name('trainer-assignments.history');
@@ -373,6 +383,11 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         [AssignmentController::class, 'show']
     )->name('assignments.show');
 
+    Route::patch(
+        '/trainer/assignments/{trainerAssignment}/goal',
+        [AssignmentController::class, 'updateGoal']
+    )->name('assignments.update-goal');
+
     Route::post(
         '/trainer/assignments/{trainerAssignment}/measurements',
         [MeasurementController::class, 'store']
@@ -425,4 +440,4 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
