@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Meal;
 use App\Models\TrainerAssignment;
 use App\Services\CalorieGoalService;
 use App\Services\MealService;
+use App\Services\NutritionalObservationService;
 use App\Services\TrainerAssignmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +18,7 @@ class AssignmentController extends Controller
         private readonly TrainerAssignmentService $trainerAssignmentService,
         private readonly MealService $mealService,
         private readonly CalorieGoalService $calorieGoalService,
+        private readonly NutritionalObservationService $nutritionalObservationService,
     ) {}
 
     /**
@@ -57,11 +60,27 @@ class AssignmentController extends Controller
             today()
         );
 
+        $dailyMeals = $trainerAssignment->member->meals()
+            ->whereDate('date', today())
+            ->with('mealFoods.food.category')
+            ->get()
+            ->groupBy(fn (Meal $meal) => $meal->type->value);
+
+        $dailySummary = $this->mealService->getDailySummary($trainerAssignment->member, today());
+
+        $observations = $this->nutritionalObservationService->getForAssignment($trainerAssignment);
+
+        $mealService = $this->mealService;
+
         return view('trainer.assignments.show', compact(
             'trainerAssignment',
             'measurements',
             'calorieGoal',
-            'nutritionHistory'
+            'nutritionHistory',
+            'dailyMeals',
+            'dailySummary',
+            'observations',
+            'mealService'
         ));
     }
 

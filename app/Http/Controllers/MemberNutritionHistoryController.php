@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TrainerAssignment;
 use App\Services\CalorieGoalService;
 use App\Services\MealService;
+use App\Services\NutritionalObservationService;
 use Illuminate\Http\Request;
 
 class MemberNutritionHistoryController extends Controller
 {
     public function __construct(
         private readonly MealService $mealService,
-        private readonly CalorieGoalService $calorieGoalService
+        private readonly CalorieGoalService $calorieGoalService,
+        private readonly NutritionalObservationService $nutritionalObservationService
     ) {}
 
     public function index(Request $request)
@@ -38,6 +41,14 @@ class MemberNutritionHistoryController extends Controller
             return $day;
         }, $history);
 
-        return view('member-nutrition-history.index', compact('history', 'days'));
+        $assignment = TrainerAssignment::where('member_id', $member->user_id)
+            ->whereNull('end_date')
+            ->first();
+
+        $observations = $assignment
+            ? $this->nutritionalObservationService->getForAssignment($assignment)
+            : collect();
+
+        return view('member-nutrition-history.index', compact('history', 'days', 'assignment', 'observations'));
     }
 }

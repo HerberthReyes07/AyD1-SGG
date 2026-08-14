@@ -71,7 +71,7 @@
             </div>
 
             <div class="tab-pane fade" id="nutritional-observations">
-                <p class="text-secondary">Próximamente.</p>
+                @include('trainer.assignments.partials.nutritional-observations')
             </div>
         </div>
     </div>

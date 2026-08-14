@@ -1,3 +1,61 @@
+<h2 class="h6 mb-3">Registro de hoy</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        @if ($dailyMeals->isEmpty())
+            <p class="text-secondary text-center mb-0 py-3">
+                El socio no ha registrado comidas hoy.
+            </p>
+        @else
+            <div class="mb-3 text-secondary small">
+                Total del dia: {{ number_format($dailySummary['totals']['calories'], 0) }} kcal
+                &middot; {{ number_format($dailySummary['totals']['protein_g'], 1) }} g proteina
+                &middot; {{ number_format($dailySummary['totals']['carbs_g'], 1) }} g carbohidratos
+                &middot; {{ number_format($dailySummary['totals']['fat_g'], 1) }} g grasas
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tiempo de comida</th>
+                            <th>Alimento</th>
+                            <th>Cantidad</th>
+                            <th>Calorias</th>
+                            <th>Proteina</th>
+                            <th>Carbohidratos</th>
+                            <th>Grasas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($dailyMeals as $mealsOfType)
+                            @foreach ($mealsOfType as $meal)
+                                @foreach ($meal->mealFoods as $index => $mealFood)
+                                    @php
+                                        $nutrition = $mealService->nutritionFor($mealFood->food, (float) $mealFood->quantity_g);
+                                    @endphp
+
+                                    <tr>
+                                        @if ($index === 0)
+                                            <td rowspan="{{ $meal->mealFoods->count() }}">{{ $meal->type->label() }}</td>
+                                        @endif
+                                        <td>{{ $mealFood->food->name }}</td>
+                                        <td>{{ number_format($mealFood->quantity_g, 0) }} g</td>
+                                        <td>{{ number_format($nutrition['calories'], 0) }} kcal</td>
+                                        <td>{{ number_format($nutrition['protein_g'], 1) }} g</td>
+                                        <td>{{ number_format($nutrition['carbs_g'], 1) }} g</td>
+                                        <td>{{ number_format($nutrition['fat_g'], 1) }} g</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="h6 mb-0">Meta calorica</h2>
     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#calorie-goal">
