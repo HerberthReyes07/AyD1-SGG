@@ -64,35 +64,6 @@
                     Dashboard
                 </x-nav-link>
 
-                @if (Auth::user()->role?->name === 'admin')
-                    <x-nav-link
-                        :href="route('foods.index')"
-                        :active="request()->routeIs('foods.*')"
-                    >
-                        Catalogo de Alimentos
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('employees.index')" :active="request()->routeIs('employees.*')">
-                        Empleados
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
-                        Miembros
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('trainer-assignments.index')" :active="request()->routeIs('trainer-assignments.*')">
-                        Asignaciones de entrenadores
-                    </x-nav-link>
-                @endif
-
-                @if (in_array(Auth::user()->role?->name, ['receptionist']))
-                <x-nav-link
-                    :href="route('payments.index')"
-                    :active="request()->routeIs('foods.*')">
-                    Pagos
-                </x-nav-link>
-                @endif
-
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
                 <x-nav-link
                     :href="route('guest-passes.index')"
@@ -101,12 +72,31 @@
                 </x-nav-link>
                 <x-nav-link
                     :href="route('memberships.index')"
-                    :active="request()->routeIs('foods.*')">
+                    :active="request()->routeIs('memberships.*')">
                     Membresías
                 </x-nav-link>
                 @endif
 
                 @if (Auth::user()->role?->name === 'admin')
+                <x-nav-link
+                    :href="route('foods.index')"
+                    :active="request()->routeIs('foods.*')"
+                >
+                    Catalogo de Alimentos
+                </x-nav-link>
+
+                <x-nav-link :href="route('employees.index')" :active="request()->routeIs('employees.*')">
+                    Empleados
+                </x-nav-link>
+
+                <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
+                    Miembros
+                </x-nav-link>
+
+                <x-nav-link :href="route('trainer-assignments.index')" :active="request()->routeIs('trainer-assignments.*')">
+                    Asignaciones de entrenadores
+                </x-nav-link>
+
                 <x-nav-link
                     :href="route('group-classes.index')"
                     :active="request()->routeIs('group-classes.*')">
@@ -127,8 +117,13 @@
                 </x-nav-link>
                 @endif
 
-                
-
+                @if (in_array(Auth::user()->role?->name, ['receptionist']))
+                <x-nav-link
+                    :href="route('payments.index')"
+                    :active="request()->routeIs('payments.*')">
+                    Pagos
+                </x-nav-link>
+                @endif
 
                 @if (Auth::user()->role?->name === 'member')
 
