@@ -17,6 +17,8 @@ use App\Http\Controllers\MemberClassController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberNutritionHistoryController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberMembershipController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhysicalProgressController;
@@ -366,6 +368,11 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/memberships/{id}/{memberId}',
         [MembershipController::class, 'show']
     )->name('memberships.show');
+
+    Route::post(
+        '/memberships/{id}/reactivate',
+        [MembershipController::class, 'reactivate']
+    )->name('memberships.reactivate');
 });
 
 /*
@@ -461,6 +468,21 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 
     Route::get('/my-nutrition-history', [MemberNutritionHistoryController::class, 'index'])
         ->name('nutrition-history.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Member membership
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/my-memberships', [MemberMembershipController::class, 'index'])
+        ->name('member-memberships.index');
+    Route::get('/my-memberships/{id}', [MemberMembershipController::class, 'show'])
+        ->name('member-memberships.show');
+    Route::post('/my-memberships/{id}/cancel', [MemberMembershipController::class, 'cancel'])
+        ->name('member-memberships.cancel');
+    Route::post('/my-membership/freeze', [MemberMembershipController::class, 'freeze'])
+        ->name('member-membership.freeze');
 });
 
 /*

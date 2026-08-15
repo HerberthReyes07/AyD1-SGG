@@ -181,6 +181,12 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     >
                         Historial nutricional
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('member-memberships.index')"
+                        :active="request()->routeIs('member-memberships.*')"
+                    >
+                        Membresías
+                    </x-nav-link>
 
                 @endif
 
