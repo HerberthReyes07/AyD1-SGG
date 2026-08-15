@@ -58,9 +58,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="h6 mb-0">Meta calorica</h2>
-    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#calorie-goal">
-        Definir / ajustar meta
-    </button>
+    @if ($canAdjustGoal)
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#calorie-goal">
+            Definir / ajustar meta
+        </button>
+    @endif
 </div>
 
 <div class="card mb-4">
@@ -85,6 +87,12 @@
                 Este socio todavia no tiene una meta calorica definida.
             </p>
         @endif
+
+        @unless ($canAdjustGoal)
+            <p class="text-muted small mb-0 mt-2">
+                Solo los socios con Plan Elite pueden tener su meta calorica ajustada por el entrenador.
+            </p>
+        @endunless
     </div>
 </div>
 
@@ -119,6 +127,7 @@
     </div>
 </div>
 
+@if ($canAdjustGoal)
 <x-modal name="calorie-goal" max-width="md">
     <form method="POST" action="{{ route('assignments.calorie-goal.store', $trainerAssignment) }}">
         @csrf
@@ -153,3 +162,4 @@
         </div>
     </form>
 </x-modal>
+@endif

@@ -80,6 +80,34 @@
                     </div>
                     @endif
 
+                    <!-- Membership (Member only) -->
+                    @if($member->role->name === 'member')
+                    <div class="mb-3">
+                        <x-input-label :value="__('Plan de membresía')" />
+                        <div class="form-control mt-1 bg-light">
+                            {{ $membership?->plan?->name ?? __('Sin membresía vigente') }}
+                        </div>
+                    </div>
+
+                    @if($membership)
+                    <div class="mb-3">
+                        <x-input-label :value="__('Estado de la membresía')" />
+                        <div class="mt-1">
+                            @php
+                                $membershipBadgeClass = match ($membership->status->value) {
+                                    'active' => 'bg-success',
+                                    'frozen' => 'bg-info',
+                                    'expired' => 'bg-warning',
+                                    'cancelled' => 'bg-danger',
+                                    default => 'bg-secondary',
+                                };
+                            @endphp
+                            <span class="badge {{ $membershipBadgeClass }}">{{ $membership->status->label() }}</span>
+                        </div>
+                    </div>
+                    @endif
+                    @endif
+
                     <!-- Status -->
                     <div class="mb-3">
                         <x-input-label :value="__('Estado')" />

@@ -19,6 +19,12 @@ class CalorieGoalController extends Controller
         // Guard: confirmar que el entrenador autenticado es dueño de esta asignación
         abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
 
+        abort_unless(
+            $this->service->canBeAdjustedByTrainer($trainerAssignment->member),
+            403,
+            'Solo los socios con Plan Elite pueden tener su meta calorica ajustada por el entrenador.'
+        );
+
         $validated = $request->validate([
             'daily_calories' => ['required', 'numeric', 'gt:0'],
             'objective' => ['required', Rule::enum(CalorieGoalObjective::class)],

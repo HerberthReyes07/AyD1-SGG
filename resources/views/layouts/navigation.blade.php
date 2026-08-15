@@ -4,28 +4,28 @@ $roleName = Auth::user()->role?->name;
 $navbarThemes = [
 'admin' => [
 'navbar' => 'navbar-dark bg-primary border-primary',
-'dropdown' => 'badge text-bg-light',
+'dropdown' => 'btn btn-sm rounded-pill px-3 py-1 fw-semibold bg-white text-dark border-0 shadow-sm',
 'mobileName' => 'text-white',
 'mobileEmail' => 'text-white-50',
 'mobileBorder' => 'border-light',
 ],
 'receptionist' => [
 'navbar' => 'navbar-dark bg-success border-success',
-'dropdown' => 'badge text-bg-light',
+'dropdown' => 'btn btn-sm rounded-pill px-3 py-1 fw-semibold bg-white text-dark border-0 shadow-sm',
 'mobileName' => 'text-white',
 'mobileEmail' => 'text-white-50',
 'mobileBorder' => 'border-light',
 ],
 'trainer' => [
 'navbar' => 'navbar-dark bg-info border-info',
-'dropdown' => 'badge text-bg-light',
+'dropdown' => 'btn btn-sm rounded-pill px-3 py-1 fw-semibold bg-white text-dark border-0 shadow-sm',
 'mobileName' => 'text-white',
 'mobileEmail' => 'text-white-50',
 'mobileBorder' => 'border-light',
 ],
 'member' => [
 'navbar' => 'navbar-dark bg-warning border-warning',
-'dropdown' => 'badge text-bg-light',
+'dropdown' => 'btn btn-sm rounded-pill px-3 py-1 fw-semibold bg-white text-dark border-0 shadow-sm',
 'mobileName' => 'text-white',
 'mobileEmail' => 'text-white-50',
 'mobileBorder' => 'border-light',
@@ -34,7 +34,7 @@ $navbarThemes = [
 
 $theme = $navbarThemes[$roleName] ?? [
 'navbar' => 'navbar-light bg-white border-bottom',
-'dropdown' => 'btn btn-light',
+'dropdown' => 'btn btn-sm rounded-pill px-3 py-1 fw-semibold bg-light text-dark border shadow-sm',
 'mobileName' => 'text-dark',
 'mobileEmail' => 'text-muted',
 'mobileBorder' => 'border-bottom',
@@ -60,11 +60,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
             <!-- Navigation Links -->
             <div class="navbar-nav me-auto">
 
-                <x-nav-link
-                    :href="route('dashboard')"
-                    :active="request()->routeIs('dashboard')">
-                    Dashboard
-                </x-nav-link>
+
 
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
                 <x-nav-link
@@ -76,6 +72,11 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :href="route('memberships.index')"
                     :active="request()->routeIs('memberships.*')">
                     Membresías
+                </x-nav-link>
+                <x-nav-link
+                    :href="route('attendance.index')"
+                    :active="request()->routeIs('attendance.*')">
+                    Asistencia
                 </x-nav-link>
                 @endif
 
@@ -195,10 +196,10 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
             </div>
 
             <!-- Settings Dropdown (desktop) -->
-            <div class="navbar-nav ms-auto d-none d-sm-flex">
+            <div class="navbar-nav ms-auto d-none d-sm-flex" >
                 <x-dropdown align="right">
                     <x-slot name="trigger">
-                        <button class="{{ $theme['dropdown'] }} d-flex align-items-center">
+                        <button class="{{ $theme['dropdown'] }} d-flex align-items-center " >
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <svg class="ms-1" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -208,7 +209,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         </button>
                     </x-slot>
 
-                    <x-slot name="content">
+                    <x-slot name="content" >
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Mi Perfil') }}
                         </x-dropdown-link>
@@ -233,7 +234,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     <div class="small {{ $theme['mobileEmail'] }}">{{ Auth::user()->email }}</div>
                 </div>
 
-                <div class="navbar-nav mt-2">
+                <div class="navbar-nav mt-2 ">
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
