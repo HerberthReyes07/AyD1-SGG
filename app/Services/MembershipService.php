@@ -413,4 +413,104 @@ class MembershipService
             return $membership->fresh();
         });
     }
+
+    // -------------------------------------------------------------------------
+    // Automatic status transitions
+    // -------------------------------------------------------------------------
+
+    /**
+     * Transition an active membership to Expired when its end_date has been reached.
+     *
+     * Handles source state:
+     *  - Active → Expired  (end_date reached while membership was active)
+     *
+     * Frozen memberships must not expire while frozen; they reactivate first
+     * (extending end_date) and can only expire afterwards if the extended end_date is reached.
+     *
+     * Already-expired and cancelled memberships are rejected to prevent duplicate
+     * status-history records.
+     *
+     * @param  MemberMembership  $membership   Eager-loaded membership model.
+     * @param  int|string        $changedById  User ID attributed to the transition.
+     * @throws Exception  When the membership is not in an Active state.
+     */
+    public function expireMembership(MemberMembership $membership, int|string $changedById): void
+    {
+        if ($membership->status !== MembershipStatus::Active) {
+            throw new Exception(
+                "La membresía #{$membership->id} no puede ser vencida desde el estado '{$membership->status->value}'."
+            );
+        }
+
+        DB::transaction(function () use ($membership, $changedById) {
+            $previousStatus = $membership->status;
+
+            // Flip status to Expired.
+            $this->membershipRepository->update($membership->id, [
+                'status' => MembershipStatus::Expired,
+            ]);
+
+            // Record the transition using the existing status-history mechanism.
+            MembershipStatusHistory::create([
+                'previous_status'      => $previousStatus,
+                'new_status'           => MembershipStatus::Expired,
+                'change_date'          => now(),
+                'reason'               => 'Vencimiento automático de membresía',
+                'changed_by'           => $changedById,
+                'member_membership_id' => $membership->id,
+            ]);
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Expiration notifications
+    // -------------------------------------------------------------------------
+
+    /**
+     * Send the 5-day expiration warning email to the member who owns the
+     * given membership and mark the flag so it is never sent again.
+     *
+     * @throws Exception If the membership is not in a state that allows a warning.
+     */
+    public function sendExpirationWarning(MemberMembership $membership): void
+    {
+        if ($membership->expiration_warning_sent) {
+            throw new Exception('La advertencia de vencimiento ya fue enviada para esta membresía.');
+        }
+
+        $user = $membership->member?->user;
+        if (!$user) {
+            throw new Exception("No se encontró el usuario para la membresía #{$membership->id}.");
+        }
+
+        $user->notify(new \App\Notifications\MembershipExpiringNotification($membership));
+
+        $this->membershipRepository->update($membership->id, [
+            'expiration_warning_sent' => true,
+        ]);
+    }
+
+    /**
+     * Send the expiration-day notification email to the member who owns the
+     * given membership and mark the flag so it is never sent again.
+     *
+     * @throws Exception If the membership is not in a state that allows the notification.
+     */
+    public function sendExpirationNotification(MemberMembership $membership): void
+    {
+        if ($membership->expiration_notified) {
+            throw new Exception('La notificación de vencimiento ya fue enviada para esta membresía.');
+        }
+
+        $user = $membership->member?->user;
+        if (!$user) {
+            throw new Exception("No se encontró el usuario para la membresía #{$membership->id}.");
+        }
+
+        $user->notify(new \App\Notifications\MembershipExpiredNotification($membership));
+
+        $this->membershipRepository->update($membership->id, [
+            'expiration_notified' => true,
+        ]);
+    }
 }

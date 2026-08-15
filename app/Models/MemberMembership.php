@@ -8,16 +8,18 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['member_id', 'plan_id', 'status', 'start_date', 'end_date', 'cancellation_reason', 'cancellation_date'])]
+#[Fillable(['member_id', 'plan_id', 'status', 'start_date', 'end_date', 'cancellation_reason', 'cancellation_date', 'expiration_warning_sent', 'expiration_notified'])]
 class MemberMembership extends Model
 {
     protected function casts(): array
     {
         return [
-            'status' => MembershipStatus::class,
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'cancellation_date' => 'date',
+            'status'                  => MembershipStatus::class,
+            'start_date'              => 'date',
+            'end_date'                => 'date',
+            'cancellation_date'       => 'date',
+            'expiration_warning_sent' => 'boolean',
+            'expiration_notified'     => 'boolean',
         ];
     }
 

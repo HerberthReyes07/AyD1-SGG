@@ -95,8 +95,8 @@ class MembershipRepository
             ->where(function ($q) use ($windowStart) {
                 // Include freezes that started or ended within the window, or are still open.
                 $q->where('start_date', '>=', $windowStart)
-                  ->orWhere('reactivation_date', '>=', $windowStart)
-                  ->orWhereNull('reactivation_date');
+                    ->orWhere('reactivation_date', '>=', $windowStart)
+                    ->orWhereNull('reactivation_date');
             })
             ->get();
 
@@ -119,8 +119,12 @@ class MembershipRepository
     }
 
     /**
-     * Return all frozen memberships whose estimated_reactivation_date is today or in the past
+     * Return frozen memberships whose estimated_reactivation_date is today or in the past
      * and that still have an open freeze record (reactivation_date IS NULL).
+     *
+     * A frozen membership is eligible for reactivation whenever estimated_reactivation_date <= today.
+     * The original end_date does not block reactivation; upon reactivation, end_date will be extended
+     * by the actual number of frozen days.
      *
      * Used by the membership scheduler to trigger automatic reactivation.
      */
@@ -129,8 +133,8 @@ class MembershipRepository
         return MemberMembership::where('status', MembershipStatus::Frozen)
             ->whereHas('freezes', function ($q) {
                 $q->whereNull('reactivation_date')
-                  ->whereNotNull('estimated_reactivation_date')
-                  ->whereDate('estimated_reactivation_date', '<=', Carbon::today());
+                    ->whereNotNull('estimated_reactivation_date')
+                    ->whereDate('estimated_reactivation_date', '<=', Carbon::today());
             })
             ->with([
                 'freezes' => function ($q) {
@@ -139,4 +143,54 @@ class MembershipRepository
             ])
             ->get();
     }
+
+    /**
+     * Return active memberships whose end_date is exactly 5 days from today
+     * and whose 5-day expiration warning email has not yet been sent.
+     *
+     * Filtering on status = "Active" ensures "frozen" and "cancelled" memberships
+     * are never included, satisfying those business rules implicitly.
+     */
+    public function findActiveMembershipsDueForExpirationWarning(): Collection
+    {
+        return MemberMembership::where('status', MembershipStatus::Active)
+            ->whereDate('end_date', Carbon::today()->addDays(5))
+            ->where('expiration_warning_sent', false)
+            ->with(['member.user', 'plan'])
+            ->get();
+    }
+
+    /**
+     * Return active memberships whose end_date is today (expiration day)
+     * and whose expiration notification email has not yet been sent.
+     *
+     * The notification is sent while the membership is still Active so that
+     * it fires on the expiration day itself.
+     *
+     * Filtering on status = Active ensures frozen and cancelled memberships
+     * are never included.
+     */
+    public function findActiveMembershipsExpiredToday(): Collection
+    {
+        return MemberMembership::where('status', MembershipStatus::Active)
+            ->whereDate('end_date', Carbon::today())
+            ->where('expiration_notified', false)
+            ->with(['member.user', 'plan'])
+            ->get();
+    }
+
+    /**
+     * Return active memberships whose end_date has been reached (end_date <= today).
+     *
+     * These should be transitioned to Expired by the scheduler.
+     * Already-expired and cancelled memberships are excluded by the status filter.
+     */
+    public function findActiveMembershipsToExpire(): Collection
+    {
+        return MemberMembership::where('status', MembershipStatus::Active)
+            ->whereDate('end_date', '<=', Carbon::today())
+            ->with(['member.user'])
+            ->get();
+    }
+
 }

@@ -39,10 +39,9 @@ class ProcessMembershipTasks extends Command
     public function handle(): int
     {
         $this->reactivateDueFreezes();
-
-        // Future tasks can be added here as private methods, e.g.:
-        // $this->markExpiredMemberships();
-        // $this->notifyExpiringMemberships();
+        $this->notifyExpiringMemberships();
+        $this->notifyExpiredMemberships();  // must run before status flip so membership is still active
+        $this->markExpiredMemberships();
 
         return Command::SUCCESS;
     }
@@ -66,14 +65,110 @@ class ProcessMembershipTasks extends Command
             try {
                 $this->membershipService->reactivateFrozenMembership(
                     membershipId: $membership->id,
-                    changedById:  $membership->member_id,  // attribute change logged against the member's own user ID
-                    reason:       'Reactivación automática por vencimiento del período de congelamiento',
+                    changedById: $membership->member_id,  // attribute change logged against the member's own user ID
+                    reason: 'Reactivación automática por vencimiento del período de congelamiento',
                 );
 
                 $this->info("  ✓ Membership #{$membership->id} reactivated.");
             } catch (Throwable $e) {
                 // Log and continue so one failure does not block other memberships.
                 $this->error("  ✗ Membership #{$membership->id} failed: {$e->getMessage()}");
+                report($e);
+            }
+        }
+    }
+
+    /**
+     * Send a 5-day expiration warning email to every active member whose
+     * membership expires exactly 5 days from today and has not yet received
+     * the warning.
+     */
+    private function notifyExpiringMemberships(): void
+    {
+        $memberships = $this->membershipRepository->findActiveMembershipsDueForExpirationWarning();
+
+        if ($memberships->isEmpty()) {
+            $this->info('No memberships require a 5-day expiration warning today.');
+            return;
+        }
+
+        $this->info("Found {$memberships->count()} membership(s) to warn about upcoming expiration.");
+
+        foreach ($memberships as $membership) {
+            try {
+                $this->membershipService->sendExpirationWarning($membership);
+                $this->info("  ✓ Expiration warning sent for membership #{$membership->id}.");
+            } catch (Throwable $e) {
+                $this->error("  ✗ Membership #{$membership->id} warning failed: {$e->getMessage()}");
+                report($e);
+            }
+        }
+    }
+
+    /**
+     * Send an expiration notification email to every active member whose
+     * membership end_date is today and who has not yet received this notification.
+     *
+     * The notification is sent while the membership is still Active so it fires
+     * on the expiration day itself, not the day after.
+     */
+    private function notifyExpiredMemberships(): void
+    {
+        $memberships = $this->membershipRepository->findActiveMembershipsExpiredToday();
+
+        if ($memberships->isEmpty()) {
+            $this->info('No memberships require an expiration notification today.');
+            return;
+        }
+
+        $this->info("Found {$memberships->count()} membership(s) to notify of expiration.");
+
+        foreach ($memberships as $membership) {
+            try {
+                $this->membershipService->sendExpirationNotification($membership);
+                $this->info("  ✓ Expiration notification sent for membership #{$membership->id}.");
+            } catch (Throwable $e) {
+                $this->error("  ✗ Membership #{$membership->id} notification failed: {$e->getMessage()}");
+                report($e);
+            }
+        }
+    }
+    /**
+     * Transition all memberships that have reached or passed their end_date to Expired.
+     *
+     * Processes two groups in sequence:
+     *  1. Active memberships with end_date <= today  → Expired
+     *
+     * This method runs AFTER notifyExpiredMemberships() so the expiration-day email
+     * is sent while the membership is still Active, as required.
+     *
+     * Cancelled and already-expired memberships are excluded by the repository queries.
+     * MembershipService::expireMembership() additionally guards against invalid states
+     * to prevent duplicate status-history records.
+     */
+    private function markExpiredMemberships(): void
+    {
+        $memberships = $this->membershipRepository->findActiveMembershipsToExpire();
+
+        if ($memberships->isEmpty()) {
+            $this->info('No active memberships to expire today.');
+            return;
+        }
+
+        $this->info("Found {$memberships->count()} active membership(s) to expire.");
+
+        foreach ($memberships as $membership) {
+            try {
+                $this->membershipService->expireMembership(
+                    membership: $membership,
+                    changedById: $membership->member_id,
+                );
+
+                $this->info("  ✓ Membership #{$membership->id} expired.");
+            } catch (Throwable $e) {
+                $this->error(
+                    "  ✗ Membership #{$membership->id} expiration failed: {$e->getMessage()}"
+                );
                 report($e);
             }
         }
