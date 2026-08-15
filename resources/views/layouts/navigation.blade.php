@@ -40,7 +40,7 @@ $theme = $navbarThemes[$roleName] ?? [
 'mobileBorder' => 'border-bottom',
 ];
 
-$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*');
+$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*') || request()->routeIs('class-attendance-reports.*') || request()->routeIs('reports.*');
 @endphp
 
 <nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
@@ -119,6 +119,14 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         </x-slot>
 
                         <x-slot name="content">
+                            <x-dropdown-link :href="route('reports.income.index')"
+                                :active="request()->routeIs('reports.income.*')">
+                                Ingresos
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('reports.membership-expiration.index')"
+                                :active="request()->routeIs('reports.membership-expiration.*')">
+                                Vencimiento de membresías
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('physical-progress.index')"
                                 :active="request()->routeIs('physical-progress.*')">
                                 Progreso físico

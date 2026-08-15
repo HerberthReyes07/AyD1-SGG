@@ -12,6 +12,7 @@ use App\Http\Controllers\GroupClassController;
 use App\Http\Controllers\GroupClassReportController;
 use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
+use App\Http\Controllers\IncomeReportController;
 use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
 use App\Http\Controllers\MemberMealController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMembershipController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MembershipExpirationReportController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\ProfileController;
@@ -269,6 +271,36 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'physical-progress/export-excel',
         [PhysicalProgressController::class, 'exportExcel']
     )->name('physical-progress.export-excel');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reports: Income & Membership Expiration
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/reports/income', [IncomeReportController::class, 'index'])
+        ->name('reports.income.index');
+
+    Route::get('/reports/income/export-excel', [IncomeReportController::class, 'exportExcel'])
+        ->name('reports.income.export-excel');
+
+    Route::get('/reports/income/export-csv', [IncomeReportController::class, 'exportCsv'])
+        ->name('reports.income.export-csv');
+
+    Route::post('/reports/income/export-pdf', [IncomeReportController::class, 'exportPdf'])
+        ->name('reports.income.export-pdf');
+
+    Route::get('/reports/membership-expiration', [MembershipExpirationReportController::class, 'index'])
+        ->name('reports.membership-expiration.index');
+
+    Route::get('/reports/membership-expiration/export-excel', [MembershipExpirationReportController::class, 'exportExcel'])
+        ->name('reports.membership-expiration.export-excel');
+
+    Route::get('/reports/membership-expiration/export-csv', [MembershipExpirationReportController::class, 'exportCsv'])
+        ->name('reports.membership-expiration.export-csv');
+
+    Route::post('/reports/membership-expiration/export-pdf', [MembershipExpirationReportController::class, 'exportPdf'])
+        ->name('reports.membership-expiration.export-pdf');
 });
 
 /*
