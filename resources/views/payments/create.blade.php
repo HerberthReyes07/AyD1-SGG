@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('payments.index') }}" class="btn btn-secondary">
+                                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
                                     Cancelar
                                 </a>
                                 <button type="submit" class="btn btn-primary">

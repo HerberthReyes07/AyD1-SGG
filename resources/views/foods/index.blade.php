@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">Catalogo de Alimentos</h2>
+                <h2 class="mb-0">Catálogo de alimentos</h2>
                 <small class="text-muted">
                     Consulta y administra los alimentos registrados
                 </small>

@@ -7,9 +7,13 @@
                     Consulta y administra las membresías de los socios
                 </small>
             </div>
-            <div>
+
+            <div class="d-flex gap-2">
                 <a href="{{ route('payments.create') }}" class="btn btn-primary">
                     Nueva Membresía / Pago
+                </a>
+                <a href="{{ route('payments.index') }}" class="btn btn-secondary">
+                    Ver Pagos
                 </a>
             </div>
         </div>
@@ -49,12 +53,7 @@
                             Buscar socio
                         </label>
 
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="search"
-                            name="search"
-                            value="{{ $search ?? '' }}"
+                        <input type="text" class="form-control" id="search" name="search" value="{{ $search ?? '' }}"
                             placeholder="Nombre, apellido o correo electrónico">
                     </div>
 
@@ -103,8 +102,7 @@
 
                                 <td class="pe-4 text-center">
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a
-                                            href="{{ route('memberships.member', $member->id) }}"
+                                        <a href="{{ route('memberships.member', $member->id) }}"
                                             class="btn btn-sm btn-outline-primary">
                                             Ver Membresías
                                         </a>

@@ -67,11 +67,11 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 </x-nav-link>
 
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
-                <x-nav-link
+                {{-- <x-nav-link
                     :href="route('guest-passes.index')"
                     :active="request()->routeIs('guest-passes.*')">
                     Pases de invitado
-                </x-nav-link>
+                </x-nav-link> --}}
                 <x-nav-link
                     :href="route('memberships.index')"
                     :active="request()->routeIs('memberships.*')">
@@ -84,7 +84,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :href="route('foods.index')"
                     :active="request()->routeIs('foods.*')"
                 >
-                    Catalogo de Alimentos
+                    Catálogo de alimentos
                 </x-nav-link>
 
                 <x-nav-link :href="route('employees.index')" :active="request()->routeIs('employees.*')">
@@ -99,9 +99,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :active="request()->routeIs('trainer-assignments.*')">
                     Asignaciones de entrenadores
                 </x-nav-link>
-                @endif
 
-                @if (Auth::user()->role?->name === 'admin')
                 <x-nav-link :href="route('group-classes.index')" :active="request()->routeIs('group-classes.*')">
                     Clases grupales
                 </x-nav-link>
@@ -142,6 +140,11 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :href="route('payments.index')"
                     :active="request()->routeIs('payments.*')">
                     Pagos
+                </x-nav-link>
+                <x-nav-link
+                    :href="route('guest-passes.index')"
+                    :active="request()->routeIs('guest-passes.*')">
+                    Pases de invitado
                 </x-nav-link>
                 @endif
 
