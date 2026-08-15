@@ -317,6 +317,11 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/memberships/{id}/{memberId}',
         [MembershipController::class, 'show']
     )->name('memberships.show');
+
+    Route::post(
+        '/memberships/{id}/reactivate',
+        [MembershipController::class, 'reactivate']
+    )->name('memberships.reactivate');
 });
 
 /*

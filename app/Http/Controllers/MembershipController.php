@@ -107,4 +107,30 @@ class MembershipController extends Controller
             'memberships'
         ));
     }
+    /**
+     * Manually reactivate a frozen membership (admin / receptionist).
+     *
+     * POST /memberships/{id}/reactivate
+     */
+    public function reactivate(Request $request, string|int $id)
+    {
+        try {
+            $membership = $this->membershipRepository->findById($id);
+            if (!$membership) {
+                abort(404, 'Membresía no encontrada.');
+            }
+
+            $this->membershipService->reactivateFrozenMembership(
+                membershipId: $id,
+                changedById:  $request->user()->id,
+                reason:       'Reactivación manual por administrador/recepcionista',
+            );
+
+            return redirect()
+                ->route('memberships.show', ['id' => $id, 'memberId' => $membership->member_id])
+                ->with('success', 'Membresía reactivada correctamente.');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }
