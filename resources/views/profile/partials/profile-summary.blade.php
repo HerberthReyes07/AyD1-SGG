@@ -24,5 +24,24 @@
     @if ($user->member)
     <dt class="col-5 text-secondary">{{ __('Nacimiento') }}</dt>
     <dd class="col-7">{{ $user->member->birth_date?->format('d/m/Y') ?? __('No registrada') }}</dd>
+
+    <dt class="col-5 text-secondary">{{ __('Membresía') }}</dt>
+    <dd class="col-7">{{ $membership?->plan?->name ?? __('Sin membresía vigente') }}</dd>
+
+    @if ($membership)
+        @php
+            $membershipBadgeClass = match ($membership->status->value) {
+                'active' => 'text-bg-success',
+                'frozen' => 'text-bg-info',
+                'expired' => 'text-bg-warning',
+                'cancelled' => 'text-bg-danger',
+                default => 'text-bg-secondary',
+            };
+        @endphp
+        <dt class="col-5 text-secondary">{{ __('Estado') }}</dt>
+        <dd class="col-7">
+            <span class="badge {{ $membershipBadgeClass }}">{{ $membership->status->label() }}</span>
+        </dd>
+    @endif
     @endif
 </dl>

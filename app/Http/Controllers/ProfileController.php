@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\MemberMembership;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,20 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
+        $user = $request->user()->load(['role', 'trainer.specialty', 'member']);
+
+        $membership = $user->member
+            ? MemberMembership::where('member_id', $user->member->user_id)
+                ->whereDate('start_date', '<=', today())
+                ->whereDate('end_date', '>=', today())
+                ->with('plan')
+                ->orderByDesc('start_date')
+                ->first()
+            : null;
+
         return view('profile.edit', [
-            'user' => $request->user()->load(['role', 'trainer.specialty', 'member']),
+            'user' => $user,
+            'membership' => $membership,
         ]);
     }
 

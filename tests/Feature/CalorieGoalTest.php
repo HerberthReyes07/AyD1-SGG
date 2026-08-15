@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Food;
 use App\Models\FoodCategory;
 use App\Models\Member;
+use App\Models\MemberMembership;
+use App\Models\MembershipPlan;
 use App\Models\Role;
 use App\Models\Trainer;
 use App\Models\TrainerAssignment;
@@ -99,6 +101,33 @@ class CalorieGoalTest extends TestCase
             'member_id' => $member->user_id,
             'trainer_id' => $trainer->user_id,
             'assigned_by' => $trainer->user_id,
+        ]);
+    }
+
+    private function createPlan(bool $includesTrainer): MembershipPlan
+    {
+        return MembershipPlan::create([
+            'name' => ($includesTrainer ? 'Elite' : 'Basic').' '.fake()->unique()->word(),
+            'description' => null,
+            'price' => 100,
+            'duration_months' => 1,
+            'includes_group_classes' => $includesTrainer,
+            'weekly_class_limit' => null,
+            'includes_trainer' => $includesTrainer,
+            'has_waitlist_priority' => $includesTrainer,
+        ]);
+    }
+
+    private function createMembership(Member $member, MembershipPlan $plan): MemberMembership
+    {
+        return MemberMembership::create([
+            'member_id' => $member->user_id,
+            'plan_id' => $plan->id,
+            'status' => 'active',
+            'start_date' => today()->subDays(5),
+            'end_date' => today()->addDays(25),
+            'cancellation_reason' => null,
+            'cancellation_date' => null,
         ]);
     }
 
@@ -218,11 +247,12 @@ class CalorieGoalTest extends TestCase
         $this->assertEquals(330.0, $history[2]['calories']);
     }
 
-    public function test_trainer_with_active_assignment_can_adjust_member_goal(): void
+    public function test_trainer_with_active_assignment_can_adjust_member_goal_on_elite_plan(): void
     {
         $member = $this->createMember();
         $trainer = $this->createTrainer();
         $assignment = $this->createAssignment($member, $trainer);
+        $this->createMembership($member, $this->createPlan(true));
 
         $response = $this
             ->actingAs($trainer->user)
@@ -241,12 +271,32 @@ class CalorieGoalTest extends TestCase
         ]);
     }
 
+    public function test_trainer_cannot_adjust_goal_for_a_member_without_elite_plan(): void
+    {
+        $member = $this->createMember();
+        $trainer = $this->createTrainer();
+        $assignment = $this->createAssignment($member, $trainer);
+        $this->createMembership($member, $this->createPlan(false));
+
+        $response = $this
+            ->actingAs($trainer->user)
+            ->post(route('assignments.calorie-goal.store', $assignment), [
+                'daily_calories' => 2100,
+                'objective' => 'gain_muscle',
+            ]);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseCount('calorie_goals', 0);
+    }
+
     public function test_trainer_cannot_adjust_goal_for_an_assignment_that_is_not_theirs(): void
     {
         $member = $this->createMember();
         $ownerTrainer = $this->createTrainer();
         $otherTrainer = $this->createTrainer();
         $assignment = $this->createAssignment($member, $ownerTrainer);
+        $this->createMembership($member, $this->createPlan(true));
 
         $response = $this
             ->actingAs($otherTrainer->user)

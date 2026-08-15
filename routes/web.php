@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ClassAttendanceReportController;
 use App\Http\Controllers\ClassEnrollmentController;
 use App\Http\Controllers\ClassRatingController;
@@ -13,22 +14,22 @@ use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberNutritionHistoryController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\CalorieGoalController as TrainerCalorieGoalController;
 use App\Http\Controllers\Trainer\MeasurementController;
-use App\Http\Controllers\Trainer\RoutineController;
-use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\TrainerRatingController;
 use App\Http\Controllers\Trainer\NutritionalObservationController;
+use App\Http\Controllers\Trainer\RoutineController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\TrainerClassController;
+use App\Http\Controllers\TrainerRatingController;
+use App\Http\Controllers\TrainingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -190,8 +191,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [ClassSessionController::class, 'cancel']
     )->name('class-sessions.cancel');
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Employee management
@@ -287,7 +286,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 //         ->only(
 //             ['index', 'create', 'store', 'show']
 //         );
-// 
+//
 
 /*
 |--------------------------------------------------------------------------
@@ -335,14 +334,29 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Attendance
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/attendance', [AttendanceController::class, 'index'])
+        ->name('attendance.index');
+
+    Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])
+        ->name('attendance.check-in');
+
+    Route::patch('/attendance/{attendance}/check-out', [AttendanceController::class, 'checkOut'])
+        ->name('attendance.check-out');
+
+    /*
+    |--------------------------------------------------------------------------
     | Memberships
     |--------------------------------------------------------------------------
     */
     Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'destroy']);
     Route::resource('payments', PaymentController::class)
-    ->only(
-        ['index', 'create', 'store', 'show']
-    );
+        ->only(
+            ['index', 'create', 'store', 'show']
+        );
     Route::get(
         '/memberships/member/{memberId}',
         [MembershipController::class, 'memberMemberships']
@@ -426,7 +440,7 @@ Route::middleware(['auth', 'role:member'])->group(function () {
         'trainer-assignments/{trainerAssignment}/rate',
         [TrainerRatingController::class, 'store']
     )->name('trainer-assignments.rate');
-  
+
     /*
     |--------------------------------------------------------------------------
     | Calorie goal
@@ -549,7 +563,7 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         '/trainer/assignments/{trainerAssignment}/routines/{routine}/duplicate',
         [RoutineController::class, 'duplicate']
     )->name('trainer.assignments.routines.duplicate');
-  
+
     Route::post(
         '/trainer/assignments/{trainerAssignment}/calorie-goal',
         [TrainerCalorieGoalController::class, 'store']
@@ -567,4 +581,4 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

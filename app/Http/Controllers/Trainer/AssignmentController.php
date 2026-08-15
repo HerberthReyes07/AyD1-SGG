@@ -8,8 +8,8 @@ use App\Models\TrainerAssignment;
 use App\Services\CalorieGoalService;
 use App\Services\MealService;
 use App\Services\NutritionalObservationService;
-use App\Services\TrainerAssignmentService;
 use App\Services\RoutineService;
+use App\Services\TrainerAssignmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,6 +50,8 @@ class AssignmentController extends Controller
 
         $calorieGoal = $this->calorieGoalService->getCurrentGoal($trainerAssignment->member);
 
+        $canAdjustGoal = $this->calorieGoalService->canBeAdjustedByTrainer($trainerAssignment->member);
+
         $nutritionHistory = $this->mealService->getHistory(
             $trainerAssignment->member,
             today()->subDays(6),
@@ -72,6 +74,7 @@ class AssignmentController extends Controller
             'trainerAssignment',
             'measurements',
             'calorieGoal',
+            'canAdjustGoal',
             'nutritionHistory',
             'dailyMeals',
             'dailySummary',

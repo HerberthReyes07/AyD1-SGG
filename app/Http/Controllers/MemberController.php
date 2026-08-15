@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MemberMembership;
 use App\Services\MemberService;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,7 @@ class MemberController extends Controller
     public function index()
     {
         $members = $this->memberService->getAllMembers();
+
         return view('admin.members.index', compact('members'));
     }
 
@@ -37,12 +39,14 @@ class MemberController extends Controller
         ]);
 
         $this->memberService->createMember($request->all());
+
         return redirect()->route('members.index')->with('success', 'Socio creado con éxito.');
     }
 
     public function edit(string $id)
     {
         $member = $this->memberService->getMemberById($id);
+
         return view('admin.members.edit', compact('member'));
     }
 
@@ -51,7 +55,7 @@ class MemberController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$id,
             'phone_number' => 'nullable|regex:/^[0-9+\-() ]+$/|max:20',
             'password' => 'nullable|string|min:6',
             'birth_date' => 'required|date|before:today',
@@ -59,24 +63,37 @@ class MemberController extends Controller
         ]);
 
         $this->memberService->updateMember($id, $request->all());
+
         return redirect()->route('members.index')->with('success', 'Socio actualizado con éxito.');
     }
 
     public function show(string $id)
     {
         $member = $this->memberService->getMemberById($id);
-        return view('admin.members.show', compact('member'));
+
+        $membership = $member->role->name === 'member'
+            ? MemberMembership::where('member_id', $member->id)
+                ->whereDate('start_date', '<=', today())
+                ->whereDate('end_date', '>=', today())
+                ->with('plan')
+                ->orderByDesc('start_date')
+                ->first()
+            : null;
+
+        return view('admin.members.show', compact('member', 'membership'));
     }
 
     public function activate(string $id)
     {
         $this->memberService->activateMember($id);
+
         return redirect()->route('members.index')->with('success', 'Socio activado con éxito.');
     }
 
     public function destroy(string $id)
     {
         $this->memberService->deleteMember($id);
+
         return redirect()->route('members.index')->with('success', 'Socio eliminado con éxito.');
     }
 }

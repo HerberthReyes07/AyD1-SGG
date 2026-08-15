@@ -4,11 +4,25 @@ namespace App\Services;
 
 use App\Models\CalorieGoal;
 use App\Models\Member;
+use App\Models\MemberMembership;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CalorieGoalService
 {
+    // solo los socios con un plan que incluye entrenador (Plan Elite) pueden tener su meta ajustada por el entrenador
+    public function canBeAdjustedByTrainer(Member $member): bool
+    {
+        $membership = MemberMembership::where('member_id', $member->user_id)
+            ->whereDate('start_date', '<=', today())
+            ->whereDate('end_date', '>=', today())
+            ->with('plan')
+            ->orderByDesc('start_date')
+            ->first();
+
+        return (bool) $membership?->plan?->includes_trainer;
+    }
+
     // cierra la meta vigente y crea una nueva desde hoy, sea el socio o el entrenador quien la defina
     public function setGoal(Member $member, array $data, ?int $definedBy = null): CalorieGoal
     {
