@@ -60,12 +60,30 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
             <!-- Navigation Links -->
             <div class="navbar-nav me-auto">
 
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <x-nav-link
+                    :href="route('dashboard')"
+                    :active="request()->routeIs('dashboard')">
                     Dashboard
                 </x-nav-link>
 
+                @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
+                <x-nav-link
+                    :href="route('guest-passes.index')"
+                    :active="request()->routeIs('guest-passes.*')">
+                    Pases de invitado
+                </x-nav-link>
+                <x-nav-link
+                    :href="route('memberships.index')"
+                    :active="request()->routeIs('memberships.*')">
+                    Membresías
+                </x-nav-link>
+                @endif
+
                 @if (Auth::user()->role?->name === 'admin')
-                <x-nav-link :href="route('foods.index')" :active="request()->routeIs('foods.*')">
+                <x-nav-link
+                    :href="route('foods.index')"
+                    :active="request()->routeIs('foods.*')"
+                >
                     Catalogo de Alimentos
                 </x-nav-link>
 
@@ -116,11 +134,22 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                                 :active="request()->routeIs('group-class-reports.*')">
                                 Clases grupales
                             </x-dropdown-link>
+                            <x-dropdown-link :href="route('class-attendance-reports.index')"
+                                :active="request()->routeIs('class-attendance-reports.*')">
+                                Asistencia por clase
+                            </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
                 @endif
 
+                @if (in_array(Auth::user()->role?->name, ['receptionist']))
+                <x-nav-link
+                    :href="route('payments.index')"
+                    :active="request()->routeIs('payments.*')">
+                    Pagos
+                </x-nav-link>
+                @endif
 
                 @if (Auth::user()->role?->name === 'member')
 
@@ -141,10 +170,26 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     Mis comidas
                 </x-nav-link>
 
+                    <x-nav-link
+                        :href="route('calorie-goals.edit')"
+                        :active="request()->routeIs('calorie-goals.*')"
+                    >
+                        Meta calorica
+                    </x-nav-link>
+
+                    <x-nav-link
+                        :href="route('nutrition-history.index')"
+                        :active="request()->routeIs('nutrition-history.*')"
+                    >
+                        Historial nutricional
+                    </x-nav-link>
+
                 @endif
 
                 @if (Auth::user()->role?->name === 'trainer')
-                <x-nav-link :href="route('trainer-classes.index')" :active="request()->routeIs('trainer-classes.*')">
+                <x-nav-link
+                    :href="route('trainer-classes.index')"
+                    :active="request()->routeIs('trainer-classes.*')">
                     Mis clases
                 </x-nav-link>
 
@@ -176,7 +221,8 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                            <x-dropdown-link :href="route('logout')"
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Cerrar sesión') }}
                             </x-dropdown-link>
@@ -200,7 +246,8 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
+                        <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
                                             this.closest('form').submit();">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>

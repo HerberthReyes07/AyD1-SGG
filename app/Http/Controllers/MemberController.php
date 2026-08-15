@@ -27,6 +27,15 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'phone_number' => 'nullable|regex:/^[0-9+\-() ]+$/|max:20',
+            'password' => 'required|string|min:6',
+            'birth_date' => 'required|date|before:today',
+        ]);
+
         $this->memberService->createMember($request->all());
         return redirect()->route('members.index')->with('success', 'Socio creado con éxito.');
     }
@@ -39,6 +48,16 @@ class MemberController extends Controller
 
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'phone_number' => 'nullable|regex:/^[0-9+\-() ]+$/|max:20',
+            'password' => 'nullable|string|min:6',
+            'birth_date' => 'required|date|before:today',
+            'is_active' => 'required|in:0,1',
+        ]);
+
         $this->memberService->updateMember($id, $request->all());
         return redirect()->route('members.index')->with('success', 'Socio actualizado con éxito.');
     }

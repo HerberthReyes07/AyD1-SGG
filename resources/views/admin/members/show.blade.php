@@ -54,6 +54,14 @@
                         </div>
                     </div>
 
+                    <!-- Birth Date -->
+                    <div class="mb-3">
+                        <x-input-label :value="__('Fecha de Nacimiento')" />
+                        <div class="form-control mt-1 bg-light">
+                            {{ $member->member?->birth_date?->format('d/m/Y') ?? __('No registrada') }}
+                        </div>
+                    </div>
+
                     <!-- Role -->
                     <div class="mb-3">
                         <x-input-label :value="__('Rol')" />

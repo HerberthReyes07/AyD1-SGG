@@ -99,6 +99,40 @@ class MealService
         ];
     }
 
+    // totales por dia en un rango, para ver tendencias en el historial nutricional
+    public function getHistory(Member $member, Carbon $startDate, Carbon $endDate): array
+    {
+        $mealsByDate = $member->meals()
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
+            ->with('mealFoods.food')
+            ->get()
+            ->groupBy(fn (Meal $meal) => $meal->date->toDateString());
+
+        $days = [];
+
+        for ($date = $endDate->copy(); $date->gte($startDate); $date->subDay()) {
+            $totals = $this->emptyTotals();
+
+            foreach ($mealsByDate->get($date->toDateString(), collect()) as $meal) {
+                foreach ($meal->mealFoods as $mealFood) {
+                    $nutrition = $this->nutritionFor($mealFood->food, (float) $mealFood->quantity_g);
+
+                    foreach ($nutrition as $key => $value) {
+                        $totals[$key] += $value;
+                    }
+                }
+            }
+
+            $days[] = [
+                'date' => $date->copy(),
+                ...$this->roundTotals($totals),
+            ];
+        }
+
+        return $days;
+    }
+
     // saca calorias  segun la cantidad consumida con la porcion de referencia
     public function nutritionFor(Food $food, float $quantityG): array
     {

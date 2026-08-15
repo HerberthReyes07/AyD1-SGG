@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers\Trainer;
 
+use App\Http\Controllers\Controller;
+use App\Models\Meal;
+use App\Models\TrainerAssignment;
+use App\Services\CalorieGoalService;
+use App\Services\MealService;
+use App\Services\NutritionalObservationService;
 use App\Services\TrainerAssignmentService;
 use App\Services\RoutineService;
-use App\Models\TrainerAssignment;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
-
     public function __construct(
         private readonly TrainerAssignmentService $trainerAssignmentService,
         private readonly RoutineService $routineService,
+        private readonly MealService $mealService,
+        private readonly CalorieGoalService $calorieGoalService,
+        private readonly NutritionalObservationService $nutritionalObservationService,
     ) {}
 
     /**
@@ -23,12 +29,14 @@ class AssignmentController extends Controller
     public function index()
     {
         $assignments = $this->trainerAssignmentService->getActiveForTrainer(Auth::id());
+
         return view('trainer.assignments.index', compact('assignments'));
     }
 
     public function history()
     {
         $assignments = $this->trainerAssignmentService->getHistoryForTrainer(Auth::id());
+
         return view('trainer.assignments.history', compact('assignments'));
     }
 
@@ -40,7 +48,37 @@ class AssignmentController extends Controller
         $measurements = $this->trainerAssignmentService->getMeasuresForAssignment($trainerAssignment);
         $routines = $this->routineService->getForAssignment($trainerAssignment->id);
 
-        return view('trainer.assignments.show', compact('trainerAssignment', 'measurements', 'routines'));
+        $calorieGoal = $this->calorieGoalService->getCurrentGoal($trainerAssignment->member);
+
+        $nutritionHistory = $this->mealService->getHistory(
+            $trainerAssignment->member,
+            today()->subDays(6),
+            today()
+        );
+
+        $dailyMeals = $trainerAssignment->member->meals()
+            ->whereDate('date', today())
+            ->with('mealFoods.food.category')
+            ->get()
+            ->groupBy(fn (Meal $meal) => $meal->type->value);
+
+        $dailySummary = $this->mealService->getDailySummary($trainerAssignment->member, today());
+
+        $observations = $this->nutritionalObservationService->getForAssignment($trainerAssignment);
+
+        $mealService = $this->mealService;
+
+        return view('trainer.assignments.show', compact(
+            'trainerAssignment',
+            'measurements',
+            'calorieGoal',
+            'nutritionHistory',
+            'dailyMeals',
+            'dailySummary',
+            'observations',
+            'mealService',
+            'routines'
+        ));
     }
 
     public function store(Request $request, TrainerAssignment $trainerAssignment)

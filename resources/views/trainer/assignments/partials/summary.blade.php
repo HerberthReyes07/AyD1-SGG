@@ -27,6 +27,10 @@
                 <p class="text-secondary small mb-1">Objetivo</p>
                 <p class="mb-0">{{ $trainerAssignment->goal ?? 'Sin objetivo definido' }}</p>
             </div>
+            <div class="col-md-6">
+                <p class="text-secondary small mb-1">Objetivo nutricional</p>
+                <p class="mb-0">{{ $calorieGoal?->objective?->label() ?? 'Sin meta calorica definida' }}</p>
+            </div>
         </div>
     </div>
 </div>
