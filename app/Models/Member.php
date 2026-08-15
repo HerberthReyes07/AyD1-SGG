@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,5 +59,27 @@ class Member extends Model
     public function calorieGoals(): HasMany
     {
         return $this->hasMany(CalorieGoal::class, 'member_id', 'user_id');
+    }
+
+    // Funciones auxiliares
+    public function currentMembershipIncludesTrainer(): bool
+    {
+        $activeMembership = $this->memberships()
+            ->where('status', MembershipStatus::Active)
+            ->with('plan')
+            ->latest('start_date')
+            ->first();
+
+        return $activeMembership?->plan->includes_trainer ?? false;
+    }
+
+    public function hasActiveTrainerAssignment(): bool
+    {
+        return $this->trainerAssignments()->whereNull('end_date')->exists();
+    }
+
+    public function hasAnyTrainerAssignmentHistory(): bool
+    {
+        return $this->trainerAssignments()->whereNotNull('end_date')->exists();
     }
 }

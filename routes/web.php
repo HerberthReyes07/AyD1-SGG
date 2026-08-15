@@ -16,12 +16,16 @@ use App\Http\Controllers\MemberClassController;
 use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\CalorieGoalController as TrainerCalorieGoalController;
 use App\Http\Controllers\Trainer\MeasurementController;
+use App\Http\Controllers\Trainer\RoutineController;
+use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TrainerRatingController;
 use App\Http\Controllers\Trainer\NutritionalObservationController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\TrainerClassController;
@@ -217,22 +221,54 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     | Trainer assignments
     |--------------------------------------------------------------------------
     */
+
     Route::get(
-        'trainer-assignments/{trainerAssignment}/reassign',
+        '/trainer-assignments/{trainerAssignment}/reassign',
         [TrainerAssignmentController::class, 'reassignCreate']
     )->name('trainer-assignments.reassign.create');
 
     Route::post(
-        'trainer-assignments/{trainerAssignment}/reassign',
+        '/trainer-assignments/{trainerAssignment}/reassign',
         [TrainerAssignmentController::class, 'reassignStore']
     )->name('trainer-assignments.reassign.store');
 
     Route::get(
-        'trainer-assignments/history',
+        'trainer-assignments/bulk-reassign',
+        [TrainerAssignmentController::class, 'bulkReassignCreate']
+    )->name('trainer-assignments.bulk-reassign.create');
+
+    Route::post(
+        'trainer-assignments/bulk-reassign',
+        [TrainerAssignmentController::class, 'bulkReassignStore']
+    )->name('trainer-assignments.bulk-reassign.store');
+
+    Route::get(
+        '/trainer-assignments/history',
         [TrainerAssignmentController::class, 'history']
     )->name('trainer-assignments.history');
 
     Route::resource('trainer-assignments', TrainerAssignmentController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reports: Physical Progress
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        'physical-progress',
+        [PhysicalProgressController::class, 'index']
+    )->name('physical-progress.index');
+
+    Route::post(
+        'physical-progress/export-pdf',
+        [PhysicalProgressController::class, 'exportPdf']
+    )->name('physical-progress.export-pdf');
+
+    Route::get(
+        'physical-progress/export-excel',
+        [PhysicalProgressController::class, 'exportExcel']
+    )->name('physical-progress.export-excel');
 });
 
 /*
@@ -377,6 +413,22 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Training
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/my-training',
+        [TrainingController::class, 'index']
+    )->name('member-training.index');
+
+    Route::post(
+        'trainer-assignments/{trainerAssignment}/rate',
+        [TrainerRatingController::class, 'store']
+    )->name('trainer-assignments.rate');
+  
+    /*
+    |--------------------------------------------------------------------------
     | Calorie goal
     |--------------------------------------------------------------------------
     */
@@ -427,7 +479,12 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         [TrainerClassController::class, 'complete']
     )->name('trainer-classes.complete');
 
-    // Ver socios asignados al entrenador
+    /*
+    |--------------------------------------------------------------------------
+    | Trainer assignments
+    |--------------------------------------------------------------------------
+    */
+
     Route::get(
         '/trainer/assignments',
         [AssignmentController::class, 'index']
@@ -443,11 +500,56 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
         [AssignmentController::class, 'show']
     )->name('assignments.show');
 
+    Route::patch(
+        '/trainer/assignments/{trainerAssignment}/goal',
+        [AssignmentController::class, 'updateGoal']
+    )->name('assignments.update-goal');
+
     Route::post(
         '/trainer/assignments/{trainerAssignment}/measurements',
         [MeasurementController::class, 'store']
     )->name('assignments.measurements.store');
 
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/measurements/history',
+        [MeasurementController::class, 'history']
+    )->name('assignments.measurements.history');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/routines/create',
+        [RoutineController::class, 'create']
+    )->name('assignments.routines.create');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/routines',
+        [RoutineController::class, 'store']
+    )->name('assignments.routines.store');
+
+    Route::get(
+        '/trainer/routines/{routine}/edit',
+        [RoutineController::class, 'edit']
+    )->name('routines.edit');
+
+    Route::put(
+        '/trainer/routines/{routine}',
+        [RoutineController::class, 'update']
+    )->name('routines.update');
+
+    Route::patch(
+        '/trainer/routines/{routine}/toggle-active',
+        [RoutineController::class, 'toggleActive']
+    )->name('routines.toggle-active');
+
+    Route::get(
+        '/trainer/assignments/{trainerAssignment}/routines/history',
+        [RoutineController::class, 'history']
+    )->name('trainer.assignments.routines.history');
+
+    Route::post(
+        '/trainer/assignments/{trainerAssignment}/routines/{routine}/duplicate',
+        [RoutineController::class, 'duplicate']
+    )->name('trainer.assignments.routines.duplicate');
+  
     Route::post(
         '/trainer/assignments/{trainerAssignment}/calorie-goal',
         [TrainerCalorieGoalController::class, 'store']
@@ -465,4 +567,4 @@ Route::middleware(['auth', 'role:trainer'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

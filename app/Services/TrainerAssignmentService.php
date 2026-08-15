@@ -8,6 +8,7 @@ use App\Models\Trainer;
 use App\Models\TrainerAssignment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class TrainerAssignmentService
 {
@@ -46,6 +47,7 @@ class TrainerAssignmentService
             ->withCount(['trainerAssignments as active_members_count' => function ($query) {
                 $query->whereNull('end_date');
             }])
+            ->whereHas('user', fn($query) => $query->where('is_active', true))
             ->get();
     }
 
@@ -81,6 +83,7 @@ class TrainerAssignmentService
 
         $availableTrainers = Trainer::with(['user', 'specialty'])
             ->where('user_id', '!=', $trainerAssignment->trainer_id)
+            ->whereHas('user', fn($query) => $query->where('is_active', true))
             ->withCount(['trainerAssignments as active_members_count' => function ($query) {
                 $query->whereNull('end_date');
             }])
@@ -151,5 +154,42 @@ class TrainerAssignmentService
             'arm_measurement' => $validated['arm_measurement'] ?? null,
             'leg_measurement' => $validated['leg_measurement'] ?? null,
         ]);
+    }
+
+    public function updateGoal(TrainerAssignment $trainerAssignment, string $goal): void
+    {
+        $trainerAssignment->update(['goal' => $goal]);
+    }
+
+    public function bulkReassign(array $validated): int
+    {
+        // $assignments = TrainerAssignment::whereIn('id', $validated['assignment_ids'])
+        //     ->whereNull('end_date')->where('trainer_id', $validated['old_trainer_id'])
+        //     ->get();
+        // dd($assignments, $validated);
+        return DB::transaction(function () use ($validated) {
+            $assignments = TrainerAssignment::whereIn('id', $validated['assignment_ids'])
+                ->where('trainer_id', $validated['old_trainer_id'])
+                ->whereNull('end_date')
+                ->get();
+
+            foreach ($assignments as $assignment) {
+                $this->reassign($assignment, [
+                    'new_trainer_id' => $validated['new_trainer_id'],
+                    'reassignment_reason' => $validated['reassignment_reason'],
+                    'goal' => $assignment->goal, // Keep the same goal for the new assignment
+                ]);
+            }
+
+            return $assignments->count();
+        });
+    }
+
+    public function getAllForMemberWithRatings(int $memberId): Collection
+    {
+        return TrainerAssignment::where('member_id', $memberId)
+            ->with(['trainer.user', 'trainerRating'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 }

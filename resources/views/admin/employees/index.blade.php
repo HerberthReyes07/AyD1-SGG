@@ -1,12 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 font-medium mb-0">
-                {{ __('Gestión de Empleados') }}
-            </h2>
-            <a href="{{ route('employees.create') }}" class="btn btn-primary">
-                {{ __('Agregar Empleado') }}
-            </a>
+            <div>
+                <h2 class="mb-0">{{ __('Gestión de Empleados') }}</h2>
+                <small class="text-muted">
+                    {{ __('Administra la información de los empleados') }}
+                </small>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{{ route('employees.create') }}" class="btn btn-primary">
+                    {{ __('Agregar Empleado') }}
+                </a>
+            </div>
         </div>
     </x-slot>
 

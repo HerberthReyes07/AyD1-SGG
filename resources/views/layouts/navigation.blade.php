@@ -1,44 +1,46 @@
 @php
-    $roleName = Auth::user()->role?->name;
+$roleName = Auth::user()->role?->name;
 
-    $navbarThemes = [
-        'admin' => [
-            'navbar' => 'navbar-dark bg-primary border-primary',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'receptionist' => [
-            'navbar' => 'navbar-dark bg-success border-success',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'trainer' => [
-            'navbar' => 'navbar-dark bg-info border-info',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-        'member' => [
-            'navbar' => 'navbar-dark bg-warning border-warning',
-            'dropdown' => 'badge text-bg-light',
-            'mobileName' => 'text-white',
-            'mobileEmail' => 'text-white-50',
-            'mobileBorder' => 'border-light',
-        ],
-    ];
+$navbarThemes = [
+'admin' => [
+'navbar' => 'navbar-dark bg-primary border-primary',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'receptionist' => [
+'navbar' => 'navbar-dark bg-success border-success',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'trainer' => [
+'navbar' => 'navbar-dark bg-info border-info',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+'member' => [
+'navbar' => 'navbar-dark bg-warning border-warning',
+'dropdown' => 'badge text-bg-light',
+'mobileName' => 'text-white',
+'mobileEmail' => 'text-white-50',
+'mobileBorder' => 'border-light',
+],
+];
 
-    $theme = $navbarThemes[$roleName] ?? [
-        'navbar' => 'navbar-light bg-white border-bottom',
-        'dropdown' => 'btn btn-light',
-        'mobileName' => 'text-dark',
-        'mobileEmail' => 'text-muted',
-        'mobileBorder' => 'border-bottom',
-    ];
+$theme = $navbarThemes[$roleName] ?? [
+'navbar' => 'navbar-light bg-white border-bottom',
+'dropdown' => 'btn btn-light',
+'mobileName' => 'text-dark',
+'mobileEmail' => 'text-muted',
+'mobileBorder' => 'border-bottom',
+];
+
+$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*');
 @endphp
 
 <nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
@@ -93,28 +95,52 @@
                     Miembros
                 </x-nav-link>
 
-                <x-nav-link :href="route('trainer-assignments.index')" :active="request()->routeIs('trainer-assignments.*')">
+                <x-nav-link :href="route('trainer-assignments.index')"
+                    :active="request()->routeIs('trainer-assignments.*')">
                     Asignaciones de entrenadores
                 </x-nav-link>
+                @endif
 
-                <x-nav-link
-                    :href="route('group-classes.index')"
-                    :active="request()->routeIs('group-classes.*')">
+                @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
+                <x-nav-link :href="route('guest-passes.index')" :active="request()->routeIs('guest-passes.*')">
+                    Pases de invitado
+                </x-nav-link>
+                @endif
+
+                @if (Auth::user()->role?->name === 'admin')
+                <x-nav-link :href="route('group-classes.index')" :active="request()->routeIs('group-classes.*')">
                     Clases grupales
                 </x-nav-link>
 
-                <x-nav-link
-                    :href="route('group-class-reports.index')"
-                    :active="request()->routeIs('group-class-reports.*')">
-                    Reportes de clases
-                </x-nav-link>
+                <div class="nav-item d-flex align-items-center" style="margin-left: 0.5rem">
+                    <x-dropdown align="right" width="48" menuClass="shadow-sm">
+                        <x-slot name="trigger">
+                            <button class="btn btn-sm d-flex align-items-center gap-1 rounded-pill px-3 py-1 fw-semibold {{ $isReportsActive ? 'bg-white text-primary border-0 shadow-sm' : 'bg-primary text-black border border-black border-opacity-50' }}">
+                                Reportes
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
 
-                <x-nav-link
-                    :href="route('class-attendance-reports.index')"
-                    :active="request()->routeIs('class-attendance-reports.*')"
-                >
-                    Asistencia por clase
-                </x-nav-link>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('physical-progress.index')"
+                                :active="request()->routeIs('physical-progress.*')">
+                                Progreso físico
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('group-class-reports.index')"
+                                :active="request()->routeIs('group-class-reports.*')">
+                                Clases grupales
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('class-attendance-reports.index')"
+                                :active="request()->routeIs('class-attendance-reports.*')">
+                                Asistencia por clase
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
                 @endif
 
                 @if (in_array(Auth::user()->role?->name, ['receptionist']))
@@ -136,12 +162,13 @@
                     Historial de clases
                 </x-nav-link>
 
-                    <x-nav-link
-                        :href="route('member-meals.index')"
-                        :active="request()->routeIs('member-meals.*')"
-                    >
-                        Mis comidas
-                    </x-nav-link>
+                <x-nav-link :href="route('member-training.index')" :active="request()->routeIs('member-training.*')">
+                    Mi Entrenamiento
+                </x-nav-link>
+
+                <x-nav-link :href="route('member-meals.index')" :active="request()->routeIs('member-meals.*')">
+                    Mis comidas
+                </x-nav-link>
 
                     <x-nav-link
                         :href="route('calorie-goals.edit')"
@@ -207,7 +234,8 @@
             <!-- Responsive Settings Options (mobile, dentro del collapse) -->
             <div class="d-sm-none pt-3 mt-3 border-top {{ $theme['mobileBorder'] }}">
                 <div class="px-2">
-                    <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                    <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{
+                        Auth::user()->last_name }}</div>
                     <div class="small {{ $theme['mobileEmail'] }}">{{ Auth::user()->email }}</div>
                 </div>
 

@@ -16,27 +16,27 @@ class TestMemberSeeder extends Seeder
     public function run(): void
     {
         $memberRole = Role::where('name', 'member')->firstOrFail();
-        $elitePlan = MembershipPlan::where('name', 'Elite - Monthly')->firstOrFail();
+        $plan = MembershipPlan::where('name', 'Elite - Monthly')->firstOrFail();
 
         $user = User::firstOrCreate(
-            ['email' => 'socio5@test.com'],
+            ['email' => 'socio7@test.com'],
             [
                 'role_id' => $memberRole->id,
-                'first_name' => 'Socio5',
+                'first_name' => 'Socio7',
                 'last_name' => 'Test',
                 'password' => Hash::make('socio'),
-                'phone_number' => '55512341',
+                'phone_number' => '55510386',
                 'is_active' => true,
             ]
         );
 
         $member = Member::firstOrCreate(
             ['user_id' => $user->id],
-            ['birth_date' => '1999-02-15']
+            ['birth_date' => '1999-02-17']
         );
 
         MemberMembership::firstOrCreate(
-            ['member_id' => $member->user_id, 'plan_id' => $elitePlan->id],
+            ['member_id' => $member->user_id, 'plan_id' => $plan->id],
             [
                 'status' => MembershipStatus::Active,
                 'start_date' => now(),

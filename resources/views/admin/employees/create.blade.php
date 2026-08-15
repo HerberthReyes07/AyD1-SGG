@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="h4 font-medium mb-0">
-            {{ __('Registrar Empleado') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0">{{ __('Registrar Empleado') }}</h2>
+                <small class="text-muted">
+                    {{ __('Registra la información de un nuevo empleado') }}
+                </small>
+            </div>
+        </div>
     </x-slot>
 
     @php
@@ -24,7 +29,7 @@
                                 <option value="">{{ __('Seleccione un tipo') }}</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
-                                        
+
                                         {{ match($role->name) {
                                             'trainer' => __('Entrenador'),
                                             'receptionist' => __('Recepcionista'),

@@ -1,10 +1,15 @@
-@props(['align' => 'end', 'width' => '48'])
+@props(['align' => 'end', 'width' => '48', 'menuClass' => ''])
 
 @php
 $alignmentClass = match ($align) {
     'left' => 'dropdown-menu-start',
     'top' => '',
     default => 'dropdown-menu-end',
+};
+
+$widthClass = match ($width) {
+    '48' => 'w-auto',
+    default => $width,
 };
 @endphp
 
@@ -13,7 +18,7 @@ $alignmentClass = match ($align) {
         {{ $trigger }}
     </div>
 
-    <div class="dropdown-menu {{ $alignmentClass }} shadow">
+    <div class="dropdown-menu {{ $alignmentClass }} {{ $widthClass }} border-0 shadow-lg mt-2 p-2 rounded-3 {{ $menuClass }}">
         {{ $content }}
     </div>
 </div>

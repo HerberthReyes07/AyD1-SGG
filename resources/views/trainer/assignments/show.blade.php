@@ -22,7 +22,19 @@
     <div class="container py-4">
 
         @if (session('status'))
-        <div class="alert alert-success">{{ session('status') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('status') }}
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        @endif
+
+        @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
         @endif
 
         <ul class="nav nav-tabs mb-4">
@@ -33,7 +45,7 @@
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#routine" type="button">
-                    Rutina
+                    Rutinas
                 </button>
             </li>
             <li class="nav-item">
@@ -59,7 +71,7 @@
             </div>
 
             <div class="tab-pane fade" id="routine">
-                <p class="text-secondary">Próximamente.</p>
+                @include('trainer.assignments.partials.routines')
             </div>
 
             <div class="tab-pane fade" id="measurements">

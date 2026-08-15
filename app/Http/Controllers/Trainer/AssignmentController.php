@@ -9,6 +9,7 @@ use App\Services\CalorieGoalService;
 use App\Services\MealService;
 use App\Services\NutritionalObservationService;
 use App\Services\TrainerAssignmentService;
+use App\Services\RoutineService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,7 @@ class AssignmentController extends Controller
 {
     public function __construct(
         private readonly TrainerAssignmentService $trainerAssignmentService,
+        private readonly RoutineService $routineService,
         private readonly MealService $mealService,
         private readonly CalorieGoalService $calorieGoalService,
         private readonly NutritionalObservationService $nutritionalObservationService,
@@ -40,17 +42,11 @@ class AssignmentController extends Controller
 
     public function show(TrainerAssignment $trainerAssignment)
     {
-        if (! $this->trainerAssignmentService->isActive($trainerAssignment)) {
-            return redirect()->route('assignments.index')
-                ->with('error', 'Esta asignación ya no está activa.');
-        }
+        abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
 
-        if ($trainerAssignment->trainer_id !== Auth::id()) {
-            return redirect()->route('assignments.index')
-                ->with('error', 'No tienes permiso para ver esta asignación.');
-        }
-
+        $trainerAssignment->load(['member.user']);
         $measurements = $this->trainerAssignmentService->getMeasuresForAssignment($trainerAssignment);
+        $routines = $this->routineService->getForAssignment($trainerAssignment->id);
 
         $calorieGoal = $this->calorieGoalService->getCurrentGoal($trainerAssignment->member);
 
@@ -80,7 +76,8 @@ class AssignmentController extends Controller
             'dailyMeals',
             'dailySummary',
             'observations',
-            'mealService'
+            'mealService',
+            'routines'
         ));
     }
 
@@ -99,5 +96,18 @@ class AssignmentController extends Controller
         $this->trainerAssignmentService->register($trainerAssignment->id, $validated);
 
         return back()->with('status', 'Medición registrada correctamente.');
+    }
+
+    public function updateGoal(Request $request, TrainerAssignment $trainerAssignment)
+    {
+        abort_unless($trainerAssignment->trainer_id === Auth::id(), 403);
+
+        $validated = $request->validate([
+            'goal' => 'required|string|max:1000',
+        ]);
+
+        $this->trainerAssignmentService->updateGoal($trainerAssignment, $validated['goal']);
+
+        return back()->with('status', 'Objetivo actualizado correctamente.');
     }
 }
