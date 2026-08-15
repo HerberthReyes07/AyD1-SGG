@@ -101,12 +101,6 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 </x-nav-link>
                 @endif
 
-                @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
-                <x-nav-link :href="route('guest-passes.index')" :active="request()->routeIs('guest-passes.*')">
-                    Pases de invitado
-                </x-nav-link>
-                @endif
-
                 @if (Auth::user()->role?->name === 'admin')
                 <x-nav-link :href="route('group-classes.index')" :active="request()->routeIs('group-classes.*')">
                     Clases grupales

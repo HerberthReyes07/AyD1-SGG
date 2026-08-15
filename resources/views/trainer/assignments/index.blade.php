@@ -66,7 +66,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">
+                                    <td colspan="6" class="text-center py-4 text-muted">
                                         {{ __('No se encontraron asignaciones activas.') }}
                                     </td>
                                 </tr>
