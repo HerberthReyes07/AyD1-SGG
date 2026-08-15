@@ -14,7 +14,6 @@ use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
 use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MemberController;
