@@ -7,9 +7,12 @@
                     Historial de cobros y pagos de membresías registrados
                 </small>
             </div>
-            <div>
-                <a href="{{ route('payments.create') }}" class="btn btn-primary">
-                    Nuevo Pago / Registro
+            <div class="d-flex gap-2">
+                {{-- <a href="{{ route('payments.create') }}" class="btn btn-primary">
+                    Nueva Membresía / Pago
+                </a> --}}
+                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
+                    Regresar
                 </a>
             </div>
         </div>

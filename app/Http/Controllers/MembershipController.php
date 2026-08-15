@@ -81,7 +81,7 @@ class MembershipController extends Controller
         try {
             $this->membershipService->cancelMembership($id, $request->reason, $request->user()->id);
             return redirect()
-                ->route('memberships.show', $id)
+                ->route('memberships.index')
                 ->with('success', 'Membresía cancelada correctamente.');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
