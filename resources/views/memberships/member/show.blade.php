@@ -4,11 +4,11 @@
             <div>
                 <h2 class="mb-0">Detalles de Membresía #{{ $membership->id }}</h2>
                 <small class="text-muted">
-                    Consulta la información detallada de la membresía del socio
+                    Consulta la información detallada de tu membresía
                 </small>
             </div>
             <div>
-                <a href="{{ route('memberships.member', $member->id) }}" class="btn btn-secondary">
+                <a href="{{ route('member-memberships.index') }}" class="btn btn-secondary">
                     Volver al Listado
                 </a>
             </div>
@@ -45,45 +45,40 @@
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Socio</label>
-                                <p class="fs-5 fw-bold mb-0">
-                                    {{ $membership->member?->user?->first_name }} {{ $membership->member?->user?->last_name }}
-                                </p>
-                                <p class="text-muted mb-0 small">{{ $membership->member?->user?->email }}</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Estado</label>
-                                <div>
-                                    @php
-                                        $statusClass = match($membership->status?->value ?? '') {
-                                            'active' => 'bg-success',
-                                            'frozen' => 'bg-info text-dark',
-                                            'expired' => 'bg-secondary',
-                                            'cancelled' => 'bg-danger',
-                                            default => 'bg-light text-dark'
-                                        };
-                                        $statusLabel = $membership->status?->label() ?? 'Desconocido';
-                                    @endphp
-                                    <span class="badge fs-6 {{ $statusClass }}">
-                                        {{ $statusLabel }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Plan</label>
+                                <label class="form-label text-muted small fw-bold mb-0">Plan</label>
                                 <p class="fs-6 fw-semibold mb-0">{{ $membership->plan?->name }}</p>
                                 <p class="text-muted mb-0 small">{{ $membership->plan?->description }}</p>
                             </div>
                             <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Precio del Plan</label>
+                                <label class="form-label text-muted small fw-bold mb-0">Estado</label>
+                                <div>
+                                    @php
+                                        $statusClass = match($membership->status?->value ?? '') {
+                                            'active'    => 'bg-success',
+                                            'frozen'    => 'bg-info text-dark',
+                                            'expired'   => 'bg-secondary',
+                                            'cancelled' => 'bg-danger',
+                                            default     => 'bg-light text-dark'
+                                        };
+                                        $statusLabel = $membership->status?->label() ?? 'Desconocido';
+                                    @endphp
+                                    <span class="badge fs-6 {{ $statusClass }}">{{ $statusLabel }}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label text-muted small fw-bold mb-0">Precio del Plan</label>
                                 <p class="fs-5 fw-bold text-dark mb-0">Q{{ number_format($membership->plan?->price, 2) }}</p>
                             </div>
                             <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Fecha de Inicio</label>
+                                <label class="form-label text-muted small fw-bold mb-0">Duración</label>
+                                <p class="fs-6 mb-0">{{ $membership->plan?->duration_months }} mes(es)</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label text-muted small fw-bold mb-0">Fecha de Inicio</label>
                                 <p class="fs-6 mb-0">{{ $membership->start_date?->format('d/m/Y') }}</p>
                             </div>
                             <div class="col-sm-6">
-                                <label class="form-label text-muted small uppercase fw-bold mb-0">Fecha de Fin</label>
+                                <label class="form-label text-muted small fw-bold mb-0">Fecha de Vencimiento</label>
                                 <p class="fs-6 mb-0">{{ $membership->end_date?->format('d/m/Y') }}</p>
                             </div>
 
@@ -118,7 +113,7 @@
                     </div>
                 </div>
 
-                <!-- Historial de Cambios de Estado -->
+                <!-- Historial de Estado -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3">
                         <strong class="mb-0">Historial de Estado</strong>
@@ -132,7 +127,6 @@
                                         <th>Estado Anterior</th>
                                         <th>Nuevo Estado</th>
                                         <th>Motivo</th>
-                                        <th class="pe-3">Registrado Por</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,14 +143,11 @@
                                             <td>
                                                 <span class="badge bg-light text-dark">{{ $history->new_status->label() }}</span>
                                             </td>
-                                            <td>{{ $history->reason ?? '-' }}</td>
-                                            <td class="pe-3">
-                                                {{ $history->changedBy?->first_name }} {{ $history->changedBy?->last_name }}
-                                            </td>
+                                            <td class="pe-3">{{ $history->reason ?? '-' }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center py-3 text-muted">
+                                            <td colspan="4" class="text-center py-3 text-muted">
                                                 No hay historial de cambios registrado.
                                             </td>
                                         </tr>
@@ -168,8 +159,10 @@
                 </div>
             </div>
 
-            <!-- Panel Lateral de Acciones -->
+            <!-- Panel Lateral -->
             <div class="col-md-4">
+
+                <!-- Pagos -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white py-3">
                         <strong class="mb-0">Pagos Registrados</strong>
@@ -195,40 +188,108 @@
                     </div>
                 </div>
 
+                {{-- ── Freeze form (active only) ── --}}
                 @if($membership->status?->value === 'active')
+                    <div class="card shadow-sm mb-4 border-primary">
+                        <div class="card-header bg-primary text-white py-3">
+                            <strong class="mb-0">Solicitar Congelamiento</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small mb-3">
+                                Puedes congelar tu membresía activa por un máximo de <strong>15 días acumulados</strong>
+                                por trimestre (ventana móvil de 90 días). Mientras tu membresía esté congelada,
+                                el tiempo no correrá y se añadirá al final de tu vigencia.
+                            </p>
+                            <form method="POST" action="{{ route('member-membership.freeze') }}" id="freezeForm">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="freeze_reason" class="form-label fw-semibold">
+                                        Motivo <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea
+                                        class="form-control @error('reason') is-invalid @enderror"
+                                        id="freeze_reason"
+                                        name="reason"
+                                        rows="2"
+                                        required
+                                        maxlength="255"
+                                        placeholder="Ej. Viaje, lesión, etc.">{{ old('reason') }}</textarea>
+                                    @error('reason')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="estimated_reactivation_date" class="form-label fw-semibold">
+                                        Fecha Estimada de Reactivación
+                                        <span class="text-muted fw-normal">(opcional)</span>
+                                    </label>
+                                    <input
+                                        type="date"
+                                        class="form-control @error('estimated_reactivation_date') is-invalid @enderror"
+                                        id="estimated_reactivation_date"
+                                        name="estimated_reactivation_date"
+                                        value="{{ old('estimated_reactivation_date') }}"
+                                        min="{{ now()->addDay()->toDateString() }}"
+                                        max="{{ now()->addDays(15)->toDateString() }}">
+                                    <div class="form-text">
+                                        Si no indicas una fecha, el sistema usará <strong>15 días</strong> a partir de hoy
+                                        como estimado de reactivación.
+                                    </div>
+                                    @error('estimated_reactivation_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Confirmar Congelamiento
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ── Cancel card (active or frozen) ── --}}
+                @if(in_array($membership->status?->value, ['active', 'frozen']))
                     <div class="card shadow-sm border-danger">
                         <div class="card-header bg-danger text-white py-3">
-                            <strong class="mb-0">Acciones de Control</strong>
+                            <strong class="mb-0">Cancelar Membresía</strong>
                         </div>
                         <div class="card-body">
                             <p class="text-muted small">
-                                Cancela la membresía activa del socio. Se le solicitará un motivo y los registros de historial serán preservados.
+                                Si cancelas tu membresía, esta acción no puede deshacerse y se registrará el motivo
+                                en el historial.
                             </p>
-                            
                             <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                 Cancelar Membresía
                             </button>
                         </div>
                     </div>
 
-                    <!-- Modal de Cancelación -->
+                    <!-- Modal Cancelación -->
                     <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelación de Membresía</h5>
+                                    <h5 class="modal-title" id="cancelModalLabel">Confirmar Cancelación</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                 </div>
-                                <form method="POST" action="{{ route('memberships.destroy', $membership->id) }}">
+                                <form method="POST" action="{{ route('member-memberships.cancel', $membership->id) }}">
                                     @csrf
-                                    @method('DELETE')
                                     <div class="modal-body">
                                         <p class="text-muted small mb-3">
-                                            ¿Desea cancelar la membresía activa de <strong>{{ $membership->member?->user?->first_name }} {{ $membership->member?->user?->last_name }}</strong>? Esta acción no se puede deshacer.
+                                            ¿Deseas cancelar tu membresía <strong>{{ $membership->plan?->name }}</strong>?
+                                            Esta acción no se puede deshacer.
                                         </p>
                                         <div class="mb-3">
-                                            <label for="reason" class="form-label">Motivo de la cancelación:</label>
-                                            <textarea class="form-control" id="reason" name="reason" rows="3" required placeholder="Ej. Solicitud del cliente por mudanza"></textarea>
+                                            <label for="cancel_reason" class="form-label">
+                                                Motivo de la cancelación <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea
+                                                class="form-control"
+                                                id="cancel_reason"
+                                                name="reason"
+                                                rows="3"
+                                                required
+                                                placeholder="Ej. Solicitud personal, cambio de ciudad…"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -240,6 +301,7 @@
                         </div>
                     </div>
                 @endif
+
             </div>
         </div>
 
