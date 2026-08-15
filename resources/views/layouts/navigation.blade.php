@@ -39,6 +39,8 @@ $theme = $navbarThemes[$roleName] ?? [
 'mobileEmail' => 'text-muted',
 'mobileBorder' => 'border-bottom',
 ];
+
+$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*');
 @endphp
 
 <nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
@@ -79,7 +81,6 @@ $theme = $navbarThemes[$roleName] ?? [
                     :active="request()->routeIs('trainer-assignments.*')">
                     Asignaciones de entrenadores
                 </x-nav-link>
-
                 @endif
 
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
@@ -93,10 +94,31 @@ $theme = $navbarThemes[$roleName] ?? [
                     Clases grupales
                 </x-nav-link>
 
-                <x-nav-link :href="route('group-class-reports.index')"
-                    :active="request()->routeIs('group-class-reports.*')">
-                    Reportes de clases
-                </x-nav-link>
+                <div class="nav-item d-flex align-items-center" style="margin-left: 0.5rem">
+                    <x-dropdown align="right" width="48" menuClass="shadow-sm">
+                        <x-slot name="trigger">
+                            <button class="btn btn-sm d-flex align-items-center gap-1 rounded-pill px-3 py-1 fw-semibold {{ $isReportsActive ? 'bg-white text-primary border-0 shadow-sm' : 'bg-primary text-black border border-black border-opacity-50' }}">
+                                Reportes
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('physical-progress.index')"
+                                :active="request()->routeIs('physical-progress.*')">
+                                Progreso físico
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('group-class-reports.index')"
+                                :active="request()->routeIs('group-class-reports.*')">
+                                Clases grupales
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
                 @endif
 
 

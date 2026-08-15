@@ -1,12 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
     <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 font-medium mb-0">
-                {{ __('Información Socio') }}
-            </h2>
-            <a href="{{ route('members.index') }}" class="btn btn-primary">
-                {{ __('Regresar') }}
-            </a>
+            <div>
+                <h2 class="mb-0">{{ __('Información del Socio') }}</h2>
+                <small class="text-muted">
+                    {{ __('Muestra la información detallada de un socio') }}
+                </small>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{{ route('members.index') }}" class="btn btn-primary">
+                    {{ __('Regresar') }}
+                </a>
+            </div>
         </div>
     </x-slot>
 

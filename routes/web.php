@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainerClassController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\Trainer\AssignmentController;
 use App\Http\Controllers\Trainer\MeasurementController;
@@ -229,6 +230,27 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     )->name('trainer-assignments.history');
 
     Route::resource('trainer-assignments', TrainerAssignmentController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reports: Physical Progress
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        'physical-progress',
+        [PhysicalProgressController::class, 'index']
+    )->name('physical-progress.index');
+
+    Route::post(
+        'physical-progress/export-pdf',
+        [PhysicalProgressController::class, 'exportPdf']
+    )->name('physical-progress.export-pdf');
+
+    Route::get(
+        'physical-progress/export-excel',
+        [PhysicalProgressController::class, 'exportExcel']
+    )->name('physical-progress.export-excel');
 });
 
 /*

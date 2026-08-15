@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="h4 font-medium mb-0">
-            {{ __('Registrar Socio') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-0">{{ __('Registrar Socio') }}</h2>
+                <small class="text-muted">
+                    {{ __('Registra la información de un nuevo socio') }}
+                </small>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-4">

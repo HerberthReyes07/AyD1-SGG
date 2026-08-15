@@ -37,11 +37,13 @@ class PeriodicMeasurementService
             ->get();
     }
 
-    public function getFullHistoryForMember(int $memberId): Collection
+    public function getFullHistoryForMember(int $memberId, ?string $startDate = null, ?string $endDate = null): Collection
     {
         return PeriodicMeasurement::whereHas('trainerAssignment', function ($query) use ($memberId) {
             $query->where('member_id', $memberId);
         })
+            ->when($startDate, fn($query) => $query->where('date', '>=', $startDate))
+            ->when($endDate, fn($query) => $query->where('date', '<=', $endDate))
             ->orderBy('date')
             ->get();
     }
