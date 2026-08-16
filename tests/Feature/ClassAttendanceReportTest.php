@@ -471,4 +471,126 @@ class ClassAttendanceReportTest extends TestCase
             'date_to'
         );
     }
+
+
+    public function test_admin_can_export_attendance_report_excel(): void
+{
+    $member = $this->createMember(
+        'excel.member@test.com'
+    );
+
+    $session = $this->createSession(
+        $this->yoga,
+        '2026-08-10 10:00:00'
+    );
+
+    $this->createEnrollment(
+        $member,
+        $session,
+        ClassEnrollmentStatus::Attended
+    );
+
+    $response = $this
+        ->actingAs($this->admin)
+        ->get(
+            route(
+                'class-attendance-reports.export-excel',
+                [
+                    'date_from' => '2026-08-01',
+                    'date_to' => '2026-08-31',
+                    'group_class_id' =>
+                        $this->yoga->id,
+                ]
+            )
+        );
+
+    $response->assertOk();
+
+    $response->assertHeader(
+        'content-type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+
+    $this->assertStringContainsString(
+        '.xlsx',
+        $response->headers->get(
+            'content-disposition'
+        )
+    );
+}
+
+
+public function test_receptionist_cannot_export_attendance_report_excel(): void
+{
+    $response = $this
+        ->actingAs($this->receptionist)
+        ->get(
+            route(
+                'class-attendance-reports.export-excel'
+            )
+        );
+
+    $response->assertForbidden();
+}
+
+
+public function test_admin_can_export_attendance_report_pdf(): void
+{
+    $member = $this->createMember(
+        'pdf.member@test.com'
+    );
+
+    $session = $this->createSession(
+        $this->yoga,
+        '2026-08-10 10:00:00'
+    );
+
+    $this->createEnrollment(
+        $member,
+        $session,
+        ClassEnrollmentStatus::Attended
+    );
+
+    $response = $this
+        ->actingAs($this->admin)
+        ->post(
+            route(
+                'class-attendance-reports.export-pdf'
+            ),
+            [
+                'date_from' => '2026-08-01',
+                'date_to' => '2026-08-31',
+                'group_class_id' =>
+                    $this->yoga->id,
+            ]
+        );
+
+    $response->assertOk();
+
+    $response->assertHeader(
+        'content-type',
+        'application/pdf'
+    );
+
+    $this->assertStringContainsString(
+        '.pdf',
+        $response->headers->get(
+            'content-disposition'
+        )
+    );
+}
+
+
+public function test_receptionist_cannot_export_attendance_report_pdf(): void
+{
+    $response = $this
+        ->actingAs($this->receptionist)
+        ->post(
+            route(
+                'class-attendance-reports.export-pdf'
+            )
+        );
+
+    $response->assertForbidden();
+}
 }

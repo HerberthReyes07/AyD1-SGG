@@ -118,6 +118,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         [ClassAttendanceReportController::class, 'index']
     )->name('class-attendance-reports.index');
 
+    Route::get(
+    '/group-classes/attendance-report/export-excel',
+    [
+        ClassAttendanceReportController::class,
+        'exportExcel',
+    ]
+    )->name('class-attendance-reports.export-excel');
+
+    Route::post(
+    '/group-classes/attendance-report/export-pdf',
+    [
+        ClassAttendanceReportController::class,
+        'exportPdf',
+    ]
+    )->name('class-attendance-reports.export-pdf');
+
     /*
     |--------------------------------------------------------------------------
     | Group classes
