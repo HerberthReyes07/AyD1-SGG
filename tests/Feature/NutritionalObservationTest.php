@@ -172,8 +172,7 @@ class NutritionalObservationTest extends TestCase
             ->actingAs($otherTrainer->user)
             ->get(route('assignments.show', $assignment));
 
-        $response->assertRedirect(route('assignments.index'));
-        $response->assertSessionHas('error');
+        $response->assertForbidden();
     }
 
     public function test_todays_meal_log_is_visible_to_the_assigned_trainer(): void

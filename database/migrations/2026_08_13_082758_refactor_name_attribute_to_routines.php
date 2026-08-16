@@ -12,9 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('routines', function (Blueprint $table) {
-            $table->dropColumn('name');
-            $table->string('name')->after('trainer_assignment_id');
-            $table->unique(['trainer_assignment_id', 'name']);
+            $table->dropUnique('routines_name_unique');
+
+            $table->unique(
+                ['trainer_assignment_id', 'name'],
+                'routines_trainer_assignment_id_name_unique'
+            );
         });
     }
 
@@ -24,8 +27,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('routines', function (Blueprint $table) {
-            $table->string('name')->after('trainer_assignment_id');
-            $table->dropUnique(['trainer_assignment_id', 'name']);
+            $table->dropUnique(
+                'routines_trainer_assignment_id_name_unique'
+            );
+
+            $table->unique(
+                'name',
+                'routines_name_unique'
+            );
         });
     }
 };
