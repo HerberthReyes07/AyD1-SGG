@@ -40,7 +40,7 @@ $theme = $navbarThemes[$roleName] ?? [
 'mobileBorder' => 'border-bottom',
 ];
 
-$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*') || request()->routeIs('class-attendance-reports.*') || request()->routeIs('reports.*');
+$isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*') || request()->routeIs('class-attendance-reports.*') || request()->routeIs('guest-pass-reports.*') || request()->routeIs('reports.*');
 @endphp
 
 <nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
@@ -138,6 +138,10 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                             <x-dropdown-link :href="route('class-attendance-reports.index')"
                                 :active="request()->routeIs('class-attendance-reports.*')">
                                 Asistencia por clase
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('guest-pass-reports.index')"
+                                :active="request()->routeIs('guest-pass-reports.*')">
+                                Pases de invitado
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>

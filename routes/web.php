@@ -12,13 +12,14 @@ use App\Http\Controllers\GroupClassController;
 use App\Http\Controllers\GroupClassReportController;
 use App\Http\Controllers\GroupClassScheduleController;
 use App\Http\Controllers\GuestPassController;
+use App\Http\Controllers\GuestPassReportController;
 use App\Http\Controllers\IncomeReportController;
 use App\Http\Controllers\MemberCalorieGoalController;
 use App\Http\Controllers\MemberClassController;
-use App\Http\Controllers\MemberMealController;
-use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberMealController;
 use App\Http\Controllers\MemberMembershipController;
+use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipExpirationReportController;
 use App\Http\Controllers\PaymentController;
@@ -119,20 +120,35 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     )->name('class-attendance-reports.index');
 
     Route::get(
-    '/group-classes/attendance-report/export-excel',
-    [
-        ClassAttendanceReportController::class,
-        'exportExcel',
-    ]
+        '/group-classes/attendance-report/export-excel',
+        [
+            ClassAttendanceReportController::class,
+            'exportExcel',
+        ]
     )->name('class-attendance-reports.export-excel');
 
     Route::post(
-    '/group-classes/attendance-report/export-pdf',
-    [
-        ClassAttendanceReportController::class,
-        'exportPdf',
-    ]
+        '/group-classes/attendance-report/export-pdf',
+        [
+            ClassAttendanceReportController::class,
+            'exportPdf',
+        ]
     )->name('class-attendance-reports.export-pdf');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Guest pass reports
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/reports/guest-passes', [GuestPassReportController::class, 'index'])
+        ->name('guest-pass-reports.index');
+
+    Route::get('/reports/guest-passes/export-excel', [GuestPassReportController::class, 'exportExcel'])
+        ->name('guest-pass-reports.export-excel');
+
+    Route::post('/reports/guest-passes/export-pdf', [GuestPassReportController::class, 'exportPdf'])
+        ->name('guest-pass-reports.export-pdf');
 
     /*
     |--------------------------------------------------------------------------
