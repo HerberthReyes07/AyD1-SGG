@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Registrar comida</h2>
+            <h2 class="mb-0"><i class="bi bi-egg-fried me-2"></i>Registrar comida</h2>
             <small class="text-muted">
                 Selecciona los alimentos que consumiste y la cantidad en gramos
             </small>
@@ -28,7 +28,7 @@
                         </a>
 
                         <x-primary-button>
-                            Guardar comida
+                            <i class="bi bi-check-lg me-1"></i>Guardar comida
                         </x-primary-button>
 
                     </div>

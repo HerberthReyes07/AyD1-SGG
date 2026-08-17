@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Asistencia</h2>
+            <h2 class="mb-0"><i class="bi bi-door-open me-2"></i>Asistencia</h2>
             <small class="text-muted">
                 Registra el check-in y check-out de los socios
             </small>
@@ -57,7 +57,7 @@
 
                         <div class="col-md-2 d-flex align-items-end">
                             <x-primary-button class="w-100 justify-content-center">
-                                Buscar
+                                <i class="bi bi-search me-2"></i>Buscar
                             </x-primary-button>
                         </div>
 
@@ -116,7 +116,7 @@
                                                     <input type="hidden" name="member_id" value="{{ $row['user']->id }}">
 
                                                     <button type="submit" class="btn btn-sm btn-primary">
-                                                        Registrar check-in
+                                                        <i class="bi bi-box-arrow-in-right me-1"></i>Registrar check-in
                                                     </button>
                                                 </form>
                                             @endif
@@ -134,6 +134,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                             No se encontraron socios con ese criterio.
                                         </td>
                                     </tr>
@@ -178,7 +179,7 @@
                                                 @method('PATCH')
 
                                                 <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                                    Registrar check-out
+                                                    <i class="bi bi-box-arrow-right me-1"></i>Registrar check-out
                                                 </button>
                                             </form>
                                         @endif
@@ -187,6 +188,7 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                         Todavia no hay asistencias registradas hoy.
                                     </td>
                                 </tr>

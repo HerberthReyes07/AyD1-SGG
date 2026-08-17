@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Asignar entrenador a socio') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>{{ __('Asignar entrenador a socio') }}</h2>
                 <small class="text-muted">
                     {{ __('Selecciona un socio elegible y el entrenador que lo acompañará') }}
                 </small>
             </div>
 
-            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-secondary">
-                {{ __('Volver al listado') }}
+            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>{{ __('Volver al listado') }}
             </a>
         </div>
     </x-slot>
@@ -87,13 +87,14 @@
                                                         class="btn btn-sm btn-outline-primary select-member"
                                                         data-id="{{ $member->user_id }}"
                                                         data-name="{{ $member->user->first_name }} {{ $member->user->last_name }}">
-                                                        {{ __('Seleccionar') }}
+                                                        <i class="bi bi-check-lg me-1"></i>{{ __('Seleccionar') }}
                                                     </button>
                                                 </td>
                                             </tr>
                                             @empty
                                             <tr>
                                                 <td colspan="4" class="text-center py-4 text-muted">
+                                                    <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                                     {{ __('No hay socios elegibles (deben tener Plan Élite sin
                                                     entrenador asignado).') }}
                                                 </td>
@@ -129,13 +130,15 @@
                                                         data-id="{{ $trainer->user_id }}"
                                                         data-name="{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}"
                                                         data-specialty="{{ $trainer->specialty->name }}">
-                                                        {{ __('Seleccionar') }}
+                                                        <i class="bi bi-check-lg me-1"></i>{{ __('Seleccionar') }}
                                                     </button>
                                                 </td>
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="4" class="text-center py-4 text-muted">{{ __('No hay
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
+                                                    {{ __('No hay
                                                     entrenadores disponibles.') }}</td>
                                             </tr>
                                             @endforelse
@@ -143,7 +146,7 @@
                                     </table>
                                 </div>
                                 <button type="button" class="btn btn-outline-secondary mt-3" id="back-to-step1">
-                                    &larr; {{ __('Volver') }}
+                                    <i class="bi bi-arrow-left me-1"></i>{{ __('Volver') }}
                                 </button>
                             </div>
 
@@ -172,10 +175,10 @@
                                 </div>
                                 <div class="mt-3 d-flex gap-2">
                                     <button type="button" class="btn btn-outline-secondary" id="back-to-step2">
-                                        &larr; {{ __('Volver') }}
+                                        <i class="bi bi-arrow-left me-1"></i>{{ __('Volver') }}
                                     </button>
                                     <button type="submit" class="btn btn-success">
-                                        {{ __('Confirmar asignación') }}
+                                        <i class="bi bi-check-lg me-1"></i>{{ __('Confirmar asignación') }}
                                     </button>
                                 </div>
                             </div>
@@ -201,7 +204,7 @@
                     row.classList.remove('table-primary');
                     const selectBtn = row.querySelector('button');
                     if (selectBtn) {
-                        selectBtn.textContent = '{{ __("Seleccionar") }}';
+                        selectBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionar") }}';
                         selectBtn.disabled = false;
                     }
                 });
@@ -215,7 +218,7 @@
 
                     clearRowSelection('#step1 tbody tr');
                     this.closest('tr').classList.add('table-primary');
-                    this.textContent = '{{ __("Seleccionado") }}';
+                    this.innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionado") }}';
                     this.disabled = true;
 
                     step2TabBtn.disabled = false;
@@ -232,7 +235,7 @@
 
                     clearRowSelection('#step2 tbody tr');
                     this.closest('tr').classList.add('table-primary');
-                    this.textContent = '{{ __("Seleccionado") }}';
+                    this.innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionado") }}';
                     this.disabled = true;
 
                     step3TabBtn.disabled = false;

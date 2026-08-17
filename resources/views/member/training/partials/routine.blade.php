@@ -1,6 +1,7 @@
 @if ($routines->isEmpty())
 <div class="card">
     <div class="card-body text-center py-4">
+        <i class="bi bi-inbox d-block mb-2 text-secondary" style="font-size: 2.5rem;"></i>
         <p class="text-secondary mb-0">Tu entrenador todavía no te ha asignado ninguna rutina.</p>
     </div>
 </div>
@@ -21,7 +22,7 @@
     'monday' => 'Lunes', 'tuesday' => 'Martes', 'wednesday' => 'Miércoles',
     'thursday' => 'Jueves', 'friday' => 'Viernes', 'saturday' => 'Sábado', 'sunday' => 'Domingo',
     ] as $dayValue => $dayLabel)
-    <div class="col">
+    <div class="col-6 col-md-3 col-lg">
         <div class="card h-100">
             <div class="card-header text-center small fw-semibold py-2">
                 {{ $dayLabel }}

@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Clases grupales</h2>
+                <h2 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Clases grupales</h2>
 
                 <small class="text-muted">
                     Administra las plantillas de clases grupales
@@ -13,7 +13,7 @@
                 href="{{ route('group-classes.create') }}"
                 class="btn btn-primary"
             >
-                Nueva clase
+                <i class="bi bi-plus-lg me-1"></i>Nueva clase
             </a>
         </div>
     </x-slot>
@@ -131,7 +131,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Buscar
+                                <i class="bi bi-search me-1"></i>Buscar
                             </button>
                         </div>
 
@@ -222,21 +222,21 @@
                                                 href="{{ route('group-class-schedules.index', $groupClass) }}"
                                                 class="btn btn-sm btn-outline-secondary"
                                             >
-                                                Horarios
+                                                <i class="bi bi-clock me-1"></i>Horarios
                                             </a>
 
                                             <a
                                                 href="{{ route('class-sessions.index', $groupClass) }}"
-                                                class="btn btn-sm btn-outline-dark"
+                                                class="btn btn-sm btn-outline-secondary"
                                             >
-                                                Sesiones
+                                                <i class="bi bi-list-check me-1"></i>Sesiones
                                             </a>
 
                                             <a
                                                 href="{{ route('group-classes.edit', $groupClass) }}"
                                                 class="btn btn-sm btn-outline-primary"
                                             >
-                                                Editar
+                                                <i class="bi bi-pencil-square me-1"></i>Editar
                                             </a>
 
                                             <form
@@ -251,14 +251,14 @@
                                                         type="submit"
                                                         class="btn btn-sm btn-outline-danger"
                                                     >
-                                                        Desactivar
+                                                        <i class="bi bi-x-circle me-1"></i>Desactivar
                                                     </button>
                                                 @else
                                                     <button
                                                         type="submit"
                                                         class="btn btn-sm btn-outline-success"
                                                     >
-                                                        Activar
+                                                        <i class="bi bi-check-circle me-1"></i>Activar
                                                     </button>
                                                 @endif
 
@@ -276,6 +276,7 @@
                                         colspan="7"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         No se encontraron clases grupales.
                                     </td>
                                 </tr>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Nueva clase grupal</h2>
+            <h2 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Nueva clase grupal</h2>
             <small class="text-muted">
                 Registra una nueva plantilla de clase grupal
             </small>
@@ -19,35 +19,24 @@
                     <div class="row g-3">
 
                         <div class="col-md-6">
-                            <label for="name" class="form-label">
-                                Nombre
-                            </label>
-
-                            <input
-                                type="text"
+                            <x-input-label for="name" value="Nombre" />
+                            <x-text-input
                                 id="name"
                                 name="name"
-                                value="{{ old('name') }}"
-                                class="form-control @error('name') is-invalid @enderror"
+                                type="text"
+                                class="mt-1 d-block w-100"
+                                :value="old('name')"
                                 placeholder="Ejemplo: Yoga principiantes"
-                            >
-
-                            @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="category_id" class="form-label">
-                                Categoria
-                            </label>
-
+                            <x-input-label for="category_id" value="Categoria" />
                             <select
                                 id="category_id"
                                 name="category_id"
-                                class="form-select @error('category_id') is-invalid @enderror"
+                                class="form-select mt-1"
                             >
                                 <option value="">Seleccione</option>
 
@@ -60,23 +49,15 @@
                                     </option>
                                 @endforeach
                             </select>
-
-                            @error('category_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="trainer_id" class="form-label">
-                                Entrenador
-                            </label>
-
+                            <x-input-label for="trainer_id" value="Entrenador" />
                             <select
                                 id="trainer_id"
                                 name="trainer_id"
-                                class="form-select @error('trainer_id') is-invalid @enderror"
+                                class="form-select mt-1"
                             >
                                 <option value="">Sin asignar</option>
 
@@ -94,74 +75,45 @@
                                     </option>
                                 @endforeach
                             </select>
-
-                            @error('trainer_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error class="mt-2" :messages="$errors->get('trainer_id')" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="duration_minutes" class="form-label">
-                                Duracion (minutos)
-                            </label>
-
-                            <input
+                            <x-input-label for="duration_minutes" value="Duracion (minutos)" />
+                            <x-text-input
                                 type="number"
                                 id="duration_minutes"
                                 name="duration_minutes"
                                 min="1"
-                                value="{{ old('duration_minutes') }}"
-                                class="form-control @error('duration_minutes') is-invalid @enderror"
-                            >
-
-                            @error('duration_minutes')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('duration_minutes')"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('duration_minutes')" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="max_participants" class="form-label">
-                                Cupo maximo
-                            </label>
-
-                            <input
+                            <x-input-label for="max_participants" value="Cupo maximo" />
+                            <x-text-input
                                 type="number"
                                 id="max_participants"
                                 name="max_participants"
                                 min="1"
-                                value="{{ old('max_participants') }}"
-                                class="form-control @error('max_participants') is-invalid @enderror"
-                            >
-
-                            @error('max_participants')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('max_participants')"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('max_participants')" />
                         </div>
 
                         <div class="col-md-12">
-                            <label for="description" class="form-label">
-                                Descripcion
-                            </label>
-
+                            <x-input-label for="description" value="Descripcion" />
                             <textarea
                                 id="description"
                                 name="description"
                                 rows="4"
-                                class="form-control @error('description') is-invalid @enderror"
+                                class="form-control mt-1"
                                 placeholder="Descripcion de la clase"
                             >{{ old('description') }}</textarea>
-
-                            @error('description')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
                     </div>
@@ -170,17 +122,14 @@
 
                         <a
                             href="{{ route('group-classes.index') }}"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-secondary"
                         >
-                            Cancelar
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
                         </a>
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
-                            Guardar clase
-                        </button>
+                        <x-primary-button>
+                            <i class="bi bi-check-lg me-1"></i>Guardar clase
+                        </x-primary-button>
 
                     </div>
 

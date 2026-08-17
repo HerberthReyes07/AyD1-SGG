@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Historial de mediciones durante la asignación</h2>
+    <h2 class="h6 mb-0"><i class="bi bi-rulers me-1"></i> Historial de mediciones durante la asignación</h2>
     <div class="d-flex gap-2">
         <a href="{{ route('assignments.measurements.history', $trainerAssignment) }}" class="btn btn-sm btn-outline-secondary">
             <i class="bi bi-clock-history"></i> Historial completo
@@ -13,9 +13,10 @@
 <div class="card">
     <div class="card-body">
         @if ($measurements->isEmpty())
-            <p class="text-secondary text-center mb-0 py-3">
+            <div class="text-secondary text-center py-3">
+                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                 Todavía no hay mediciones registradas para este socio.
-            </p>
+            </div>
         @else
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
@@ -90,7 +91,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar</button>
         </div>
     </form>
 </x-modal>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Editar comida</h2>
+            <h2 class="mb-0"><i class="bi bi-pencil me-2"></i>Editar comida</h2>
             <small class="text-muted">
                 Actualiza los alimentos o la cantidad consumida
             </small>
@@ -29,7 +29,7 @@
                         </a>
 
                         <x-primary-button>
-                            Guardar cambios
+                            <i class="bi bi-check-lg me-1"></i>Guardar cambios
                         </x-primary-button>
 
                     </div>

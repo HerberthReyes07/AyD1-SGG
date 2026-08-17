@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Rutinas y ejercicios</h2>
+    <h2 class="h6 mb-0"><i class="bi bi-list-check me-1"></i> Rutinas y ejercicios</h2>
     <div class="d-flex gap-2">
         <a href="{{ route('assignments.routines.create', $trainerAssignment) }}" class="btn btn-sm btn-primary">
             <i class="bi bi-plus-lg"></i> Nueva rutina
@@ -16,9 +16,10 @@
 <div class="card">
     <div class="card-body">
         @if ($routines->isEmpty())
-        <p class="text-secondary text-center mb-0 py-3">
+        <div class="text-secondary text-center py-3">
+            <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
             Todavía no hay rutinas creadas para este socio.
-        </p>
+        </div>
         @else
         <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -43,10 +44,10 @@
                         <td class="text-end">
                             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
                                 data-bs-target="#routine-detail-{{ $routine->id }}">
-                                Ver
+                                <i class="bi bi-eye"></i> Ver
                             </button>
                             <a href="{{ route('routines.edit', $routine) }}" class="btn btn-sm btn-outline-primary">
-                                Editar
+                                <i class="bi bi-pencil"></i> Editar
                             </a>
 
                             <form action="{{ route('routines.toggle-active', $routine) }}" method="POST"
@@ -55,6 +56,7 @@
                                 @method('PATCH')
                                 <button type="submit"
                                     class="btn btn-sm btn-outline-{{ $routine->is_active ? 'warning' : 'success' }}">
+                                    <i class="bi bi-{{ $routine->is_active ? 'pause-circle' : 'play-circle' }}"></i>
                                     {{ $routine->is_active ? 'Desactivar' : 'Activar' }}
                                 </button>
                             </form>

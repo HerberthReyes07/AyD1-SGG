@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Gestión de Empleados') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-people me-2"></i>{{ __('Gestión de Empleados') }}</h2>
                 <small class="text-muted">
                     {{ __('Administra la información de los empleados') }}
                 </small>
@@ -10,7 +10,7 @@
 
             <div class="d-flex gap-2">
                 <a href="{{ route('employees.create') }}" class="btn btn-primary">
-                    {{ __('Agregar Empleado') }}
+                    <i class="bi bi-plus-lg me-1"></i>{{ __('Agregar Empleado') }}
                 </a>
             </div>
         </div>
@@ -70,14 +70,14 @@
                                         <td class="px-4 py-3 text-end">
                                             <div class="d-flex justify-content-end gap-2">
                                                 <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-outline-secondary">
-                                                    {{ __('Editar') }}
+                                                    <i class="bi bi-pencil-square me-1"></i>{{ __('Editar') }}
                                                 </a>
                                                 @if($employee->is_active)
                                                     <form method="POST" action="{{ route('employees.destroy', $employee->id) }}" onsubmit="return confirm('¿De verdad desea desactivar a este empleado?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                            {{ __('Desactivar') }}
+                                                            <i class="bi bi-x-circle me-1"></i>{{ __('Desactivar') }}
                                                         </button>
                                                     </form>
                                                 @else($employee->is_active)
@@ -86,7 +86,7 @@
                                                         @csrf
                                                         @method('POST')
                                                         <button type="submit" class="btn btn-sm btn-outline-success">
-                                                            {{ __('Activar') }}
+                                                            <i class="bi bi-check-circle me-1"></i>{{ __('Activar') }}
                                                         </button>
                                                     </form>
                                                 @endif
@@ -96,6 +96,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                             {{ __('No se encontraron empleados registrados.') }}
                                         </td>
                                     </tr>

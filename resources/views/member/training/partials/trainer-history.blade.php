@@ -2,6 +2,7 @@
     <div class="card-body">
         @if ($trainerHistory->isEmpty())
             <p class="text-secondary text-center mb-0 py-3">
+                <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                 Todavía no has tenido ningún entrenador asignado.
             </p>
         @else
@@ -45,7 +46,7 @@
                                 <td class="text-end">
                                     <button type="button" class="btn btn-sm btn-outline-primary"
                                         data-bs-toggle="modal" data-bs-target="#rate-trainer-{{ $assignment->id }}">
-                                        {{ $assignment->trainerRating ? 'Editar Calificación' : 'Calificar' }}
+                                        <i class="bi bi-star me-1"></i>{{ $assignment->trainerRating ? 'Editar Calificación' : 'Calificar' }}
                                     </button>
                                 </td>
                             </tr>
@@ -86,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Guardar</button>
             </div>
         </form>
     </x-modal>

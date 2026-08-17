@@ -1,25 +1,34 @@
 <x-app-layout>
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h4 mb-0">Historial de mediciones</h1>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0"><i class="bi bi-clock-history me-2"></i>Historial de mediciones</h2>
+                <small class="text-muted">Mediciones registradas en asignaciones anteriores de este socio</small>
+            </div>
             <a href="{{ route('assignments.show', $trainerAssignment) }}"
                 class="btn btn-sm btn-outline-secondary">
-                &larr; Volver
+                <i class="bi bi-arrow-left"></i> Volver
             </a>
         </div>
+    </x-slot>
 
-        <div class="card">
-            <div class="card-body">
+    <div class="container py-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <strong><i class="bi bi-rulers me-1"></i>Mediciones anteriores</strong>
+            </div>
+            <div class="card-body p-0">
                 @if ($measurementHistory->isEmpty())
-                <p class="text-secondary text-center mb-0 py-3">
+                <div class="text-secondary text-center py-5">
+                    <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                     Este socio no tiene mediciones de asignaciones anteriores.
-                </p>
+                </div>
                 @else
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <th>Fecha</th>
+                                <th class="ps-3">Fecha</th>
                                 <th>Peso (kg)</th>
                                 <th>Cintura (cm)</th>
                                 <th>Brazo (cm)</th>
@@ -30,7 +39,7 @@
                         <tbody>
                             @foreach ($measurementHistory as $measurement)
                             <tr>
-                                <td>{{ $measurement->date->format('d/m/Y') }}</td>
+                                <td class="ps-3">{{ $measurement->date->format('d/m/Y') }}</td>
                                 <td>{{ $measurement->weight }}</td>
                                 <td>{{ $measurement->waist_measurement ?? '—' }}</td>
                                 <td>{{ $measurement->arm_measurement ?? '—' }}</td>

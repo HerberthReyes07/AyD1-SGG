@@ -1,19 +1,17 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Centro de control de entrenamiento') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>{{ __('Centro de control de entrenamiento') }}</h2>
                 <small class="text-muted">
-                    <h1 class="h5 mb-0">
-                        {{ $trainerAssignment->member->user->first_name }}
-                        {{ $trainerAssignment->member->user->last_name }}
-                    </h1>
+                    {{ $trainerAssignment->member->user->first_name }}
+                    {{ $trainerAssignment->member->user->last_name }}
                 </small>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('assignments.index') }}" class="btn btn-sm btn-secondary">
-                    &larr; Volver a mis socios
+                <a href="{{ route('assignments.index') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver a mis socios
                 </a>
             </div>
         </div>
@@ -37,30 +35,30 @@
         </div>
         @endif
 
-        <ul class="nav nav-tabs mb-4">
+        <ul class="nav nav-tabs mb-4 flex-nowrap overflow-auto text-nowrap">
             <li class="nav-item">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary" type="button">
-                    Resumen
+                    <i class="bi bi-person-vcard me-1"></i> Resumen
                 </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#routine" type="button">
-                    Rutinas
+                    <i class="bi bi-list-check me-1"></i> Rutinas
                 </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#measurements" type="button">
-                    Mediciones
+                    <i class="bi bi-rulers me-1"></i> Mediciones
                 </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nutrition" type="button">
-                    Nutricion
+                    <i class="bi bi-egg-fried me-1"></i> Nutricion
                 </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nutritional-observations" type="button">
-                    Observaciones nutricionales
+                    <i class="bi bi-chat-square-text me-1"></i> Observaciones nutricionales
                 </button>
             </li>
         </ul>

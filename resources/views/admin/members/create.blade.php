@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">{{ __('Registrar Socio') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-person-plus me-2"></i>{{ __('Registrar Socio') }}</h2>
                 <small class="text-muted">
                     {{ __('Registra la información de un nuevo socio') }}
                 </small>
@@ -68,10 +68,10 @@
 
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ route('members.index') }}" class="btn btn-outline-secondary">
-                                {{ __('Cancelar') }}
+                                <i class="bi bi-x-lg me-1"></i>{{ __('Cancelar') }}
                             </a>
                             <x-primary-button>
-                                {{ __('Guardar') }}
+                                <i class="bi bi-check-lg me-1"></i>{{ __('Guardar') }}
                             </x-primary-button>
                         </div>
                     </form>

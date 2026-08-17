@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">{{ __('Mi entrenamiento') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>{{ __('Mi entrenamiento') }}</h2>
                 <small class="text-muted">
                     {{ __('Consulta tu progreso y asignaciones de entrenamiento') }}
                 </small>
@@ -28,20 +28,23 @@
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary" type="button">
-                    Resumen
+                    <i class="bi bi-info-circle me-1"></i>Resumen
                 </button>
             </li>
             @if ($accessState === 'active')
             <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#routine" type="button">Mi rutina</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#routine" type="button">
+                    <i class="bi bi-calendar3 me-1"></i>Mi rutina
+                </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#progress" type="button">Mi
-                    progreso</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#progress" type="button">
+                    <i class="bi bi-graph-up-arrow me-1"></i>Mi progreso
+                </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#trainer-history" type="button">
-                    Mis entrenadores
+                    <i class="bi bi-people me-1"></i>Mis entrenadores
                 </button>
             </li>
             @endif

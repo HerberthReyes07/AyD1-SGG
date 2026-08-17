@@ -1,16 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Membresías del Socio</h2>
+                <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Membresías del Socio</h2>
                 <small class="text-muted">
                     Consulta el historial de membresías del socio
                 </small>
             </div>
 
             <div>
-                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
-                    Volver a Membresías
+                <a href="{{ route('memberships.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Volver a Membresías
                 </a>
             </div>
         </div>
@@ -173,7 +173,7 @@
                                             'memberId' => $member->id,
                                         ]) }}"
                                         class="btn btn-sm btn-outline-primary">
-                                        Ver Detalles
+                                        <i class="bi bi-eye me-1"></i>Ver Detalles
                                     </a>
 
                                 </td>
@@ -184,6 +184,7 @@
 
                             <tr>
                                 <td colspan="6" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                     Este socio no tiene membresías registradas.
                                 </td>
                             </tr>

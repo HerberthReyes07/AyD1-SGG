@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Registrar Pago / Adquirir Membresía</h2>
+            <h2 class="mb-0"><i class="bi bi-credit-card me-2"></i>Registrar Pago / Adquirir Membresía</h2>
             <small class="text-muted">
                 Simula y registra el pago de membresía para un socio
             </small>
@@ -40,7 +40,7 @@
 
                             <!-- Selector de Socio -->
                             <div class="mb-3">
-                                <label for="member_id" class="form-label fw-bold">1. Seleccionar Socio</label>
+                                <x-input-label for="member_id" class="fw-bold" :value="__('1. Seleccionar Socio')" />
                                 <select class="form-select @error('member_id') is-invalid @enderror" id="member_id" name="member_id" required>
                                     <option value="">-- Seleccionar Socio --</option>
                                     @foreach ($members as $user)
@@ -55,17 +55,30 @@
                             </div>
 
                             <!-- Selector de Plan -->
-                            <div class="mb-3"> <label for="plan_id" class="form-label fw-bold"> 2. Seleccionar Plan de Membresía </label> <select class="form-select @error('plan_id') is-invalid @enderror" id="plan_id" name="plan_id" required>
+                            <div class="mb-3">
+                                <x-input-label for="plan_id" class="fw-bold" :value="__('2. Seleccionar Plan de Membresía')" />
+                                <select class="form-select @error('plan_id') is-invalid @enderror" id="plan_id" name="plan_id" required>
                                     <option value="" data-price="0" data-duration="0" data-plan-name="" data-period="" data-discount="0"> -- Seleccionar Plan -- </option>
-                                    @foreach ($plans as $plan) @php [$name, $period] = array_pad(explode(' - ', $plan->name), 2, ''); $names = [ 'Basic' => 'Básico', 'Premium' => 'Premium', 'Elite' => 'Élite', ]; $periods = [ 'Monthly' => 'Mensual', 'Quarterly' => 'Trimestral', 'Annual' => 'Anual', ]; $discounts = [ 'Monthly' => 0, 'Quarterly' => 10, 'Annual' => 20, ];
-                                    @endphp
-                                    <option value="{{ $plan->id }}" data-price="{{ $plan->price }}" data-duration="{{ $plan->duration_months }}" data-plan-name="{{ $names[$name] ?? $name }}" data-period="{{ $periods[$period] ?? $period }}" data-discount="{{ $discounts[$period] ?? 0 }}" @selected(old('plan_id', request('plan_id'))==$plan->id)> {{ $names[$name] ?? $name }} - {{ $periods[$period] ?? $period }} - Q{{ number_format($plan->price, 2) }} </option>
+                                    @foreach ($plans as $plan)
+                                        @php
+                                            [$name, $period] = array_pad(explode(' - ', $plan->name), 2, '');
+                                            $names = ['Basic' => 'Básico', 'Premium' => 'Premium', 'Elite' => 'Élite'];
+                                            $periods = ['Monthly' => 'Mensual', 'Quarterly' => 'Trimestral', 'Annual' => 'Anual'];
+                                            $discounts = ['Monthly' => 0, 'Quarterly' => 10, 'Annual' => 20];
+                                        @endphp
+                                        <option value="{{ $plan->id }}" data-price="{{ $plan->price }}" data-duration="{{ $plan->duration_months }}" data-plan-name="{{ $names[$name] ?? $name }}" data-period="{{ $periods[$period] ?? $period }}" data-discount="{{ $discounts[$period] ?? 0 }}" @selected(old('plan_id', request('plan_id')) == $plan->id)>
+                                            {{ $names[$name] ?? $name }} - {{ $periods[$period] ?? $period }} - Q{{ number_format($plan->price, 2) }}
+                                        </option>
                                     @endforeach
-                                </select> @error('plan_id') <div class="invalid-feedback">{{ $message }}</div> @enderror </div>
+                                </select>
+                                @error('plan_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <!-- Selector de Método de Pago (Simulado) -->
                             <div class="mb-3">
-                                <label for="payment_method_id" class="form-label fw-bold">3. Método de Pago (Simulado)</label>
+                                <x-input-label for="payment_method_id" class="fw-bold" :value="__('3. Método de Pago (Simulado)')" />
                                 <select class="form-select @error('payment_method_id') is-invalid @enderror" id="payment_method_id" name="payment_method_id" required>
                                     <option value="">-- Seleccionar Método --</option>
                                     @foreach ($paymentMethods as $method)
@@ -81,7 +94,7 @@
 
                             <!-- Selector de Promoción (Opcional, de rastreo) -->
                             <div class="mb-3">
-                                <label for="promotion_id" class="form-label fw-bold">4. Promoción (Opcional)</label>
+                                <x-input-label for="promotion_id" class="fw-bold" :value="__('4. Promoción (Opcional)')" />
                                 <select class="form-select @error('promotion_id') is-invalid @enderror" id="promotion_id" name="promotion_id">
                                     <option value="">Ninguna promoción seleccionada</option>
                                     @foreach ($promotions as $promotion)
@@ -96,11 +109,11 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
+                                <a href="{{ route('memberships.index') }}" class="btn btn-outline-secondary">
                                     Cancelar
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    Registrar Pago y Activar
+                                    <i class="bi bi-check-lg me-1"></i>Registrar Pago y Activar
                                 </button>
                             </div>
                         </form>

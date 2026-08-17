@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Resumen de la asignación</h2>
+    <h2 class="h6 mb-0"><i class="bi bi-person-vcard me-1"></i> Resumen de la asignación</h2>
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
             data-bs-target="#new-goal">
-            Actualizar objetivo
+            <i class="bi bi-pencil"></i> Actualizar objetivo
         </button>
     </div>
 </div>
@@ -52,7 +52,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar</button>
         </div>
     </form>
 </x-modal>

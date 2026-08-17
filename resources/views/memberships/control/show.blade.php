@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Detalles de Membresía #{{ $membership->id }}</h2>
+                <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Detalles de Membresía #{{ $membership->id }}</h2>
                 <small class="text-muted">
                     Consulta la información detallada de la membresía del socio
                 </small>
             </div>
             <div>
-                <a href="{{ route('memberships.member', $member->id) }}" class="btn btn-secondary">
-                    Volver al Listado
+                <a href="{{ route('memberships.member', $member->id) }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Volver al Listado
                 </a>
             </div>
         </div>
@@ -135,7 +135,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($membership->statusHistories as $history)
+                                    @forelse ($membership->statusHistories as $history)
                                     <tr>
                                         <td class="ps-3">{{ $history->change_date?->format('d/m/Y') }}</td>
                                         <td>
@@ -156,6 +156,7 @@
                                     @empty
                                     <tr>
                                         <td colspan="5" class="text-center py-3 text-muted">
+                                            <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                             No hay historial de cambios registrado.
                                         </td>
                                     </tr>
@@ -187,6 +188,7 @@
                             </li>
                             @empty
                             <li class="list-group-item text-center py-3 text-muted">
+                                <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                 No hay pagos registrados para esta membresía.
                             </li>
                             @endforelse
@@ -205,7 +207,7 @@
                         </p>
 
                         <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#cancelModal">
-                            Cancelar Membresía
+                            <i class="bi bi-x-circle me-1"></i>Cancelar Membresía
                         </button>
                     </div>
                 </div>
@@ -226,13 +228,13 @@
                                         ¿Desea cancelar la membresía activa de <strong>{{ $membership->member?->user?->first_name }} {{ $membership->member?->user?->last_name }}</strong>? Esta acción no se puede deshacer.
                                     </p>
                                     <div class="mb-3">
-                                        <label for="reason" class="form-label">Motivo de la cancelación:</label>
+                                        <x-input-label for="reason" :value="__('Motivo de la cancelación:')" />
                                         <textarea class="form-control" id="reason" name="reason" rows="3" required placeholder="Ej. Solicitud del cliente por mudanza"></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-danger">Confirmar Cancelación</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i>Confirmar Cancelación</button>
                                 </div>
                             </form>
                         </div>
@@ -252,7 +254,7 @@
                         <form method="POST" action="{{ route('memberships.reactivate', $membership->id) }}">
                             @csrf
                             <button type="submit" class="btn btn-primary w-100">
-                                Reactivar Membresía
+                                <i class="bi bi-arrow-repeat me-1"></i>Reactivar Membresía
                             </button>
                         </form>
                     </div>

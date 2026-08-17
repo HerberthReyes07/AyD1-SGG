@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Planes de Membresía Disponibles</h2>
+            <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Planes de Membresía Disponibles</h2>
             <small class="text-muted">
                 Selecciona un plan y asócialo a un socio para registrar su pago y activar su membresía.
             </small>
@@ -49,7 +49,7 @@
                                 <li class="mb-2">
                                     @if ($plan->includes_group_classes)
                                         <span class="text-dark">
-                                            ✔ Clases grupales incluidas
+                                            <i class="bi bi-check-lg text-success me-1"></i>Clases grupales incluidas
                                             @if ($plan->weekly_class_limit)
                                                 (Límite: {{ $plan->weekly_class_limit }} por semana)
                                             @else
@@ -57,21 +57,21 @@
                                             @endif
                                         </span>
                                     @else
-                                        <span class="text-muted">✗ No incluye clases grupales</span>
+                                        <span class="text-muted"><i class="bi bi-x-lg me-1"></i>No incluye clases grupales</span>
                                     @endif
                                 </li>
                                 <li class="mb-2">
                                     @if ($plan->includes_trainer)
-                                        <span class="text-dark">✔ Entrenador personal incluido</span>
+                                        <span class="text-dark"><i class="bi bi-check-lg text-success me-1"></i>Entrenador personal incluido</span>
                                     @else
-                                        <span class="text-muted">✗ No incluye entrenador</span>
+                                        <span class="text-muted"><i class="bi bi-x-lg me-1"></i>No incluye entrenador</span>
                                     @endif
                                 </li>
                                 <li class="mb-2">
                                     @if ($plan->has_waitlist_priority)
-                                        <span class="text-dark">✔ Prioridad en lista de espera</span>
+                                        <span class="text-dark"><i class="bi bi-check-lg text-success me-1"></i>Prioridad en lista de espera</span>
                                     @else
-                                        <span class="text-muted">✗ Sin prioridad en lista de espera</span>
+                                        <span class="text-muted"><i class="bi bi-x-lg me-1"></i>Sin prioridad en lista de espera</span>
                                     @endif
                                 </li>
                             </ul>
@@ -83,7 +83,7 @@
                                 <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                                 
                                 <div class="mb-3">
-                                    <label class="form-label small fw-bold">Seleccionar Socio:</label>
+                                    <x-input-label class="small fw-bold" :value="__('Seleccionar Socio:')" />
                                     <select name="member_id" class="form-select form-select-sm" required>
                                         <option value="">-- Seleccionar --</option>
                                         @foreach ($members as $user)
@@ -95,7 +95,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary w-100">
-                                    Proceder al Pago
+                                    <i class="bi bi-arrow-right-circle me-1"></i>Proceder al Pago
                                 </button>
                             </form>
                         </div>

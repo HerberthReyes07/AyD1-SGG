@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0 fw-bold">{{ __('Reporte de Ingresos') }}</h2>
+                <h2 class="mb-0 fw-bold">
+                    <i class="bi bi-cash-coin text-primary me-2"></i>
+                    {{ __('Reporte de Ingresos') }}
+                </h2>
                 <small class="text-muted">
                     {{ __('Ingresos totales y desglose por plan de membresía agrupados por semana o por mes') }}
                 </small>

@@ -1,7 +1,7 @@
 <section>
     <header>
         <h2 class="h5 fw-medium text-dark">
-            Informacion del perfil
+            <i class="bi bi-person-lines-fill me-2"></i>Informacion del perfil
         </h2>
 
         <p class="mt-1 small text-secondary">
@@ -143,7 +143,7 @@
         <div class="d-flex align-items-center gap-3">
 
             <x-primary-button>
-                Guardar
+                <i class="bi bi-check-lg me-1"></i>Guardar
             </x-primary-button>
 
             @if (session('status') === 'profile-updated')

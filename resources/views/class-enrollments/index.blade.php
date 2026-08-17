@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
             <div>
                 <h2 class="mb-0">
-                    Inscripciones - {{ $session->groupClass->name }}
+                    <i class="bi bi-people me-2"></i>Inscripciones - {{ $session->groupClass->name }}
                 </h2>
 
                 <small class="text-muted">
@@ -19,7 +19,7 @@
                 ) }}"
                 class="btn btn-outline-secondary"
             >
-                Volver a sesiones
+                <i class="bi bi-arrow-left me-1"></i>Volver a sesiones
             </a>
 
         </div>
@@ -28,18 +28,32 @@
     <div class="container-xl py-4">
 
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar"
+                ></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar"
+                ></button>
             </div>
         @endif
 
@@ -150,7 +164,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Inscribir
+                                <i class="bi bi-plus-lg me-1"></i>Inscribir
                             </button>
 
                         </div>
@@ -223,7 +237,7 @@
                                                 type="submit"
                                                 class="btn btn-sm btn-outline-danger"
                                             >
-                                                Cancelar inscripcion
+                                                <i class="bi bi-x-circle me-1"></i>Cancelar inscripcion
                                             </button>
 
                                         </form>
@@ -239,6 +253,7 @@
                                         colspan="4"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         No hay socios inscritos.
                                     </td>
                                 </tr>
@@ -325,6 +340,7 @@
                                         colspan="4"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         No hay socios en lista de espera.
                                     </td>
                                 </tr>

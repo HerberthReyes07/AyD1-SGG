@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
             <div>
                 <h2 class="mb-0">
-                    {{ $session->groupClass->name }}
+                    <i class="bi bi-calendar2-check me-2"></i>{{ $session->groupClass->name }}
                 </h2>
 
                 <small class="text-muted">
@@ -16,7 +16,7 @@
                 href="{{ route('trainer-classes.index') }}"
                 class="btn btn-outline-secondary"
             >
-                Volver
+                <i class="bi bi-arrow-left"></i> Volver
             </a>
 
         </div>
@@ -25,13 +25,14 @@
     <div class="container-xl py-4">
 
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
 
                     @foreach ($errors->all() as $error)
@@ -39,6 +40,7 @@
                     @endforeach
 
                 </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         @endif
 
@@ -50,7 +52,7 @@
 
                     <div class="col-md-3">
                         <span class="text-muted">
-                            Estado
+                            <i class="bi bi-info-circle me-1"></i>Estado
                         </span>
 
                         <h4>
@@ -60,7 +62,7 @@
 
                     <div class="col-md-3">
                         <span class="text-muted">
-                            Fecha
+                            <i class="bi bi-calendar3 me-1"></i>Fecha
                         </span>
 
                         <h4>
@@ -70,7 +72,7 @@
 
                     <div class="col-md-3">
                         <span class="text-muted">
-                            Hora
+                            <i class="bi bi-clock me-1"></i>Hora
                         </span>
 
                         <h4>
@@ -80,7 +82,7 @@
 
                     <div class="col-md-3">
                         <span class="text-muted">
-                            Participantes
+                            <i class="bi bi-people me-1"></i>Participantes
                         </span>
 
                         <h4>
@@ -119,7 +121,7 @@
                             type="submit"
                             class="btn btn-success"
                         >
-                            Iniciar sesion
+                            <i class="bi bi-play-fill"></i> Iniciar sesion
                         </button>
 
                     </form>
@@ -135,7 +137,7 @@
 
             <div class="card-header bg-white">
                 <strong>
-                    Participantes
+                    <i class="bi bi-people me-1"></i>Participantes
                 </strong>
             </div>
 
@@ -245,8 +247,9 @@
 
                                     <td
                                         colspan="3"
-                                        class="text-center py-4 text-muted"
+                                        class="text-center py-5 text-muted"
                                     >
+                                        <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                                         No hay participantes inscritos.
                                     </td>
 
@@ -272,7 +275,7 @@
                             type="submit"
                             class="btn btn-primary"
                         >
-                            Guardar asistencia
+                            <i class="bi bi-check-lg"></i> Guardar asistencia
                         </button>
 
                     </div>
@@ -309,7 +312,7 @@
                             type="submit"
                             class="btn btn-danger"
                         >
-                            Finalizar sesion
+                            <i class="bi bi-flag"></i> Finalizar sesion
                         </button>
 
                     </form>

@@ -1,11 +1,12 @@
-<h2 class="h6 mb-3">Registro de hoy</h2>
+<h2 class="h6 mb-3"><i class="bi bi-egg-fried me-1"></i> Registro de hoy</h2>
 
 <div class="card mb-4">
     <div class="card-body">
         @if ($dailyMeals->isEmpty())
-            <p class="text-secondary text-center mb-0 py-3">
+            <div class="text-secondary text-center py-3">
+                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                 El socio no ha registrado comidas hoy.
-            </p>
+            </div>
         @else
             <div class="mb-3 text-secondary small">
                 Total del dia: {{ number_format($dailySummary['totals']['calories'], 0) }} kcal
@@ -57,10 +58,10 @@
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Meta calorica</h2>
+    <h2 class="h6 mb-0"><i class="bi bi-bullseye me-1"></i> Meta calorica</h2>
     @if ($canAdjustGoal)
         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#calorie-goal">
-            Definir / ajustar meta
+            <i class="bi bi-pencil"></i> Definir / ajustar meta
         </button>
     @endif
 </div>
@@ -83,9 +84,10 @@
                 </div>
             </div>
         @else
-            <p class="text-secondary text-center mb-0 py-3">
+            <div class="text-secondary text-center py-3">
+                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                 Este socio todavia no tiene una meta calorica definida.
-            </p>
+            </div>
         @endif
 
         @unless ($canAdjustGoal)
@@ -96,7 +98,7 @@
     </div>
 </div>
 
-<h2 class="h6 mb-3">Historial nutricional (ultimos 7 dias)</h2>
+<h2 class="h6 mb-3"><i class="bi bi-clock-history me-1"></i> Historial nutricional (ultimos 7 dias)</h2>
 
 <div class="card">
     <div class="card-body">
@@ -158,7 +160,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar</button>
         </div>
     </form>
 </x-modal>

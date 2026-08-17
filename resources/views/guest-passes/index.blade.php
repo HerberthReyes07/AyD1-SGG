@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Pases de invitado</h2>
+                <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>Pases de invitado</h2>
                 <small class="text-muted">
                     Consulta y registra los pases otorgados
                 </small>
@@ -12,7 +12,7 @@
                 href="{{ route('guest-passes.create') }}"
                 class="btn btn-primary"
             >
-                Nuevo pase
+                <i class="bi bi-plus-lg me-1"></i>Nuevo pase
             </a>
         </div>
     </x-slot>
@@ -39,67 +39,50 @@
                     <div class="row g-3">
 
                         <div class="col-md-4">
-                            <label for="search" class="form-label">
-                                Buscar invitado
-                            </label>
+                            <x-input-label for="search" :value="__('Buscar invitado')" />
 
-                            <input
-                                type="text"
-                                class="form-control"
+                            <x-text-input
                                 id="search"
                                 name="search"
-                                value="{{ request('search') }}"
+                                type="text"
+                                class="mt-1 d-block w-100"
+                                :value="request('search')"
                                 placeholder="Nombre o DPI"
-                            >
+                            />
                         </div>
 
                         <div class="col-md-2">
-                            <label for="date_from" class="form-label">
-                                Desde
-                            </label>
+                            <x-input-label for="date_from" :value="__('Desde')" />
 
-                            <input
-                                type="date"
-                                class="form-control @error('date_from') is-invalid @enderror"
+                            <x-text-input
                                 id="date_from"
                                 name="date_from"
-                                value="{{ request('date_from') }}"
-                            >
+                                type="date"
+                                class="mt-1 d-block w-100 @error('date_from') is-invalid @enderror"
+                                :value="request('date_from')"
+                            />
 
-                            @error('date_from')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error :messages="$errors->get('date_from')" class="mt-1" />
                         </div>
 
                         <div class="col-md-2">
-                            <label for="date_to" class="form-label">
-                                Hasta
-                            </label>
+                            <x-input-label for="date_to" :value="__('Hasta')" />
 
-                            <input
-                                type="date"
-                                class="form-control @error('date_to') is-invalid @enderror"
+                            <x-text-input
                                 id="date_to"
                                 name="date_to"
-                                value="{{ request('date_to') }}"
-                            >
+                                type="date"
+                                class="mt-1 d-block w-100 @error('date_to') is-invalid @enderror"
+                                :value="request('date_to')"
+                            />
 
-                            @error('date_to')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error :messages="$errors->get('date_to')" class="mt-1" />
                         </div>
 
                         <div class="col-md-2 d-flex align-items-end">
-                            <button
-                                type="submit"
-                                class="btn btn-primary w-100"
-                            >
-                                Buscar
-                            </button>
+                            <x-primary-button class="w-100 justify-content-center">
+                                <i class="bi bi-search me-1"></i>Buscar
+                            </x-primary-button>
                         </div>
 
                         <div class="col-md-2 d-flex align-items-end">
@@ -107,7 +90,7 @@
                                 href="{{ route('guest-passes.index') }}"
                                 class="btn btn-outline-secondary w-100"
                             >
-                                Limpiar
+                                <i class="bi bi-x-circle me-1"></i>Limpiar
                             </a>
                         </div>
 
@@ -118,38 +101,38 @@
         </div>
 
         <div class="card shadow-sm mb-4">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-            <div>
-                <span class="text-muted">
-                    Pases encontrados
-                </span>
+                    <div>
+                        <span class="text-muted">
+                            Pases encontrados
+                        </span>
 
-                <h3 class="mb-0">
-                    {{ $totalGuestPasses }}
-                </h3>
-            </div>
+                        <h3 class="mb-0">
+                            {{ $totalGuestPasses }}
+                        </h3>
+                    </div>
 
-            @if (request('date_from') || request('date_to'))
-                <div class="text-end text-muted">
-                    Periodo:
+                    @if (request('date_from') || request('date_to'))
+                        <div class="text-end text-muted">
+                            Periodo:
 
-                    <strong>
-                        {{ request('date_from') ?: 'Inicio' }}
-                    </strong>
+                            <strong>
+                                {{ request('date_from') ?: 'Inicio' }}
+                            </strong>
 
-                    a
+                            a
 
-                    <strong>
-                        {{ request('date_to') ?: 'Actualidad' }}
-                    </strong>
+                            <strong>
+                                {{ request('date_to') ?: 'Actualidad' }}
+                            </strong>
+                        </div>
+                    @endif
+
                 </div>
-            @endif
-
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="card shadow-sm">
             <div class="card-header bg-white">
@@ -211,6 +194,7 @@
                                         colspan="5"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                         No se encontraron pases de invitado.
                                     </td>
                                 </tr>

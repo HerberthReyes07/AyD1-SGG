@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Reporte: Historial de progreso físico') }}</h2>
+                <h2 class="mb-0">
+                    <i class="bi bi-clipboard2-pulse text-primary me-2"></i>
+                    {{ __('Reporte: Historial de progreso físico') }}
+                </h2>
                 <small class="text-muted">
                     {{ __('Muestra el historial de progreso físico de un socio en un rango de fechas específico') }}
                 </small>
@@ -13,7 +16,7 @@
     <div class="container py-4">
 
         {{-- Filtros --}}
-        <div class="card mb-4">
+        <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <form method="GET" action="{{ route('physical-progress.index') }}" class="row g-3 align-items-end">
                     <div class="col-md-5">
@@ -48,56 +51,64 @@
         </div>
 
         @if ($report)
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h2 class="h5 mb-0">
-                    {{ $report['member']->user->first_name }} {{ $report['member']->user->last_name }}
-                </h2>
-                <p class="text-secondary small mb-0">
-                    {{ $filters['start_date'] ?? 'Inicio del historial' }} — {{ $filters['end_date'] ?? 'Actualidad' }}
-                </p>
-            </div>
-            <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary" id="export-image">
-                    <i class="bi bi-image"></i> Imagen del gráfico
-                </button>
-                <a href="{{ route('physical-progress.export-excel', $filters) }}"
-                    class="btn btn-sm btn-outline-success">
-                    <i class="bi bi-file-earmark-excel"></i> Excel/CSV
-                </a>
-                <form method="POST" action="{{ route('physical-progress.export-pdf') }}" id="export-pdf-form">
-                    @csrf
-                    <input type="hidden" name="member_id" value="{{ $filters['member_id'] }}">
-                    <input type="hidden" name="start_date" value="{{ $filters['start_date'] ?? '' }}">
-                    <input type="hidden" name="end_date" value="{{ $filters['end_date'] ?? '' }}">
-                    <input type="hidden" name="chart_image" id="chart_image_input">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-file-earmark-pdf"></i> PDF
-                    </button>
-                </form>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h4 class="mb-1">
+                            {{ $report['member']->user->first_name }} {{ $report['member']->user->last_name }}
+                        </h4>
+                        <small class="text-muted">
+                            {{ $filters['start_date'] ?? 'Inicio del historial' }} — {{ $filters['end_date'] ?? 'Actualidad' }}
+                        </small>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="button" class="btn btn-sm btn-outline-dark fw-semibold" id="export-image">
+                            <i class="bi bi-image me-1"></i> Imagen del gráfico
+                        </button>
+                        <a href="{{ route('physical-progress.export-excel', $filters) }}"
+                            class="btn btn-sm btn-outline-success fw-semibold">
+                            <i class="bi bi-file-earmark-excel me-1"></i> Excel/CSV
+                        </a>
+                        <form method="POST" action="{{ route('physical-progress.export-pdf') }}" id="export-pdf-form" class="d-inline">
+                            @csrf
+                            <input type="hidden" name="member_id" value="{{ $filters['member_id'] }}">
+                            <input type="hidden" name="start_date" value="{{ $filters['start_date'] ?? '' }}">
+                            <input type="hidden" name="end_date" value="{{ $filters['end_date'] ?? '' }}">
+                            <input type="hidden" name="chart_image" id="chart_image_input">
+                            <button type="submit" class="btn btn-sm btn-outline-danger fw-semibold">
+                                <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
         @if ($report['measurements']->isEmpty())
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body text-center py-4">
+                <i class="bi bi-inbox fs-1 d-block mb-2 text-muted opacity-50"></i>
                 <p class="text-secondary mb-0">Este socio no tiene mediciones registradas en el rango seleccionado.</p>
             </div>
         </div>
         @else
-        <div class="card mb-4">
+        <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <canvas id="progress-chart" height="90"></canvas>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <strong>Mediciones registradas</strong>
+            </div>
+            <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <th>Fecha</th>
+                                <th class="ps-3">Fecha</th>
                                 <th>Peso (kg)</th>
                                 <th>Cintura (cm)</th>
                                 <th>Brazo (cm)</th>
@@ -108,7 +119,7 @@
                         <tbody>
                             @foreach ($report['measurements'] as $measurement)
                             <tr>
-                                <td>{{ $measurement->date->format('d/m/Y') }}</td>
+                                <td class="ps-3">{{ $measurement->date->format('d/m/Y') }}</td>
                                 <td>{{ $measurement->weight }}</td>
                                 <td>{{ $measurement->waist_measurement ?? '—' }}</td>
                                 <td>{{ $measurement->arm_measurement ?? '—' }}</td>

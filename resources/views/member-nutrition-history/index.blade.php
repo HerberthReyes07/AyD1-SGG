@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Historial nutricional</h2>
+            <h2 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Historial nutricional</h2>
             <small class="text-muted">
                 Revisa tus tendencias de consumo de los ultimos dias
             </small>
@@ -15,14 +15,14 @@
                 href="{{ route('nutrition-history.index', ['days' => 7]) }}"
                 class="btn btn-outline-primary {{ $days === 7 ? 'active' : '' }}"
             >
-                Ultimos 7 dias
+                <i class="bi bi-calendar3 me-1"></i>Ultimos 7 dias
             </a>
 
             <a
                 href="{{ route('nutrition-history.index', ['days' => 30]) }}"
                 class="btn btn-outline-primary {{ $days === 30 ? 'active' : '' }}"
             >
-                Ultimos 30 dias
+                <i class="bi bi-calendar3 me-1"></i>Ultimos 30 dias
             </a>
         </div>
 
@@ -80,16 +80,18 @@
 
         <div class="card shadow-sm mt-4">
             <div class="card-header bg-white">
-                <strong>Recomendaciones de tu entrenador</strong>
+                <strong><i class="bi bi-chat-square-text me-1"></i>Recomendaciones de tu entrenador</strong>
             </div>
 
             <div class="card-body">
                 @if (! $assignment)
                     <p class="text-muted text-center mb-0 py-2">
+                        <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                         No tienes un entrenador asignado.
                     </p>
                 @elseif ($observations->isEmpty())
                     <p class="text-muted text-center mb-0 py-2">
+                        <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                         Tu entrenador todavia no ha dejado observaciones.
                     </p>
                 @else

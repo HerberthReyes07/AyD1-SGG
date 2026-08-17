@@ -1,18 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Registro de Pagos</h2>
+                <h2 class="mb-0"><i class="bi bi-cash-coin me-2"></i>Registro de Pagos</h2>
                 <small class="text-muted">
                     Historial de cobros y pagos de membresías registrados
                 </small>
             </div>
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 {{-- <a href="{{ route('payments.create') }}" class="btn btn-primary">
                     Nueva Membresía / Pago
                 </a> --}}
-                <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
-                    Regresar
+                <a href="{{ route('memberships.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Regresar
                 </a>
             </div>
         </div>
@@ -111,6 +111,7 @@
                             @empty
                             <tr>
                                 <td colspan="8" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                     No se encontraron registros de pagos.
                                 </td>
                             </tr>
