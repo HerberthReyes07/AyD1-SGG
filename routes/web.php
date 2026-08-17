@@ -22,7 +22,9 @@ use App\Http\Controllers\MemberMembershipController;
 use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipExpirationReportController;
+use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
@@ -80,6 +82,25 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Membership Plans
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('membership-plans', MembershipPlanController::class)
+        ->only(['index', 'edit', 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Promotions / Discounts
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('promotions', PromotionController::class)
+        ->except(['show', 'destroy']);
+
+    Route::patch('/promotions/{promotion}/toggle-status', [PromotionController::class, 'toggleStatus'])
+        ->name('promotions.toggle-status');
 
     /*
     |--------------------------------------------------------------------------

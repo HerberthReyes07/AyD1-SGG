@@ -16,7 +16,7 @@ class MembershipRepository
     public function findByMemberId(int|string $memberId): Collection
     {
         return MemberMembership::where('member_id', $memberId)
-            ->with(['plan', 'payments'])
+            ->with(['plan', 'payments.promotion'])
             ->get();
     }
 
@@ -35,7 +35,7 @@ class MembershipRepository
      */
     public function findById(int|string $id): ?MemberMembership
     {
-        return MemberMembership::with(['plan', 'member.user', 'payments', 'statusHistories'])->find($id);
+        return MemberMembership::with(['plan', 'member.user', 'payments.promotion', 'statusHistories'])->find($id);
     }
 
     /**

@@ -90,6 +90,14 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 @endif
 
                 @if (Auth::user()->role?->name === 'admin')
+                <x-nav-link :href="route('membership-plans.index')" :active="request()->routeIs('membership-plans.*')">
+                    <i class="bi bi-card-heading me-1"></i>Planes
+                </x-nav-link>
+
+                <x-nav-link :href="route('promotions.index')" :active="request()->routeIs('promotions.*')">
+                    <i class="bi bi-tags me-1"></i>Promociones
+                </x-nav-link>
+
                 <x-nav-link
                     :href="route('foods.index')"
                     :active="request()->routeIs('foods.*')"
