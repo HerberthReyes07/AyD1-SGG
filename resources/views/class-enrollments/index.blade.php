@@ -286,7 +286,9 @@
                                 <th class="ps-3">Socio</th>
                                 <th>Plan</th>
                                 <th>Prioridad</th>
+                                <th>Estado</th>
                                 <th>Solicitud</th>
+                                <th class="text-end pe-3">Acciones</th>
                             </tr>
                         </thead>
 
@@ -328,7 +330,40 @@
                                     </td>
 
                                     <td>
+                                        @if ($waitlist->status === \App\Enums\WaitlistStatus::Notified)
+                                            <span class="badge bg-info text-dark">
+                                                <i class="bi bi-envelope-check me-1"></i>Notificado
+                                            </span>
+                                        @else
+                                            <span class="badge bg-light text-dark border">
+                                                <i class="bi bi-hourglass-split me-1"></i>Esperando
+                                            </span>
+                                        @endif
+                                    </td>
+
+                                    <td>
                                         {{ $waitlist->created_at->format('d/m/Y H:i') }}
+                                    </td>
+
+                                    <td class="text-end pe-3">
+                                        <form
+                                            method="POST"
+                                            action="{{ route(
+                                                'class-enrollments.waitlist.cancel',
+                                                [$session, $waitlist->member]
+                                            ) }}"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                            >
+                                                <i class="bi bi-x-circle me-1"></i>Retirar
+                                            </button>
+
+                                        </form>
                                     </td>
 
                                 </tr>
@@ -337,7 +372,7 @@
 
                                 <tr>
                                     <td
-                                        colspan="4"
+                                        colspan="6"
                                         class="text-center py-4 text-muted"
                                     >
                                         <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>

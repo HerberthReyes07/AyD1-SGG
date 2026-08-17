@@ -397,6 +397,12 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         [ClassEnrollmentController::class, 'cancel']
     )->name('class-enrollments.cancel');
 
+    Route::patch(
+        '/class-sessions/{session}/waitlist/{member}/cancel',
+        [ClassEnrollmentController::class, 'cancelWaitlist']
+    )->name('class-enrollments.waitlist.cancel');
+
+
     /*
     |--------------------------------------------------------------------------
     | Attendance
