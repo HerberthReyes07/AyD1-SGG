@@ -23,10 +23,9 @@ class TwoFactorCodeNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Tu código de verificación')
-            ->greeting('Hola ' . $notifiable->first_name . ',')
-            ->line('Tu código de verificación es:')
-            ->line('## ' . $this->code)
-            ->line('Este código vence en 10 minutos.')
-            ->line('Si no intentaste iniciar sesión, puedes ignorar este mensaje.');
+            ->markdown('emails.two-factor-code', [
+                'name' => $notifiable->first_name,
+                'code' => $this->code,
+            ]);
     }
 }
