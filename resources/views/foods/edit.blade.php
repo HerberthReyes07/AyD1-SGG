@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Editar Alimento</h2>
+            <h2 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Alimento</h2>
             <small class="text-muted">
                 Actualiza la informacion nutricional del alimento
             </small>
@@ -20,32 +20,15 @@
                     <div class="row g-3">
 
                         <div class="col-md-8">
-                            <label for="name" class="form-label">
-                                Nombre
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control @error('name') is-invalid @enderror"
-                                id="name"
-                                name="name"
-                                value="{{ old('name', $food->name) }}"
-                            >
-
-                            @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-label for="name" value="Nombre" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 d-block w-100" :value="old('name', $food->name)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="category_id" class="form-label">
-                                Categoria
-                            </label>
-
+                            <x-input-label for="category_id" value="Categoria" />
                             <select
-                                class="form-select @error('category_id') is-invalid @enderror"
+                                class="form-select mt-1"
                                 id="category_id"
                                 name="category_id"
                             >
@@ -62,122 +45,77 @@
                                     </option>
                                 @endforeach
                             </select>
-
-                            @error('category_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="reference_serving_g" class="form-label">
-                                Porcion de referencia (g)
-                            </label>
-
-                            <input
+                            <x-input-label for="reference_serving_g" value="Porcion de referencia (g)" />
+                            <x-text-input
                                 type="number"
                                 step="0.01"
                                 min="0.01"
-                                class="form-control @error('reference_serving_g') is-invalid @enderror"
                                 id="reference_serving_g"
                                 name="reference_serving_g"
-                                value="{{ old('reference_serving_g', $food->reference_serving_g) }}"
-                            >
-
-                            @error('reference_serving_g')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('reference_serving_g', $food->reference_serving_g)"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('reference_serving_g')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="calories_per_serving" class="form-label">
-                                Calorias por porcion
-                            </label>
-
-                            <input
+                            <x-input-label for="calories_per_serving" value="Calorias por porcion" />
+                            <x-text-input
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                class="form-control @error('calories_per_serving') is-invalid @enderror"
                                 id="calories_per_serving"
                                 name="calories_per_serving"
-                                value="{{ old('calories_per_serving', $food->calories_per_serving) }}"
-                            >
-
-                            @error('calories_per_serving')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('calories_per_serving', $food->calories_per_serving)"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('calories_per_serving')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="protein_g" class="form-label">
-                                Proteina (g)
-                            </label>
-
-                            <input
+                            <x-input-label for="protein_g" value="Proteina (g)" />
+                            <x-text-input
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                class="form-control @error('protein_g') is-invalid @enderror"
                                 id="protein_g"
                                 name="protein_g"
-                                value="{{ old('protein_g', $food->protein_g) }}"
-                            >
-
-                            @error('protein_g')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('protein_g', $food->protein_g)"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('protein_g')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="carbs_g" class="form-label">
-                                Carbohidratos (g)
-                            </label>
-
-                            <input
+                            <x-input-label for="carbs_g" value="Carbohidratos (g)" />
+                            <x-text-input
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                class="form-control @error('carbs_g') is-invalid @enderror"
                                 id="carbs_g"
                                 name="carbs_g"
-                                value="{{ old('carbs_g', $food->carbs_g) }}"
-                            >
-
-                            @error('carbs_g')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('carbs_g', $food->carbs_g)"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('carbs_g')" />
                         </div>
 
                         <div class="col-md-4">
-                            <label for="fat_g" class="form-label">
-                                Grasa (g)
-                            </label>
-
-                            <input
+                            <x-input-label for="fat_g" value="Grasa (g)" />
+                            <x-text-input
                                 type="number"
                                 step="0.01"
                                 min="0"
-                                class="form-control @error('fat_g') is-invalid @enderror"
                                 id="fat_g"
                                 name="fat_g"
-                                value="{{ old('fat_g', $food->fat_g) }}"
-                            >
-
-                            @error('fat_g')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                                class="mt-1 d-block w-100"
+                                :value="old('fat_g', $food->fat_g)"
+                            />
+                            <x-input-error class="mt-2" :messages="$errors->get('fat_g')" />
                         </div>
 
                     </div>
@@ -186,17 +124,14 @@
 
                         <a
                             href="{{ route('foods.index') }}"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-secondary"
                         >
-                            Cancelar
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
                         </a>
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
-                            Guardar cambios
-                        </button>
+                        <x-primary-button>
+                            <i class="bi bi-check-lg me-1"></i>Guardar cambios
+                        </x-primary-button>
 
                     </div>
 

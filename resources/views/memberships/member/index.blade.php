@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">Mis Membresías</h2>
+                <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Mis Membresías</h2>
                 <small class="text-muted">
                     Consulta el historial de tus membresías, estado y vigencia.
                 </small>
@@ -34,7 +34,7 @@
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3">
                 <strong class="mb-0">
-                    Historial de Membresías
+                    <i class="bi bi-clock-history me-1"></i>Historial de Membresías
                 </strong>
             </div>
 
@@ -93,13 +93,14 @@
                                     <a
                                         href="{{ route('member-memberships.show', $membership->id) }}"
                                         class="btn btn-sm btn-outline-primary">
-                                        Ver Detalles
+                                        <i class="bi bi-eye me-1"></i>Ver Detalles
                                     </a>
                                 </td>
                             </tr>
                             @empty
                             <tr>
                                 <td colspan="6" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                                     No tienes membresías registradas.
                                 </td>
                             </tr>

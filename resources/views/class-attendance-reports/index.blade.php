@@ -3,6 +3,7 @@
     <x-slot name="header">
         <div>
             <h2 class="mb-0">
+                <i class="bi bi-clipboard2-check text-primary me-2"></i>
                 Reporte de asistencia por clase
             </h2>
 
@@ -590,6 +591,7 @@
                                             class="text-center
                                                 py-4 text-muted"
                                         >
+                                            <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
                                             No hay registros para el
                                             rango seleccionado.
                                         </td>

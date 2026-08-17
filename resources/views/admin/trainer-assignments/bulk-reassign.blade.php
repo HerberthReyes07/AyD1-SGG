@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Reasignación de socios') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-arrow-repeat me-2"></i>{{ __('Reasignación de socios') }}</h2>
                 <small class="text-muted">
                     {{ __('Reasigna múltiples socios a un nuevo entrenador') }}
                 </small>
             </div>
 
-            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-secondary">
-                {{ __('Volver al listado') }}
+            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>{{ __('Volver al listado') }}
             </a>
         </div>
     </x-slot>
@@ -18,8 +18,12 @@
 
         <div class="container-xl">
 
-            @if ($errors->any())
-            <div class="alert alert-danger">{{ $errors->first() }}</div>
+            @if ($errors->any() || session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') ?? $errors->first() }}
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
             @endif
 
             <div class="card shadow-sm">
@@ -63,38 +67,42 @@
 
                             {{-- PASO 1: Seleccionar entrenador viejo --}}
                             <div class="tab-pane fade show active" id="step1">
-                                <table class="table table-hover align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th>Entrenador</th>
-                                            <th>Especialidad</th>
-                                            <th>Socios activos</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($trainers as $trainer)
-                                        <tr>
-                                            <td>{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}</td>
-                                            <td>{{ $trainer->specialty->name ?? '—' }}</td>
-                                            <td>{{ $trainer->active_members_count }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-outline-primary select-old-trainer"
-                                                    data-id="{{ $trainer->user_id }}"
-                                                    data-name="{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}"
-                                                    {{ $trainer->active_members_count === 0 ? 'disabled' : '' }}>
-                                                    Seleccionar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center text-secondary">No hay entrenadores
-                                                registrados.</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Entrenador</th>
+                                                <th>Especialidad</th>
+                                                <th>Socios activos</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse ($trainers as $trainer)
+                                            <tr>
+                                                <td>{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}</td>
+                                                <td>{{ $trainer->specialty->name ?? '—' }}</td>
+                                                <td>{{ $trainer->active_members_count }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary select-old-trainer"
+                                                        data-id="{{ $trainer->user_id }}"
+                                                        data-name="{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}"
+                                                        {{ $trainer->active_members_count === 0 ? 'disabled' : '' }}>
+                                                        <i class="bi bi-check-lg me-1"></i>Seleccionar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
+                                                    No hay entrenadores
+                                                    registrados.</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             {{-- PASO 2: Seleccionar socios de ese entrenador --}}
@@ -102,37 +110,39 @@
                                 @foreach ($trainers as $trainer)
                                 <div class="old-trainer-assignments" data-trainer-id="{{ $trainer->user_id }}"
                                     style="display: none;">
-                                    <table class="table table-hover align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th><input type="checkbox" class="select-all-assignments"
-                                                        data-trainer-id="{{ $trainer->user_id }}" checked></th>
-                                                <th>Socio</th>
-                                                <th>Objetivo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($trainer->trainerAssignments as $assignment)
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="assignment_ids[]"
-                                                        value="{{ $assignment->id }}" class="assignment-checkbox"
-                                                        data-trainer-id="{{ $trainer->user_id }}" checked>
-                                                </td>
-                                                <td>{{ $assignment->member->user->first_name }} {{
-                                                    $assignment->member->user->last_name }}</td>
-                                                <td>{{ $assignment->goal ?? '—' }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" class="select-all-assignments"
+                                                            data-trainer-id="{{ $trainer->user_id }}" checked></th>
+                                                    <th>Socio</th>
+                                                    <th>Objetivo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($trainer->trainerAssignments as $assignment)
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="assignment_ids[]"
+                                                            value="{{ $assignment->id }}" class="assignment-checkbox"
+                                                            data-trainer-id="{{ $trainer->user_id }}" checked>
+                                                    </td>
+                                                    <td>{{ $assignment->member->user->first_name }} {{
+                                                        $assignment->member->user->last_name }}</td>
+                                                    <td>{{ $assignment->goal ?? '—' }}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 @endforeach
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step1">&larr;
+                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step1"><i class="bi bi-arrow-left me-1"></i>
                                         Volver</button>
                                     <button type="button" class="btn btn-primary" id="next-to-step3">Continuar
-                                        &rarr;</button>
+                                        <i class="bi bi-arrow-right ms-1"></i></button>
                                 </div>
                             </div>
 
@@ -156,10 +166,10 @@
                                         rows="3" required></textarea>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step2">&larr;
+                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step2"><i class="bi bi-arrow-left me-1"></i>
                                         Volver</button>
                                     <button type="button" class="btn btn-primary" id="next-to-step4">Continuar
-                                        &rarr;</button>
+                                        <i class="bi bi-arrow-right ms-1"></i></button>
                                 </div>
                             </div>
 
@@ -177,9 +187,9 @@
                                     </div>
                                 </div>
                                 <div class="mt-3 d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step3">&larr;
+                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step3"><i class="bi bi-arrow-left me-1"></i>
                                         Volver</button>
-                                    <button type="submit" class="btn btn-success">Confirmar reasignación masiva</button>
+                                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-1"></i>Confirmar reasignación masiva</button>
                                 </div>
                             </div>
 
@@ -212,7 +222,7 @@
             const clearRowSelection = () => {
                 document.querySelectorAll('#step1 tbody tr').forEach(row => {
                     row.classList.remove('table-primary');
-                    row.querySelector('.select-old-trainer').textContent = '{{ __("Seleccionar") }}';
+                    row.querySelector('.select-old-trainer').innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionar") }}';
                     row.querySelector('.select-old-trainer').disabled = false;
                 });
             };
@@ -270,7 +280,7 @@
 
                     clearRowSelection();
                     this.closest('tr').classList.add('table-primary');
-                    this.textContent = '{{ __("Seleccionado") }}';
+                    this.innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionado") }}';
                     this.disabled = true;
 
                     tabBtns[2].disabled = false;

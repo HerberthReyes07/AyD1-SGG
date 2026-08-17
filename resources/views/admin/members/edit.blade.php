@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">{{ __('Editar Socio') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-pencil-square me-2"></i>{{ __('Editar Socio') }}</h2>
                 <small class="text-muted">
                     {{ __('Edita la información de un socio existente') }}
                 </small>
@@ -89,10 +89,10 @@
 
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <a href="{{ route('members.index') }}" class="btn btn-outline-secondary">
-                                {{ __('Cancelar') }}
+                                <i class="bi bi-x-lg me-1"></i>{{ __('Cancelar') }}
                             </a>
                             <x-primary-button>
-                                {{ __('Guardar Cambios') }}
+                                <i class="bi bi-check-lg me-1"></i>{{ __('Guardar Cambios') }}
                             </x-primary-button>
                         </div>
                     </form>

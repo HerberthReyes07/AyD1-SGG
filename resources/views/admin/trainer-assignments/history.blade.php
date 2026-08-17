@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Historial de asignaciones de entrenadores') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-clock-history me-2"></i>{{ __('Historial de asignaciones de entrenadores') }}</h2>
                 <small class="text-muted">
                     {{ __('Revisa el registro completo de asignaciones activas y finalizadas') }}
                 </small>
             </div>
 
-            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-secondary">
-                {{ __('Volver al listado') }}
+            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>{{ __('Volver al listado') }}
             </a>
         </div>
     </x-slot>
@@ -78,13 +78,14 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary"
                                             data-bs-toggle="modal"
                                             data-bs-target="#history-details-modal-{{ $assignment->id }}">
-                                            {{ __('Ver detalle') }}
+                                            <i class="bi bi-eye me-1"></i>{{ __('Ver detalle') }}
                                         </button>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
                                     <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         {{ __('No se encontraron asignaciones registradas.') }}
                                     </td>
                                 </tr>

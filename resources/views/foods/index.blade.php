@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Catálogo de alimentos</h2>
+                <h2 class="mb-0"><i class="bi bi-egg-fried me-2"></i>Catálogo de alimentos</h2>
                 <small class="text-muted">
                     Consulta y administra los alimentos registrados
                 </small>
@@ -12,7 +12,7 @@
                 href="{{ route('foods.create') }}"
                 class="btn btn-primary"
             >
-                Nuevo alimento
+                <i class="bi bi-plus-lg me-1"></i>Nuevo alimento
             </a>
         </div>
     </x-slot>
@@ -109,7 +109,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Buscar
+                                <i class="bi bi-search me-1"></i>Buscar
                             </button>
                         </div>
 
@@ -198,7 +198,7 @@
                                                 href="{{ route('foods.edit', $food) }}"
                                                 class="btn btn-sm btn-outline-primary"
                                             >
-                                                Editar
+                                                <i class="bi bi-pencil-square me-1"></i>Editar
                                             </a>
 
                                             <button
@@ -207,7 +207,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#statusModal{{ $food->id }}"
                                             >
-                                                {{ $food->is_active ? 'Desactivar' : 'Activar' }}
+                                                <i class="bi {{ $food->is_active ? 'bi-x-circle' : 'bi-check-circle' }} me-1"></i>{{ $food->is_active ? 'Desactivar' : 'Activar' }}
                                             </button>
 
                                         </div>
@@ -252,10 +252,10 @@
 
                                                 <button
                                                     type="button"
-                                                    class="btn btn-secondary"
+                                                    class="btn btn-outline-secondary"
                                                     data-bs-dismiss="modal"
                                                 >
-                                                    Cancelar
+                                                    <i class="bi bi-x-lg me-1"></i>Cancelar
                                                 </button>
 
                                                 <form
@@ -269,7 +269,7 @@
                                                         type="submit"
                                                         class="btn {{ $food->is_active ? 'btn-danger' : 'btn-success' }}"
                                                     >
-                                                        {{ $food->is_active ? 'Desactivar' : 'Activar' }}
+                                                        <i class="bi {{ $food->is_active ? 'bi-x-circle' : 'bi-check-circle' }} me-1"></i>{{ $food->is_active ? 'Desactivar' : 'Activar' }}
                                                     </button>
                                                 </form>
 
@@ -286,6 +286,7 @@
                                         colspan="9"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         No se encontraron alimentos.
                                     </td>
                                 </tr>

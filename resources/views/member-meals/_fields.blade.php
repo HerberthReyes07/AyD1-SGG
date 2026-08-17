@@ -51,7 +51,7 @@
     <x-input-label :value="__('Alimentos consumidos')" class="mb-0" />
 
     <button type="button" class="btn btn-sm btn-outline-primary" id="add-food-row">
-        + Agregar alimento
+        <i class="bi bi-plus-lg me-1"></i>Agregar alimento
     </button>
 </div>
 
@@ -112,7 +112,7 @@
                     type="button"
                     class="btn btn-outline-danger w-100 remove-food-row"
                 >
-                    Quitar
+                    <i class="bi bi-x-circle me-1"></i>Quitar
                 </button>
             </div>
         </div>
@@ -146,7 +146,7 @@
 
         <div class="col-md-2">
             <button type="button" class="btn btn-outline-danger w-100 remove-food-row">
-                Quitar
+                <i class="bi bi-x-circle me-1"></i>Quitar
             </button>
         </div>
     </div>

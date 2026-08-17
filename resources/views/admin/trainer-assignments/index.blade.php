@@ -1,22 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Asignaciones de entrenadores') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>{{ __('Asignaciones de entrenadores') }}</h2>
                 <small class="text-muted">
                     {{ __('Consulta las asignaciones activas y administra las reasignaciones') }}
                 </small>
             </div>
 
-            <div class="d-flex gap-2">
-                <a href="{{ route('trainer-assignments.history') }}" class="btn btn-info">
-                    {{ __('Historial') }}
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{{ route('trainer-assignments.history') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-clock-history me-1"></i>{{ __('Historial') }}
                 </a>
                 <a href="{{ route('trainer-assignments.create') }}" class="btn btn-primary">
-                    {{ __('Nueva asignación') }}
+                    <i class="bi bi-plus-lg me-1"></i>{{ __('Nueva asignación') }}
                 </a>
-                <a href="{{ route('trainer-assignments.bulk-reassign.create') }}" class="btn btn-warning">
-                    {{ __('Reasignar socios') }}
+                <a href="{{ route('trainer-assignments.bulk-reassign.create') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-repeat me-1"></i>{{ __('Reasignar socios') }}
                 </a>
             </div>
         </div>
@@ -84,12 +84,12 @@
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#assignment-details-modal-{{ $assignment->id }}"
                                                 >
-                                                    {{ __('Ver detalle') }}
+                                                    <i class="bi bi-eye me-1"></i>{{ __('Ver detalle') }}
                                                 </button>
 
                                                 <a href="{{ route('trainer-assignments.reassign.create', $assignment) }}"
                                                     class="btn btn-sm btn-outline-primary">
-                                                    {{ __('Reasignar') }}
+                                                    <i class="bi bi-arrow-repeat me-1"></i>{{ __('Reasignar') }}
                                                 </a>
                                             </div>
                                         </td>
@@ -97,6 +97,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                             {{ __('No se encontraron asignaciones registradas.') }}
                                         </td>
                                     </tr>

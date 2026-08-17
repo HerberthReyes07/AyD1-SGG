@@ -1,13 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h2 class="mb-0">
-                Historial de clases
-            </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0">
+                    <i class="bi bi-calendar-check me-2"></i>Historial de clases
+                </h2>
 
-            <small class="text-muted">
-                Consulta las clases tomadas y califica tu experiencia
-            </small>
+                <small class="text-muted">
+                    Consulta las clases tomadas y califica tu experiencia
+                </small>
+            </div>
         </div>
     </x-slot>
 
@@ -45,7 +47,7 @@
 
             <div class="card-header bg-white">
                 <strong>
-                    Clases realizadas
+                    <i class="bi bi-list-check me-1"></i>Clases realizadas
                 </strong>
             </div>
 
@@ -129,13 +131,13 @@
                                         )
 
                                             <span class="badge bg-success">
-                                                Asistio
+                                                <i class="bi bi-check-circle me-1"></i>Asistio
                                             </span>
 
                                         @else
 
                                             <span class="badge bg-secondary">
-                                                No asistio
+                                                <i class="bi bi-x-circle me-1"></i>No asistio
                                             </span>
 
                                         @endif
@@ -175,7 +177,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#rating{{ $enrollment->id }}"
                                             >
-                                                Calificar
+                                                <i class="bi bi-star me-1"></i>Calificar
                                             </button>
 
                                         @elseif ($enrollment->classRating)
@@ -186,7 +188,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#viewRating{{ $enrollment->id }}"
                                             >
-                                                Ver calificacion
+                                                <i class="bi bi-eye me-1"></i>Ver calificacion
                                             </button>
 
                                         @else
@@ -316,7 +318,7 @@
                                                             type="submit"
                                                             class="btn btn-primary"
                                                         >
-                                                            Guardar calificacion
+                                                            <i class="bi bi-check-lg me-1"></i>Guardar calificacion
                                                         </button>
 
                                                     </div>
@@ -393,6 +395,7 @@
                                         colspan="7"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                                         Aun no tienes clases finalizadas.
                                     </td>
 

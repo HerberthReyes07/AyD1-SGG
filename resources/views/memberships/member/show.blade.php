@@ -2,14 +2,14 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">Detalles de Membresía #{{ $membership->id }}</h2>
+                <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Detalles de Membresía #{{ $membership->id }}</h2>
                 <small class="text-muted">
                     Consulta la información detallada de tu membresía
                 </small>
             </div>
             <div>
                 <a href="{{ route('member-memberships.index') }}" class="btn btn-secondary">
-                    Volver al Listado
+                    <i class="bi bi-arrow-left me-1"></i>Volver al Listado
                 </a>
             </div>
         </div>
@@ -40,7 +40,7 @@
             <div class="col-md-8">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white py-3">
-                        <strong class="mb-0">Información General</strong>
+                        <strong class="mb-0"><i class="bi bi-info-circle me-1"></i>Información General</strong>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -116,7 +116,7 @@
                 <!-- Historial de Estado -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-white py-3">
-                        <strong class="mb-0">Historial de Estado</strong>
+                        <strong class="mb-0"><i class="bi bi-clock-history me-1"></i>Historial de Estado</strong>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -148,6 +148,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="4" class="text-center py-3 text-muted">
+                                                <i class="bi bi-inbox d-block mb-2" style="font-size: 2rem;"></i>
                                                 No hay historial de cambios registrado.
                                             </td>
                                         </tr>
@@ -165,7 +166,7 @@
                 <!-- Pagos -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white py-3">
-                        <strong class="mb-0">Pagos Registrados</strong>
+                        <strong class="mb-0"><i class="bi bi-cash-coin me-1"></i>Pagos Registrados</strong>
                     </div>
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
@@ -181,6 +182,7 @@
                                 </li>
                             @empty
                                 <li class="list-group-item text-center py-3 text-muted">
+                                    <i class="bi bi-inbox d-block mb-2" style="font-size: 2rem;"></i>
                                     No hay pagos registrados para esta membresía.
                                 </li>
                             @endforelse
@@ -192,7 +194,7 @@
                 @if($membership->status?->value === 'active')
                     <div class="card shadow-sm mb-4 border-primary">
                         <div class="card-header bg-primary text-white py-3">
-                            <strong class="mb-0">Solicitar Congelamiento</strong>
+                            <strong class="mb-0"><i class="bi bi-snow2 me-1"></i>Solicitar Congelamiento</strong>
                         </div>
                         <div class="card-body">
                             <p class="text-muted small mb-3">
@@ -240,7 +242,7 @@
                                     @enderror
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">
-                                    Confirmar Congelamiento
+                                    <i class="bi bi-snow2 me-1"></i>Confirmar Congelamiento
                                 </button>
                             </form>
                         </div>
@@ -251,7 +253,7 @@
                 @if(in_array($membership->status?->value, ['active', 'frozen']))
                     <div class="card shadow-sm border-danger">
                         <div class="card-header bg-danger text-white py-3">
-                            <strong class="mb-0">Cancelar Membresía</strong>
+                            <strong class="mb-0"><i class="bi bi-exclamation-triangle me-1"></i>Cancelar Membresía</strong>
                         </div>
                         <div class="card-body">
                             <p class="text-muted small">
@@ -259,7 +261,7 @@
                                 en el historial.
                             </p>
                             <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#cancelModal">
-                                Cancelar Membresía
+                                <i class="bi bi-x-circle me-1"></i>Cancelar Membresía
                             </button>
                         </div>
                     </div>
@@ -294,7 +296,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger">Confirmar Cancelación</button>
+                                        <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i>Confirmar Cancelación</button>
                                     </div>
                                 </form>
                             </div>

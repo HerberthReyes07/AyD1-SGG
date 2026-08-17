@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h2 class="mb-0">
-                    Horarios - {{ $groupClass->name }}
+                    <i class="bi bi-clock me-2"></i>Horarios - {{ $groupClass->name }}
                 </h2>
 
                 <small class="text-muted">
@@ -15,7 +15,7 @@
                 href="{{ route('group-classes.index') }}"
                 class="btn btn-outline-secondary"
             >
-                Volver a clases
+                <i class="bi bi-arrow-left me-1"></i>Volver a clases
             </a>
         </div>
     </x-slot>
@@ -171,7 +171,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Agregar
+                                <i class="bi bi-plus-lg me-1"></i>Agregar
                             </button>
                         </div>
 
@@ -228,7 +228,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#editSchedule{{ $schedule->id }}"
                                         >
-                                            Editar
+                                            <i class="bi bi-pencil-square me-1"></i>Editar
                                         </button>
 
                                         <form
@@ -247,7 +247,7 @@
                                                 class="btn btn-sm btn-outline-danger"
                                                 onclick="return confirm('¿Deseas eliminar este horario?')"
                                             >
-                                                Eliminar
+                                                <i class="bi bi-trash me-1"></i>Eliminar
                                             </button>
                                         </form>
 
@@ -330,17 +330,17 @@
 
                                                     <button
                                                         type="button"
-                                                        class="btn btn-secondary"
+                                                        class="btn btn-outline-secondary"
                                                         data-bs-dismiss="modal"
                                                     >
-                                                        Cancelar
+                                                        <i class="bi bi-x-lg me-1"></i>Cancelar
                                                     </button>
 
                                                     <button
                                                         type="submit"
                                                         class="btn btn-primary"
                                                     >
-                                                        Guardar cambios
+                                                        <i class="bi bi-check-lg me-1"></i>Guardar cambios
                                                     </button>
 
                                                 </div>
@@ -359,6 +359,7 @@
                                         colspan="3"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         Esta clase aun no tiene horarios.
                                     </td>
                                 </tr>

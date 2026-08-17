@@ -4,6 +4,7 @@
 
         <div>
             <h2 class="mb-0">
+                <i class="bi bi-people text-primary me-2"></i>
                 Reportes de clases grupales
             </h2>
 
@@ -80,6 +81,7 @@
                                 type="submit"
                                 class="btn btn-primary"
                             >
+                                <i class="bi bi-search me-1"></i>
                                 Consultar
                             </button>
 
@@ -87,6 +89,7 @@
                                 href="{{ route('group-class-reports.index') }}"
                                 class="btn btn-outline-secondary"
                             >
+                                <i class="bi bi-x-lg me-1"></i>
                                 Limpiar
                             </a>
 
@@ -308,6 +311,7 @@
                                         colspan="9"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
                                         No hay informacion para el periodo seleccionado.
                                     </td>
 
@@ -399,6 +403,7 @@
                                         colspan="4"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
                                         No hay sesiones canceladas o reprogramadas.
                                     </td>
 

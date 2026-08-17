@@ -1,19 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">Membresías</h2>
+                <h2 class="mb-0"><i class="bi bi-card-checklist me-2"></i>Membresías</h2>
                 <small class="text-muted">
                     Consulta y administra las membresías de los socios
                 </small>
             </div>
 
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 <a href="{{ route('payments.create') }}" class="btn btn-primary">
-                    Nueva Membresía / Pago
+                    <i class="bi bi-plus-lg me-1"></i>Nueva Membresía / Pago
                 </a>
-                <a href="{{ route('payments.index') }}" class="btn btn-secondary">
-                    Ver Pagos
+                <a href="{{ route('payments.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-cash-coin me-1"></i>Ver Pagos
                 </a>
             </div>
         </div>
@@ -49,21 +49,25 @@
                 <form method="GET" action="{{ route('memberships.index') }}" class="row g-3 align-items-end">
 
                     <div class="col-md-8">
-                        <label for="search" class="form-label fw-bold">
-                            Buscar socio
-                        </label>
+                        <x-input-label for="search" :value="__('Buscar socio')" class="fw-bold" />
 
-                        <input type="text" class="form-control" id="search" name="search" value="{{ $search ?? '' }}"
-                            placeholder="Nombre, apellido o correo electrónico">
+                        <x-text-input
+                            id="search"
+                            name="search"
+                            type="text"
+                            class="mt-1 d-block w-100"
+                            :value="$search ?? ''"
+                            placeholder="Nombre, apellido o correo electrónico"
+                        />
                     </div>
 
-                    <div class="col-md-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            Buscar
-                        </button>
+                    <div class="col-md-4 d-flex flex-wrap gap-2">
+                        <x-primary-button>
+                            <i class="bi bi-search me-1"></i>Buscar
+                        </x-primary-button>
 
-                        <a href="{{ route('memberships.index') }}" class="btn btn-secondary">
-                            Limpiar
+                        <a href="{{ route('memberships.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i>Limpiar
                         </a>
                     </div>
 
@@ -104,7 +108,7 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('memberships.member', $member->id) }}"
                                             class="btn btn-sm btn-outline-primary">
-                                            Ver Membresías
+                                            <i class="bi bi-eye me-1"></i>Ver Membresías
                                         </a>
                                     </div>
                                 </td>
@@ -112,6 +116,7 @@
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i>
                                     No se encontraron socios.
                                 </td>
                             </tr>

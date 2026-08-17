@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0 fw-bold">{{ __('Reporte de Vencimiento de Membresías') }}</h2>
+                <h2 class="mb-0 fw-bold">
+                    <i class="bi bi-calendar-x text-primary me-2"></i>
+                    {{ __('Reporte de Vencimiento de Membresías') }}
+                </h2>
                 <small class="text-muted">
                     {{ __('Seguimiento a membresías activas por vencer (próximos 7 días) y membresías ya vencidas') }}
                 </small>

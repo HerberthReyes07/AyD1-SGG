@@ -43,8 +43,24 @@ $theme = $navbarThemes[$roleName] ?? [
 $isReportsActive = request()->routeIs('physical-progress.*') || request()->routeIs('group-class-reports.*') || request()->routeIs('class-attendance-reports.*') || request()->routeIs('guest-pass-reports.*') || request()->routeIs('reports.*');
 @endphp
 
-<nav class="navbar navbar-expand-sm {{ $theme['navbar'] }}">
-    <div class="container-fluid px-4">
+{{--
+    navbar-expand-xxl (no -sm): con roles como admin que tienen muchos enlaces,
+    colapsar solo bajo "sm" (576px) los amontonaba sin quebrar, y a letra
+    normal ni "lg" (992px) ni "xl" (1200px) alcanzaban para que los 7 enlaces +
+    Reportes + usuario entraran en una fila sin partirse o desbordar. Con
+    "xxl" (1400px) el menu hamburguesa cubre mobile, tablet y laptops
+    normales, y arriba de eso hay espacio de sobra para letra a tamaño normal.
+--}}
+<style>
+    .navbar .navbar-nav .nav-link {
+        font-size: 0.95rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+</style>
+
+<nav class="navbar navbar-expand-xxl {{ $theme['navbar'] }}">
+    <div class="container-fluid px-3">
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('dashboard') }}">
             <x-application-logo style="height: 3.5rem;" />
@@ -60,23 +76,16 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
             <!-- Navigation Links -->
             <div class="navbar-nav me-auto">
 
-
-
                 @if (in_array(Auth::user()->role?->name, ['admin', 'receptionist']))
-                {{-- <x-nav-link
-                    :href="route('guest-passes.index')"
-                    :active="request()->routeIs('guest-passes.*')">
-                    Pases de invitado
-                </x-nav-link> --}}
                 <x-nav-link
                     :href="route('memberships.index')"
                     :active="request()->routeIs('memberships.*')">
-                    Membresías
+                    <i class="bi bi-card-checklist me-1"></i>Membresías
                 </x-nav-link>
                 <x-nav-link
                     :href="route('attendance.index')"
                     :active="request()->routeIs('attendance.*')">
-                    Asistencia
+                    <i class="bi bi-door-open me-1"></i>Asistencia
                 </x-nav-link>
                 @endif
 
@@ -85,30 +94,31 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :href="route('foods.index')"
                     :active="request()->routeIs('foods.*')"
                 >
-                    Catálogo de alimentos
+                    <i class="bi bi-egg-fried me-1"></i>Catálogo de alimentos
                 </x-nav-link>
 
                 <x-nav-link :href="route('employees.index')" :active="request()->routeIs('employees.*')">
-                    Empleados
+                    <i class="bi bi-person-workspace me-1"></i>Empleados
                 </x-nav-link>
 
                 <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
-                    Miembros
+                    <i class="bi bi-people me-1"></i>Miembros
                 </x-nav-link>
 
                 <x-nav-link :href="route('trainer-assignments.index')"
                     :active="request()->routeIs('trainer-assignments.*')">
-                    Asignaciones de entrenadores
+                    <i class="bi bi-person-badge me-1"></i>Asignaciones de entrenadores
                 </x-nav-link>
 
                 <x-nav-link :href="route('group-classes.index')" :active="request()->routeIs('group-classes.*')">
-                    Clases grupales
+                    <i class="bi bi-calendar-event me-1"></i>Clases grupales
                 </x-nav-link>
 
                 <div class="nav-item d-flex align-items-center" style="margin-left: 0.5rem">
                     <x-dropdown align="right" width="48" menuClass="shadow-sm">
                         <x-slot name="trigger">
                             <button class="btn btn-sm d-flex align-items-center gap-1 rounded-pill px-3 py-1 fw-semibold {{ $isReportsActive ? 'bg-white text-primary border-0 shadow-sm' : 'bg-primary text-black border border-black border-opacity-50' }}">
+                                <i class="bi bi-graph-up"></i>
                                 Reportes
                                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -121,27 +131,27 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         <x-slot name="content">
                             <x-dropdown-link :href="route('reports.income.index')"
                                 :active="request()->routeIs('reports.income.*')">
-                                Ingresos
+                                <i class="bi bi-cash-stack me-1"></i>Ingresos
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('reports.membership-expiration.index')"
                                 :active="request()->routeIs('reports.membership-expiration.*')">
-                                Vencimiento de membresías
+                                <i class="bi bi-calendar-x me-1"></i>Vencimiento de membresías
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('physical-progress.index')"
                                 :active="request()->routeIs('physical-progress.*')">
-                                Progreso físico
+                                <i class="bi bi-clipboard2-pulse me-1"></i>Progreso físico
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('group-class-reports.index')"
                                 :active="request()->routeIs('group-class-reports.*')">
-                                Clases grupales
+                                <i class="bi bi-calendar-event me-1"></i>Clases grupales
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('class-attendance-reports.index')"
                                 :active="request()->routeIs('class-attendance-reports.*')">
-                                Asistencia por clase
+                                <i class="bi bi-clipboard2-check me-1"></i>Asistencia por clase
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('guest-pass-reports.index')"
                                 :active="request()->routeIs('guest-pass-reports.*')">
-                                Pases de invitado
+                                <i class="bi bi-ticket-perforated me-1"></i>Pases de invitado
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
@@ -152,52 +162,52 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 <x-nav-link
                     :href="route('payments.index')"
                     :active="request()->routeIs('payments.*')">
-                    Pagos
+                    <i class="bi bi-cash-coin me-1"></i>Pagos
                 </x-nav-link>
                 <x-nav-link
                     :href="route('guest-passes.index')"
                     :active="request()->routeIs('guest-passes.*')">
-                    Pases de invitado
+                    <i class="bi bi-ticket-perforated me-1"></i>Pases de invitado
                 </x-nav-link>
                 @endif
 
                 @if (Auth::user()->role?->name === 'member')
 
                 <x-nav-link :href="route('member-classes.index')" :active="request()->routeIs('member-classes.index')">
-                    Clases disponibles
+                    <i class="bi bi-calendar-check me-1"></i>Clases disponibles
                 </x-nav-link>
 
                 <x-nav-link :href="route('member-classes.history')"
                     :active="request()->routeIs('member-classes.history')">
-                    Historial de clases
+                    <i class="bi bi-clock-history me-1"></i>Historial de clases
                 </x-nav-link>
 
                 <x-nav-link :href="route('member-training.index')" :active="request()->routeIs('member-training.*')">
-                    Mi Entrenamiento
+                    <i class="bi bi-clipboard2-pulse me-1"></i>Mi Entrenamiento
                 </x-nav-link>
 
                 <x-nav-link :href="route('member-meals.index')" :active="request()->routeIs('member-meals.*')">
-                    Mis comidas
+                    <i class="bi bi-basket me-1"></i>Mis comidas
                 </x-nav-link>
 
                     <x-nav-link
                         :href="route('calorie-goals.edit')"
                         :active="request()->routeIs('calorie-goals.*')"
                     >
-                        Meta calorica
+                        <i class="bi bi-bullseye me-1"></i>Meta calorica
                     </x-nav-link>
 
                     <x-nav-link
                         :href="route('nutrition-history.index')"
                         :active="request()->routeIs('nutrition-history.*')"
                     >
-                        Historial nutricional
+                        <i class="bi bi-graph-up-arrow me-1"></i>Historial nutricional
                     </x-nav-link>
                     <x-nav-link
                         :href="route('member-memberships.index')"
                         :active="request()->routeIs('member-memberships.*')"
                     >
-                        Membresías
+                        <i class="bi bi-card-checklist me-1"></i>Membresías
                     </x-nav-link>
 
                 @endif
@@ -206,21 +216,22 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 <x-nav-link
                     :href="route('trainer-classes.index')"
                     :active="request()->routeIs('trainer-classes.*')">
-                    Mis clases
+                    <i class="bi bi-calendar3 me-1"></i>Mis clases
                 </x-nav-link>
 
                 <x-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')">
-                    Mis socios asignados
+                    <i class="bi bi-person-lines-fill me-1"></i>Mis socios asignados
                 </x-nav-link>
                 @endif
 
             </div>
 
             <!-- Settings Dropdown (desktop) -->
-            <div class="navbar-nav ms-auto d-none d-sm-flex" >
+            <div class="navbar-nav ms-auto d-none d-xxl-flex">
                 <x-dropdown align="right">
                     <x-slot name="trigger">
-                        <button class="{{ $theme['dropdown'] }} d-flex align-items-center " >
+                        <button class="{{ $theme['dropdown'] }} d-flex align-items-center">
+                            <i class="bi bi-person-circle me-1"></i>
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <svg class="ms-1" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -230,9 +241,9 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         </button>
                     </x-slot>
 
-                    <x-slot name="content" >
+                    <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Mi Perfil') }}
+                            <i class="bi bi-person-circle me-1"></i>{{ __('Mi Perfil') }}
                         </x-dropdown-link>
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -240,7 +251,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Cerrar sesión') }}
+                                <i class="bi bi-box-arrow-right me-1"></i>{{ __('Cerrar sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -248,16 +259,16 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
             </div>
 
             <!-- Responsive Settings Options (mobile, dentro del collapse) -->
-            <div class="d-sm-none pt-3 mt-3 border-top {{ $theme['mobileBorder'] }}">
+            <div class="d-xxl-none pt-3 mt-3 border-top {{ $theme['mobileBorder'] }}">
                 <div class="px-2">
                     <div class="fw-medium {{ $theme['mobileName'] }}">{{ Auth::user()->first_name }} {{
                         Auth::user()->last_name }}</div>
                     <div class="small {{ $theme['mobileEmail'] }}">{{ Auth::user()->email }}</div>
                 </div>
 
-                <div class="navbar-nav mt-2 ">
+                <div class="navbar-nav mt-2">
                     <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
+                        <i class="bi bi-person-circle me-1"></i>{{ __('Mi Perfil') }}
                     </x-responsive-nav-link>
 
                     <form method="POST" action="{{ route('logout') }}">
@@ -265,7 +276,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                             this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            <i class="bi bi-box-arrow-right me-1"></i>{{ __('Cerrar sesión') }}
                         </x-responsive-nav-link>
                     </form>
                 </div>

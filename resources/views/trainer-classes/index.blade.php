@@ -1,13 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h2 class="mb-0">
-                Mis clases
-            </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0">
+                    <i class="bi bi-calendar2-week me-2"></i>Mis clases
+                </h2>
 
-            <small class="text-muted">
-                Consulta y administra tus sesiones asignadas
-            </small>
+                <small class="text-muted">
+                    Consulta y administra tus sesiones asignadas
+                </small>
+            </div>
         </div>
     </x-slot>
 
@@ -86,7 +88,7 @@
                                             ) }}"
                                             class="btn btn-sm btn-primary"
                                         >
-                                            Gestionar
+                                            <i class="bi bi-arrow-right-circle"></i> Gestionar
                                         </a>
 
                                     </td>
@@ -98,8 +100,9 @@
                                 <tr>
                                     <td
                                         colspan="7"
-                                        class="text-center py-4 text-muted"
+                                        class="text-center py-5 text-muted"
                                     >
+                                        <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                                         No tienes sesiones asignadas.
                                     </td>
                                 </tr>

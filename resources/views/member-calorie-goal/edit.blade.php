@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Meta calorica</h2>
+            <h2 class="mb-0"><i class="bi bi-bullseye me-2"></i>Meta calorica</h2>
             <small class="text-muted">
                 Define cuantas calorias quieres consumir al dia segun tu objetivo
             </small>
@@ -107,7 +107,7 @@
 
                     <div class="d-flex justify-content-end mt-4">
                         <x-primary-button>
-                            Guardar meta
+                            <i class="bi bi-check-lg me-1"></i>Guardar meta
                         </x-primary-button>
                     </div>
 

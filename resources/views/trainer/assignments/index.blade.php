@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Mis socios asignados') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>{{ __('Mis socios asignados') }}</h2>
                 <small class="text-muted">
                     {{ __('Lista de socios asignados al entrenador') }}
                 </small>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('assignments.history') }}" class="btn btn-info">
-                    {{ __('Historial') }}
+                <a href="{{ route('assignments.history') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-clock-history"></i> {{ __('Historial') }}
                 </a>
             </div>
         </div>
@@ -59,14 +59,15 @@
                                         <div class="d-flex justify-content-end gap-1 flex-nowrap">
                                             <a href="{{ route('assignments.show', $assignment) }}"
                                                 class="btn btn-sm btn-outline-primary">
-                                                Ver detalle
+                                                <i class="bi bi-eye"></i> Ver detalle
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">
+                                    <td colspan="6" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                                         {{ __('No se encontraron asignaciones activas.') }}
                                     </td>
                                 </tr>

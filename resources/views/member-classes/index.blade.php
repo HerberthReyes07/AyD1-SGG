@@ -1,13 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div>
-            <h2 class="mb-0">
-                Clases disponibles
-            </h2>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0">
+                    <i class="bi bi-calendar-check me-2"></i>Clases disponibles
+                </h2>
 
-            <small class="text-muted">
-                Consulta e inscribete en las proximas clases grupales
-            </small>
+                <small class="text-muted">
+                    Consulta e inscribete en las proximas clases grupales
+                </small>
+            </div>
         </div>
     </x-slot>
 
@@ -116,7 +118,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Buscar
+                                <i class="bi bi-search me-1"></i>Buscar
                             </button>
 
                         </div>
@@ -185,13 +187,13 @@
                                 @if ($isEnrolled)
 
                                     <span class="badge bg-success">
-                                        Inscrito
+                                        <i class="bi bi-check-circle me-1"></i>Inscrito
                                     </span>
 
                                 @elseif ($isWaiting)
 
                                     <span class="badge bg-warning text-dark">
-                                        En espera
+                                        <i class="bi bi-hourglass-split me-1"></i>En espera
                                     </span>
 
                                 @endif
@@ -307,7 +309,7 @@
                                         type="submit"
                                         class="btn btn-outline-danger w-100"
                                     >
-                                        Cancelar inscripcion
+                                        <i class="bi bi-x-circle me-1"></i>Cancelar inscripcion
                                     </button>
 
                                 </form>
@@ -329,7 +331,7 @@
                                         type="submit"
                                         class="btn btn-outline-danger w-100"
                                     >
-                                        Salir de lista de espera
+                                        <i class="bi bi-x-circle me-1"></i>Salir de lista de espera
                                     </button>
 
                                 </form>
@@ -352,9 +354,9 @@
                                     >
 
                                         @if ($available > 0)
-                                            Inscribirme
+                                            <i class="bi bi-check-circle me-1"></i>Inscribirme
                                         @else
-                                            Unirme a lista de espera
+                                            <i class="bi bi-hourglass-split me-1"></i>Unirme a lista de espera
                                         @endif
 
                                     </button>
@@ -376,6 +378,7 @@
                     <div class="card shadow-sm">
 
                         <div class="card-body text-center py-5 text-muted">
+                            <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                             No hay clases disponibles.
                         </div>
 

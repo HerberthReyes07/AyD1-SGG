@@ -1,20 +1,31 @@
 <x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0"><i class="bi bi-list-check me-2"></i>Nueva rutina</h2>
+                <small class="text-muted">Crea una rutina de ejercicios para este socio</small>
+            </div>
+            <a href="{{ route('assignments.show', $trainerAssignment) }}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+    </x-slot>
+
     <div class="container py-4">
-        <h1 class="h4 mb-4">Nueva rutina</h1>
 
         <form method="POST" action="{{ route('assignments.routines.store', $trainerAssignment) }}">
             @csrf
 
-            <div class="card mb-4">
+            <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nombre de la rutina</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                            name="name" value="{{ old('name') }}" required>
+                        <x-input-label for="name" :value="__('Nombre de la rutina')" />
+                        <x-text-input id="name" class="@error('name') is-invalid @enderror" type="text"
+                            name="name" :value="old('name')" required />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Descripción</label>
+                        <x-input-label for="description" :value="__('Descripción')" />
                         <textarea class="form-control" id="description" name="description"
                             rows="2">{{ old('description') }}</textarea>
                     </div>
@@ -22,7 +33,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h6 mb-0">Ejercicios</h2>
+                <h2 class="h6 mb-0"><i class="bi bi-list-check me-1"></i> Ejercicios</h2>
                 <button type="button" class="btn btn-sm btn-outline-primary" id="add-exercise">
                     <i class="bi bi-plus-lg"></i> Agregar ejercicio
                 </button>
@@ -77,7 +88,7 @@
                 <a href="{{ route('assignments.show', $trainerAssignment) }}" class="btn btn-outline-secondary">
                     Cancelar
                 </a>
-                <button type="submit" class="btn btn-primary">Guardar rutina</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar rutina</button>
             </div>
         </form>
     </div>

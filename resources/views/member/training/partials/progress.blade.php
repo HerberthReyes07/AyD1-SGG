@@ -1,15 +1,16 @@
 <div class="card mb-4">
     <div class="card-body">
-        <h2 class="h6 mb-3">Evolución en el tiempo</h2>
+        <h2 class="h6 mb-3"><i class="bi bi-graph-up-arrow me-1"></i>Evolución en el tiempo</h2>
         <canvas id="progress-chart" height="90"></canvas>
     </div>
 </div>
 
 <div class="card">
     <div class="card-body">
-        <h2 class="h6 mb-3">Mediciones de tu asignación actual</h2>
+        <h2 class="h6 mb-3"><i class="bi bi-rulers me-1"></i>Mediciones de tu asignación actual</h2>
         @if ($measurements->isEmpty())
         <p class="text-secondary text-center mb-0 py-3">
+            <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
             Tu entrenador todavía no ha registrado mediciones.
         </p>
         @else

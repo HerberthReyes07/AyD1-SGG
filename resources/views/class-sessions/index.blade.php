@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
                 <h2 class="mb-0">
-                    Sesiones - {{ $groupClass->name }}
+                    <i class="bi bi-list-check me-2"></i>Sesiones - {{ $groupClass->name }}
                 </h2>
 
                 <small class="text-muted">
@@ -15,7 +15,7 @@
                 href="{{ route('group-classes.index') }}"
                 class="btn btn-outline-secondary"
             >
-                Volver a clases
+                <i class="bi bi-arrow-left me-1"></i>Volver a clases
             </a>
         </div>
     </x-slot>
@@ -39,12 +39,19 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar"
+                ></button>
             </div>
         @endif
 
@@ -148,7 +155,7 @@
                                 type="submit"
                                 class="btn btn-primary w-100"
                             >
-                                Programar
+                                <i class="bi bi-plus-lg me-1"></i>Programar
                             </button>
 
                         </div>
@@ -249,7 +256,7 @@
                                             href="{{ route('class-enrollments.index', $session) }}"
                                             class="btn btn-sm btn-outline-secondary"
                                         >
-                                            Inscripciones
+                                            <i class="bi bi-people me-1"></i>Inscripciones
                                         </a>
 
                                         @if (
@@ -263,7 +270,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#reschedule{{ $session->id }}"
                                             >
-                                                Reprogramar
+                                                <i class="bi bi-calendar-event me-1"></i>Reprogramar
                                             </button>
 
                                             <button
@@ -272,7 +279,7 @@
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#cancel{{ $session->id }}"
                                             >
-                                                Cancelar
+                                                <i class="bi bi-x-circle me-1"></i>Cancelar
                                             </button>
 
                                         @endif
@@ -355,17 +362,17 @@
 
                                                     <button
                                                         type="button"
-                                                        class="btn btn-secondary"
+                                                        class="btn btn-outline-secondary"
                                                         data-bs-dismiss="modal"
                                                     >
-                                                        Cerrar
+                                                        <i class="bi bi-x-lg me-1"></i>Cerrar
                                                     </button>
 
                                                     <button
                                                         type="submit"
                                                         class="btn btn-primary"
                                                     >
-                                                        Reprogramar
+                                                        <i class="bi bi-check-lg me-1"></i>Reprogramar
                                                     </button>
 
                                                 </div>
@@ -431,17 +438,17 @@
 
                                                     <button
                                                         type="button"
-                                                        class="btn btn-secondary"
+                                                        class="btn btn-outline-secondary"
                                                         data-bs-dismiss="modal"
                                                     >
-                                                        Cerrar
+                                                        <i class="bi bi-x-lg me-1"></i>Cerrar
                                                     </button>
 
                                                     <button
                                                         type="submit"
                                                         class="btn btn-danger"
                                                     >
-                                                        Cancelar sesion
+                                                        <i class="bi bi-x-circle me-1"></i>Cancelar sesion
                                                     </button>
 
                                                 </div>
@@ -461,6 +468,7 @@
                                         colspan="5"
                                         class="text-center py-4 text-muted"
                                     >
+                                        <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
                                         No hay sesiones programadas.
                                     </td>
 

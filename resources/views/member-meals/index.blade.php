@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h2 class="mb-0">Mis comidas</h2>
+                <h2 class="mb-0"><i class="bi bi-egg-fried me-2"></i>Mis comidas</h2>
                 <small class="text-muted">
                     Registra lo que comes y revisa tus totales diarios
                 </small>
@@ -12,7 +12,7 @@
                 href="{{ route('member-meals.create') }}"
                 class="btn btn-primary"
             >
-                Registrar comida
+                <i class="bi bi-plus-lg me-1"></i>Registrar comida
             </a>
         </div>
     </x-slot>
@@ -53,7 +53,7 @@
 
                         <div class="col-md-2 d-flex align-items-end">
                             <x-primary-button class="w-100 justify-content-center">
-                                Ver
+                                <i class="bi bi-search me-1"></i>Ver
                             </x-primary-button>
                         </div>
 
@@ -92,7 +92,7 @@
                 @endif
 
                 <a href="{{ route('calorie-goals.edit') }}" class="btn btn-sm btn-outline-primary">
-                    {{ $goal ? 'Ajustar meta' : 'Definir meta' }}
+                    <i class="bi bi-bullseye me-1"></i>{{ $goal ? 'Ajustar meta' : 'Definir meta' }}
                 </a>
             </div>
         </div>
@@ -143,7 +143,7 @@
 
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white">
-                <strong>Desglose por tiempo de comida</strong>
+                <strong><i class="bi bi-bar-chart-line me-1"></i>Desglose por tiempo de comida</strong>
             </div>
 
             <div class="card-body p-0">
@@ -184,7 +184,7 @@
             @if ($mealsOfType->isNotEmpty())
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white">
-                        <strong>{{ $mealType->label() }}</strong>
+                        <strong><i class="bi bi-egg-fried me-1"></i>{{ $mealType->label() }}</strong>
                     </div>
 
                     <div class="card-body p-0">
@@ -227,7 +227,7 @@
                                                                 href="{{ route('member-meals.edit', $meal) }}"
                                                                 class="btn btn-sm btn-outline-primary"
                                                             >
-                                                                Editar
+                                                                <i class="bi bi-pencil me-1"></i>Editar
                                                             </a>
 
                                                             <button
@@ -236,7 +236,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#delete-meal-{{ $meal->id }}"
                                                             >
-                                                                Eliminar
+                                                                <i class="bi bi-trash me-1"></i>Eliminar
                                                             </button>
                                                         </div>
                                                     </td>
@@ -265,7 +265,7 @@
                                                     </x-secondary-button>
 
                                                     <x-danger-button class="ms-3">
-                                                        Eliminar
+                                                        <i class="bi bi-trash me-1"></i>Eliminar
                                                     </x-danger-button>
                                                 </div>
                                             </form>
@@ -283,6 +283,7 @@
         @if ($meals->isEmpty())
             <div class="card shadow-sm">
                 <div class="card-body text-center text-muted py-4">
+                    <i class="bi bi-inbox d-block mb-2" style="font-size: 2.5rem;"></i>
                     No has registrado comidas para esta fecha.
                 </div>
             </div>

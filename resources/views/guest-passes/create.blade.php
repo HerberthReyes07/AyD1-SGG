@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="mb-0">Nuevo pase de invitado</h2>
+            <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>Nuevo pase de invitado</h2>
             <small class="text-muted">
                 Registra una visita de prueba
             </small>
@@ -19,66 +19,48 @@
                     <div class="row g-3">
 
                         <div class="col-md-6">
-                            <label for="guest_name" class="form-label">
-                                Nombre completo
-                            </label>
+                            <x-input-label for="guest_name" :value="__('Nombre completo')" />
 
-                            <input
-                                type="text"
-                                class="form-control @error('guest_name') is-invalid @enderror"
+                            <x-text-input
                                 id="guest_name"
                                 name="guest_name"
-                                value="{{ old('guest_name') }}"
-                            >
+                                type="text"
+                                class="mt-1 d-block w-100 @error('guest_name') is-invalid @enderror"
+                                :value="old('guest_name')"
+                            />
 
-                            @error('guest_name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error :messages="$errors->get('guest_name')" class="mt-1" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="dpi" class="form-label">
-                                DPI
-                            </label>
+                            <x-input-label for="dpi" :value="__('DPI')" />
 
-                            <input
+                            <x-text-input
+                                id="dpi"
+                                name="dpi"
                                 type="text"
                                 inputmode="numeric"
                                 maxlength="13"
-                                class="form-control @error('dpi') is-invalid @enderror"
-                                id="dpi"
-                                name="dpi"
-                                value="{{ old('dpi') }}"
+                                class="mt-1 d-block w-100 @error('dpi') is-invalid @enderror"
+                                :value="old('dpi')"
                                 placeholder="13 digitos"
-                            >
+                            />
 
-                            @error('dpi')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error :messages="$errors->get('dpi')" class="mt-1" />
                         </div>
 
                         <div class="col-md-3">
-                            <label for="visit_date" class="form-label">
-                                Fecha de visita
-                            </label>
+                            <x-input-label for="visit_date" :value="__('Fecha de visita')" />
 
-                            <input
-                                type="date"
-                                class="form-control @error('visit_date') is-invalid @enderror"
+                            <x-text-input
                                 id="visit_date"
                                 name="visit_date"
-                                value="{{ old('visit_date', now()->format('Y-m-d')) }}"
-                            >
+                                type="date"
+                                class="mt-1 d-block w-100 @error('visit_date') is-invalid @enderror"
+                                :value="old('visit_date', now()->format('Y-m-d'))"
+                            />
 
-                            @error('visit_date')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-input-error :messages="$errors->get('visit_date')" class="mt-1" />
                         </div>
 
                     </div>
@@ -87,7 +69,7 @@
 
                         <a
                             href="{{ route('guest-passes.index') }}"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-secondary"
                         >
                             Cancelar
                         </a>
@@ -96,7 +78,7 @@
                             type="submit"
                             class="btn btn-primary"
                         >
-                            Registrar pase
+                            <i class="bi bi-check-lg me-1"></i>Registrar pase
                         </button>
 
                     </div>

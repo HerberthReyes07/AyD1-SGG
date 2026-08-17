@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <h2 class="mb-0">{{ __('Reasignar entrenador') }}</h2>
+                <h2 class="mb-0"><i class="bi bi-arrow-repeat me-2"></i>{{ __('Reasignar entrenador') }}</h2>
                 <small class="text-muted">
                     {{ __('Cambia el entrenador activo y registra el motivo de la reasignación') }}
                 </small>
             </div>
 
-            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-secondary">
-                {{ __('Volver al listado') }}
+            <a href="{{ route('trainer-assignments.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>{{ __('Volver al listado') }}
             </a>
         </div>
     </x-slot>
@@ -105,13 +105,15 @@
                                                         data-id="{{ $trainer->user_id }}"
                                                         data-name="{{ $trainer->user->first_name }} {{ $trainer->user->last_name }}"
                                                         data-specialty="{{ $trainer->specialty->name }}">
-                                                        {{ __('Seleccionar') }}
+                                                        <i class="bi bi-check-lg me-1"></i>{{ __('Seleccionar') }}
                                                     </button>
                                                 </td>
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="4" class="text-center py-4 text-muted">{{ __('No hay otros
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
+                                                    {{ __('No hay otros
                                                     entrenadores disponibles.') }}</td>
                                             </tr>
                                             @endforelse
@@ -131,10 +133,10 @@
                                     <x-input-error :messages="$errors->get('reassignment_reason')" class="mt-2" />
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step1">&larr; {{
+                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step1"><i class="bi bi-arrow-left me-1"></i>{{
                                         __('Volver') }}</button>
                                     <button type="button" class="btn btn-primary" id="next-to-step3">{{ __('Continuar')
-                                        }} &rarr;</button>
+                                        }} <i class="bi bi-arrow-right ms-1"></i></button>
                                 </div>
                             </div>
 
@@ -167,9 +169,9 @@
                                     </div>
                                 </div>
                                 <div class="mt-3 d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step2">&larr; {{
+                                    <button type="button" class="btn btn-outline-secondary" id="back-to-step2"><i class="bi bi-arrow-left me-1"></i>{{
                                         __('Volver') }}</button>
-                                    <button type="submit" class="btn btn-success">{{ __('Confirmar reasignación')
+                                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-1"></i>{{ __('Confirmar reasignación')
                                         }}</button>
                                 </div>
                             </div>
@@ -197,7 +199,7 @@
             const clearRowSelection = () => {
                 document.querySelectorAll('#step1 tbody tr').forEach(row => {
                     row.classList.remove('table-primary');
-                    row.querySelector('.select-trainer').textContent = '{{ __("Seleccionar") }}';
+                    row.querySelector('.select-trainer').innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionar") }}';
                     row.querySelector('.select-trainer').disabled = false;
                 });
             };
@@ -225,7 +227,7 @@
 
                     clearRowSelection();
                     this.closest('tr').classList.add('table-primary');
-                    this.textContent = '{{ __("Seleccionado") }}';
+                    this.innerHTML = '<i class="bi bi-check-lg me-1"></i>{{ __("Seleccionado") }}';
                     this.disabled = true;
 
                     step2TabBtn.disabled = false;

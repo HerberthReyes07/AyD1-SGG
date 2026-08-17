@@ -3,6 +3,7 @@
     <x-slot name="header">
         <div>
             <h2 class="mb-0">
+                <i class="bi bi-person-badge text-primary me-2"></i>
                 Reporte de pases de invitado
             </h2>
 
@@ -210,6 +211,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>
                                             No hay registros para el rango seleccionado.
                                         </td>
                                     </tr>

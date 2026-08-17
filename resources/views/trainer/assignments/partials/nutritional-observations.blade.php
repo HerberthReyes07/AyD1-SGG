@@ -1,16 +1,17 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h6 mb-0">Observaciones nutricionales</h2>
+    <h2 class="h6 mb-0"><i class="bi bi-chat-square-text me-1"></i> Observaciones nutricionales</h2>
     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#nutritional-observation">
-        Agregar observacion
+        <i class="bi bi-plus-lg"></i> Agregar observacion
     </button>
 </div>
 
 <div class="card">
     <div class="card-body">
         @if ($observations->isEmpty())
-            <p class="text-secondary text-center mb-0 py-3">
+            <div class="text-secondary text-center py-3">
+                <i class="bi bi-inbox display-6 d-block mb-2 opacity-50"></i>
                 Todavia no has dejado observaciones para este socio.
-            </p>
+            </div>
         @else
             @foreach ($observations as $observation)
                 <div class="mb-3 pb-3 {{ ! $loop->last ? 'border-bottom' : '' }}">
@@ -46,7 +47,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Guardar</button>
         </div>
     </form>
 </x-modal>
