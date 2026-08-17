@@ -8,6 +8,7 @@ use App\Models\Promotion;
 use App\Services\PaymentService;
 use App\Repositories\PaymentRepository;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 
 class PaymentController extends Controller
@@ -26,9 +27,17 @@ class PaymentController extends Controller
     /**
      * Display a listing of payments.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $payments = $this->paymentRepository->getAll();
+        $user = $request->user();
+
+        if ($user->role?->name === 'member') {
+            $member = $user->member;
+            $payments = $member ? $this->paymentRepository->getByMemberId($member->user_id) : collect();
+        } else {
+            $payments = $this->paymentRepository->getAll();
+        }
+
         return view('payments.index', compact('payments'));
     }
 
@@ -84,13 +93,48 @@ class PaymentController extends Controller
     /**
      * Display the specified payment.
      */
-    public function show(string|int $id)
+    public function show(Request $request, string|int $id)
     {
         $payment = $this->paymentRepository->findById($id);
         if (!$payment) {
             abort(404, 'Pago no encontrado.');
         }
 
+        $user = $request->user();
+
+        // Strict authorization check for members
+        if ($user->role?->name === 'member') {
+            $member = $user->member;
+            if (!$member || (string) $payment->memberMembership?->member_id !== (string) $member->user_id) {
+                abort(403, 'No tienes permiso para acceder a este comprobante de pago.');
+            }
+        }
+
         return view('payments.show', compact('payment'));
+    }
+
+    /**
+     * Download PDF receipt for the specified payment.
+     */
+    public function downloadPdf(Request $request, string|int $id)
+    {
+        $payment = $this->paymentRepository->findById($id);
+        if (!$payment) {
+            abort(404, 'Pago no encontrado.');
+        }
+
+        $user = $request->user();
+
+        // Strict authorization check for members
+        if ($user->role?->name === 'member') {
+            $member = $user->member;
+            if (!$member || (string) $payment->memberMembership?->member_id !== (string) $member->user_id) {
+                abort(403, 'No tienes permiso para descargar este comprobante de pago.');
+            }
+        }
+
+        $pdf = Pdf::loadView('payments.pdf', compact('payment'));
+
+        return $pdf->download("comprobante-pago-{$payment->id}.pdf");
     }
 }

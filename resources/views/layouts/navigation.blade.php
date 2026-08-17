@@ -218,6 +218,13 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         <i class="bi bi-card-checklist me-1"></i>Membresías
                     </x-nav-link>
 
+                    <x-nav-link
+                        :href="route('payments.index')"
+                        :active="request()->routeIs('payments.*')"
+                    >
+                        <i class="bi bi-cash-coin me-1"></i>Mis pagos
+                    </x-nav-link>
+
                 @endif
 
                 @if (Auth::user()->role?->name === 'trainer')

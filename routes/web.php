@@ -445,10 +445,7 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'destroy']);
-    Route::resource('payments', PaymentController::class)
-        ->only(
-            ['index', 'create', 'store', 'show']
-        );
+    Route::resource('payments', PaymentController::class)->only(['create', 'store']);
     Route::get(
         '/memberships/member/{memberId}',
         [MembershipController::class, 'memberMemberships']
@@ -463,6 +460,23 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/memberships/{id}/reactivate',
         [MembershipController::class, 'reactivate']
     )->name('memberships.reactivate');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Shared Payments (Admin, Receptionist, Member)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:admin,receptionist,member'])->group(function () {
+    Route::get('/payments', [PaymentController::class, 'index'])
+        ->name('payments.index');
+
+    Route::get('/payments/{id}', [PaymentController::class, 'show'])
+        ->name('payments.show');
+
+    Route::get('/payments/{id}/pdf', [PaymentController::class, 'downloadPdf'])
+        ->name('payments.pdf');
 });
 
 /*
