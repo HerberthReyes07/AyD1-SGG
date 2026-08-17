@@ -44,7 +44,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="ps-4">Plan</th>
-                                <th>Precio</th>
+                                <th>Monto Pagado</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
                                 <th>Estado</th>
@@ -54,6 +54,10 @@
 
                         <tbody>
                             @forelse ($memberships as $membership)
+                            @php
+                                $lastPayment = $membership->payments->last();
+                                $amountPaid = $lastPayment ? $lastPayment->amount : $membership->plan?->price;
+                            @endphp
                             <tr>
                                 <td class="ps-4">
                                     <strong>
@@ -62,7 +66,17 @@
                                 </td>
 
                                 <td>
-                                    Q{{ number_format($membership->plan?->price, 2) }}
+                                    <strong class="text-dark">Q{{ number_format($amountPaid, 2) }}</strong>
+                                    @if ($lastPayment?->promotion)
+                                        <div class="small text-primary">
+                                            <i class="bi bi-tag-fill me-1"></i>{{ $lastPayment->promotion->name }}
+                                        </div>
+                                    @endif
+                                    @if ($membership->plan && $lastPayment && $lastPayment->amount != $membership->plan->price)
+                                        <div class="small text-muted text-decoration-line-through">
+                                            Q{{ number_format($membership->plan->price, 2) }}
+                                        </div>
+                                    @endif
                                 </td>
 
                                 <td>

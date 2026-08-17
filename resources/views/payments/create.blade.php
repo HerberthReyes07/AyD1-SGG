@@ -58,16 +58,10 @@
                             <div class="mb-3">
                                 <x-input-label for="plan_id" class="fw-bold" :value="__('2. Seleccionar Plan de Membresía')" />
                                 <select class="form-select @error('plan_id') is-invalid @enderror" id="plan_id" name="plan_id" required>
-                                    <option value="" data-price="0" data-duration="0" data-plan-name="" data-period="" data-discount="0"> -- Seleccionar Plan -- </option>
+                                    <option value="" data-price="0" data-duration="0" data-name=""> -- Seleccionar Plan -- </option>
                                     @foreach ($plans as $plan)
-                                        @php
-                                            [$name, $period] = array_pad(explode(' - ', $plan->name), 2, '');
-                                            $names = ['Basic' => 'Básico', 'Premium' => 'Premium', 'Elite' => 'Élite'];
-                                            $periods = ['Monthly' => 'Mensual', 'Quarterly' => 'Trimestral', 'Annual' => 'Anual'];
-                                            $discounts = ['Monthly' => 0, 'Quarterly' => 10, 'Annual' => 20];
-                                        @endphp
-                                        <option value="{{ $plan->id }}" data-price="{{ $plan->price }}" data-duration="{{ $plan->duration_months }}" data-plan-name="{{ $names[$name] ?? $name }}" data-period="{{ $periods[$period] ?? $period }}" data-discount="{{ $discounts[$period] ?? 0 }}" @selected(old('plan_id', request('plan_id')) == $plan->id)>
-                                            {{ $names[$name] ?? $name }} - {{ $periods[$period] ?? $period }} - Q{{ number_format($plan->price, 2) }}
+                                        <option value="{{ $plan->id }}" data-price="{{ $plan->price }}" data-duration="{{ $plan->duration_months }}" data-name="{{ $plan->name }}" @selected(old('plan_id', request('plan_id')) == $plan->id)>
+                                            {{ $plan->name }} - Q{{ number_format($plan->price, 2) }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -92,14 +86,14 @@
                                 @enderror
                             </div>
 
-                            <!-- Selector de Promoción (Opcional, de rastreo) -->
+                            <!-- Selector de Promoción (Opcional) -->
                             <div class="mb-3">
                                 <x-input-label for="promotion_id" class="fw-bold" :value="__('4. Promoción (Opcional)')" />
                                 <select class="form-select @error('promotion_id') is-invalid @enderror" id="promotion_id" name="promotion_id">
-                                    <option value="">Ninguna promoción seleccionada</option>
+                                    <option value="" data-type="" data-value="0">Ninguna promoción seleccionada</option>
                                     @foreach ($promotions as $promotion)
-                                    <option value="{{ $promotion->id }}" @selected(old('promotion_id')==$promotion->id)>
-                                        {{ $promotion->name }} (Tipo: {{ $promotion->type->label() }}, Valor: {{ $promotion->value }})
+                                    <option value="{{ $promotion->id }}" data-type="{{ $promotion->type->value }}" data-value="{{ $promotion->value }}" @selected(old('promotion_id')==$promotion->id)>
+                                        {{ $promotion->name }} ({{ $promotion->type->label() }}: {{ $promotion->type->value === 'percentage' ? number_format($promotion->value, 0) . '%' : 'Q' . number_format($promotion->value, 2) }})
                                     </option>
                                     @endforeach
                                 </select>
@@ -140,14 +134,14 @@
 
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Descuento:</span>
-                            <span id="summaryDiscount" class="fw-semibold">-</span>
+                            <span id="summaryDiscount" class="fw-semibold">Sin descuento</span>
                         </div>
 
                         <hr>
 
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="fs-5 fw-bold text-dark">Total a pagar:</span>
-                            <span id="summaryPrice" class="fs-4 fw-bold text-primary">$0.00</span>
+                            <span id="summaryPrice" class="fs-4 fw-bold text-primary">Q0.00</span>
                         </div>
 
                     </div>
@@ -156,10 +150,11 @@
         </div>
     </div>
 
-    <!-- Script simple para actualizar resumen en tiempo real sin recargar -->
+    <!-- Script para actualizar el resumen en tiempo real según plan y promoción -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const plan = document.getElementById('plan_id');
+            const planSelect = document.getElementById('plan_id');
+            const promoSelect = document.getElementById('promotion_id');
             const summary = {
                 name: document.getElementById('summaryPlanName'),
                 duration: document.getElementById('summaryDuration'),
@@ -168,20 +163,44 @@
             };
 
             function updateSummary() {
-                const option = plan.options[plan.selectedIndex];
-                if (!plan.value) {
+                const planOpt = planSelect.options[planSelect.selectedIndex];
+                if (!planSelect.value) {
                     summary.name.textContent = 'Ninguno';
                     summary.duration.textContent = '-';
-                    summary.discount.textContent = '-';
+                    summary.discount.textContent = 'Sin descuento';
                     summary.price.textContent = 'Q0.00';
                     return;
                 }
-                summary.name.textContent = option.dataset.planName;
-                summary.duration.textContent = `${option.dataset.period} (${option.dataset.duration} mes(es))`;
-                summary.discount.textContent = `${option.dataset.discount}%`;
-                summary.price.textContent = `Q${parseFloat(option.dataset.price).toFixed(2)}`;
+
+                const basePrice = parseFloat(planOpt.dataset.price) || 0;
+                const duration = planOpt.dataset.duration || 0;
+                summary.name.textContent = planOpt.dataset.name;
+                summary.duration.textContent = `${duration} mes(es)`;
+
+                let discountText = 'Sin descuento';
+                let finalPrice = basePrice;
+
+                const promoOpt = promoSelect.options[promoSelect.selectedIndex];
+                if (promoSelect.value && promoOpt) {
+                    const type = promoOpt.dataset.type;
+                    const val = parseFloat(promoOpt.dataset.value) || 0;
+
+                    if (type === 'percentage') {
+                        const discountAmt = basePrice * (val / 100);
+                        finalPrice = Math.max(0, basePrice - discountAmt);
+                        discountText = `${val}% (-Q${discountAmt.toFixed(2)})`;
+                    } else if (type === 'fixed_amount') {
+                        finalPrice = Math.max(0, basePrice - val);
+                        discountText = `-Q${val.toFixed(2)}`;
+                    }
+                }
+
+                summary.discount.textContent = discountText;
+                summary.price.textContent = `Q${finalPrice.toFixed(2)}`;
             }
-            plan.addEventListener('change', updateSummary);
+
+            planSelect.addEventListener('change', updateSummary);
+            promoSelect.addEventListener('change', updateSummary);
             updateSummary();
         });
     </script>

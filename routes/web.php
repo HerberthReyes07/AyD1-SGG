@@ -22,7 +22,9 @@ use App\Http\Controllers\MemberMembershipController;
 use App\Http\Controllers\MemberNutritionHistoryController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipExpirationReportController;
+use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\PhysicalProgressController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Trainer\AssignmentController;
@@ -80,6 +82,25 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Membership Plans
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('membership-plans', MembershipPlanController::class)
+        ->only(['index', 'edit', 'update']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Promotions / Discounts
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('promotions', PromotionController::class)
+        ->except(['show', 'destroy']);
+
+    Route::patch('/promotions/{promotion}/toggle-status', [PromotionController::class, 'toggleStatus'])
+        ->name('promotions.toggle-status');
 
     /*
     |--------------------------------------------------------------------------
@@ -397,6 +418,12 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         [ClassEnrollmentController::class, 'cancel']
     )->name('class-enrollments.cancel');
 
+    Route::patch(
+        '/class-sessions/{session}/waitlist/{member}/cancel',
+        [ClassEnrollmentController::class, 'cancelWaitlist']
+    )->name('class-enrollments.waitlist.cancel');
+
+
     /*
     |--------------------------------------------------------------------------
     | Attendance
@@ -418,10 +445,7 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::resource('memberships', MembershipController::class)->only(['index', 'create', 'destroy']);
-    Route::resource('payments', PaymentController::class)
-        ->only(
-            ['index', 'create', 'store', 'show']
-        );
+    Route::resource('payments', PaymentController::class)->only(['create', 'store']);
     Route::get(
         '/memberships/member/{memberId}',
         [MembershipController::class, 'memberMemberships']
@@ -436,6 +460,23 @@ Route::middleware(['auth', 'role:admin,receptionist'])->group(function () {
         '/memberships/{id}/reactivate',
         [MembershipController::class, 'reactivate']
     )->name('memberships.reactivate');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Shared Payments (Admin, Receptionist, Member)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:admin,receptionist,member'])->group(function () {
+    Route::get('/payments', [PaymentController::class, 'index'])
+        ->name('payments.index');
+
+    Route::get('/payments/{id}', [PaymentController::class, 'show'])
+        ->name('payments.show');
+
+    Route::get('/payments/{id}/pdf', [PaymentController::class, 'downloadPdf'])
+        ->name('payments.pdf');
 });
 
 /*

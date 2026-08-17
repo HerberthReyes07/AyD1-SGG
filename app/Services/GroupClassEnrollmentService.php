@@ -12,6 +12,7 @@ use App\Models\ClassWaitlist;
 use App\Models\Member;
 use App\Models\MemberMembership;
 use App\Models\MembershipPlan;
+use App\Notifications\ClassWaitlistNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -482,33 +483,15 @@ class GroupClassEnrollmentService
 
         $next = $eligible[0]['waitlist'];
 
-        $enrollment = ClassEnrollment::where(
-            'member_id',
-            $next->member_id
-        )
-            ->where(
-                'class_session_id',
-                $session->id
-            )
-            ->first();
-
-        if ($enrollment) {
-            $enrollment->update([
-                'status' => ClassEnrollmentStatus::Enrolled,
-                'enrollment_date' => today(),
-            ]);
-        } else {
-            ClassEnrollment::create([
-                'member_id' => $next->member_id,
-                'class_session_id' => $session->id,
-                'enrollment_date' => today(),
-                'status' => ClassEnrollmentStatus::Enrolled,
-            ]);
-        }
-
+        // Mark as notified and send email — do NOT auto-enroll.
+        // The member must claim the spot through the normal enrollment flow.
         $next->update([
             'status' => WaitlistStatus::Notified,
         ]);
+
+        $next->member->user->notify(
+            new ClassWaitlistNotification($session)
+        );
 
         return $next;
     }

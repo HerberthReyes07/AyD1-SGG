@@ -90,6 +90,14 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                 @endif
 
                 @if (Auth::user()->role?->name === 'admin')
+                <x-nav-link :href="route('membership-plans.index')" :active="request()->routeIs('membership-plans.*')">
+                    <i class="bi bi-card-heading me-1"></i>Planes
+                </x-nav-link>
+
+                <x-nav-link :href="route('promotions.index')" :active="request()->routeIs('promotions.*')">
+                    <i class="bi bi-tags me-1"></i>Promociones
+                </x-nav-link>
+
                 <x-nav-link
                     :href="route('foods.index')"
                     :active="request()->routeIs('foods.*')"
@@ -208,6 +216,13 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                         :active="request()->routeIs('member-memberships.*')"
                     >
                         <i class="bi bi-card-checklist me-1"></i>Membresías
+                    </x-nav-link>
+
+                    <x-nav-link
+                        :href="route('payments.index')"
+                        :active="request()->routeIs('payments.*')"
+                    >
+                        <i class="bi bi-cash-coin me-1"></i>Mis pagos
                     </x-nav-link>
 
                 @endif

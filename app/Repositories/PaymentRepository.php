@@ -12,7 +12,8 @@ class PaymentRepository
      */
     public function getAll(): Collection
     {
-        return MembershipPayment::with(['memberMembership.member.user', 'paymentMethod', 'registeredBy'])
+        return MembershipPayment::with(['memberMembership.member.user', 'memberMembership.plan', 'paymentMethod', 'registeredBy', 'promotion'])
+            ->orderByDesc('id')
             ->get();
     }
 
@@ -21,7 +22,20 @@ class PaymentRepository
      */
     public function findById(int|string $id): ?MembershipPayment
     {
-        return MembershipPayment::with(['memberMembership.member.user', 'paymentMethod', 'registeredBy', 'promotion'])->find($id);
+        return MembershipPayment::with(['memberMembership.member.user', 'memberMembership.plan', 'paymentMethod', 'registeredBy', 'promotion'])->find($id);
+    }
+
+    /**
+     * Get all payments for a specific member.
+     */
+    public function getByMemberId(int|string $memberId): Collection
+    {
+        return MembershipPayment::whereHas('memberMembership', function ($q) use ($memberId) {
+            $q->where('member_id', $memberId);
+        })
+            ->with(['memberMembership.member.user', 'memberMembership.plan', 'paymentMethod', 'registeredBy', 'promotion'])
+            ->orderByDesc('id')
+            ->get();
     }
 
     /**

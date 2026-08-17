@@ -37,10 +37,10 @@ class ClassEnrollmentController extends Controller
                 'member.user',
                 'member.memberships.plan',
             ])
-            ->where(
-                'status',
-                WaitlistStatus::Waiting->value
-            )
+            ->whereIn('status', [
+                WaitlistStatus::Waiting->value,
+                WaitlistStatus::Notified->value,
+            ])
             ->orderBy('created_at')
             ->get();
 
@@ -95,6 +95,24 @@ class ClassEnrollmentController extends Controller
     ) {
         $result = $this->enrollmentService
             ->cancel($member, $session);
+
+        return redirect()
+            ->route(
+                'class-enrollments.index',
+                $session
+            )
+            ->with(
+                'success',
+                $result['message']
+            );
+    }
+
+    public function cancelWaitlist(
+        ClassSession $session,
+        Member $member
+    ) {
+        $result = $this->enrollmentService
+            ->cancelWaitlist($member, $session);
 
         return redirect()
             ->route(

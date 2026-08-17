@@ -65,9 +65,21 @@
                                     <span class="badge fs-6 {{ $statusClass }}">{{ $statusLabel }}</span>
                                 </div>
                             </div>
+                            @php
+                                $lastPayment = $membership->payments->last();
+                                $amountPaid = $lastPayment ? $lastPayment->amount : $membership->plan?->price;
+                            @endphp
                             <div class="col-sm-6">
-                                <label class="form-label text-muted small fw-bold mb-0">Precio del Plan</label>
-                                <p class="fs-5 fw-bold text-dark mb-0">Q{{ number_format($membership->plan?->price, 2) }}</p>
+                                <label class="form-label text-muted small fw-bold mb-0">Monto Pagado</label>
+                                <p class="fs-5 fw-bold text-dark mb-0">Q{{ number_format($amountPaid, 2) }}</p>
+                                @if($lastPayment?->promotion)
+                                    <div class="small text-primary mt-1">
+                                        <i class="bi bi-tag-fill me-1"></i>Promoción: {{ $lastPayment->promotion->name }}
+                                    </div>
+                                @endif
+                                @if($membership->plan && $lastPayment && $lastPayment->amount != $membership->plan->price)
+                                    <p class="text-muted mb-0 small">Precio base del plan: Q{{ number_format($membership->plan->price, 2) }}</p>
+                                @endif
                             </div>
                             <div class="col-sm-6">
                                 <label class="form-label text-muted small fw-bold mb-0">Duración</label>
