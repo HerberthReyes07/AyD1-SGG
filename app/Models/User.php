@@ -8,12 +8,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['role_id', 'first_name', 'last_name', 'email', 'password', 'phone_number', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
@@ -80,7 +80,6 @@ class User extends Authenticatable
         return $this->hasMany(MembershipStatusHistory::class, 'changed_by', 'id');
     }
 
-
     public function twoFactorCode(): HasOne
     {
         return $this->hasOne(TwoFactorCode::class);
@@ -92,7 +91,6 @@ class User extends Authenticatable
     |--------------------------------------------------------------------
     */
 
-  
     public function generateTwoFactorCode(TwoFactorChannel $channel): string
     {
         // random_int es criptográficamente seguro (a diferencia de rand()).
@@ -129,5 +127,21 @@ class User extends Authenticatable
     public function clearTwoFactorCode(): void
     {
         $this->twoFactorCode()->delete();
+    }
+
+    // le dice al canal de Twilio a que numero mandar el SMS, normalizado a formato internacional (+502 Guatemala por defecto)
+    public function routeNotificationForTwilio(): ?string
+    {
+        if (! $this->phone_number) {
+            return null;
+        }
+
+        $digits = preg_replace('/[^0-9+]/', '', $this->phone_number);
+
+        if (! str_starts_with($digits, '+')) {
+            $digits = '+502'.$digits;
+        }
+
+        return $digits;
     }
 }

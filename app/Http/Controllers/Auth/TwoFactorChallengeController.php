@@ -34,18 +34,29 @@ class TwoFactorChallengeController extends Controller
 
         $channel = TwoFactorChannel::from($request->string('channel')->toString());
 
-        // El SMS aún no está implementado.
-        if ($channel === TwoFactorChannel::Sms) {
+        if ($channel === TwoFactorChannel::Sms && ! $user->phone_number) {
             return back()->withErrors([
-                'channel' => 'El envío por SMS todavía no está disponible. Usa correo electrónico por ahora.',
+                'channel' => 'No tienes un numero de telefono registrado para recibir el codigo por SMS.',
             ]);
         }
 
         $code = $user->generateTwoFactorCode($channel);
 
-        $user->notify(new TwoFactorCodeNotification($code));
+        try {
+            $user->notify(new TwoFactorCodeNotification($code, $channel));
+        } catch (\Throwable $e) {
+            report($e);
 
-        return back()->with('status', 'Te enviamos un código a tu correo electrónico.');
+            return back()->withErrors([
+                'channel' => 'No se pudo enviar el codigo, intenta de nuevo o usa otro medio.',
+            ]);
+        }
+
+        $message = $channel === TwoFactorChannel::Sms
+            ? 'Te enviamos un código por SMS.'
+            : 'Te enviamos un código a tu correo electrónico.';
+
+        return back()->with('status', $message);
     }
 
     public function store(Request $request): RedirectResponse
