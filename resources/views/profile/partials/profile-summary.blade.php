@@ -4,7 +4,8 @@
         {{ mb_strtoupper(mb_substr($user->first_name, 0, 1).mb_substr($user->last_name, 0, 1)) }}
     </div>
     <h2 class="h5 mb-1">{{ $user->first_name }} {{ $user->last_name }}</h2>
-    <span class="badge text-bg-primary">
+    <hr>
+    <span class="badge text-bg-primary d-inline-block text-wrap" style="max-width: 100%; white-space: normal; word-break: break-word;">
         {{ $user->role?->description ?: ($user->role?->name ? ucfirst($user->role->name) : __('Sin rol')) }}
     </span>
 </div>

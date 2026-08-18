@@ -102,7 +102,7 @@ $isReportsActive = request()->routeIs('physical-progress.*') || request()->route
                     :href="route('foods.index')"
                     :active="request()->routeIs('foods.*')"
                 >
-                    <i class="bi bi-egg-fried me-1"></i>Catálogo de alimentos
+                    <i class="bi bi-egg-fried me-1"></i>Alimentos
                 </x-nav-link>
 
                 <x-nav-link :href="route('employees.index')" :active="request()->routeIs('employees.*')">
