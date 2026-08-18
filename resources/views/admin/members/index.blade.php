@@ -1,0 +1,106 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0"><i class="bi bi-people me-2"></i>{{ __('Gestión de Socios') }}</h2>
+                <small class="text-muted">
+                    {{ __('Administra la información de los socios') }}
+                </small>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{{ route('members.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i>{{ __('Agregar Socio') }}
+                </a>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="py-4">
+        <div class="container-xl">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="px-4 py-3">{{ __('Nombre') }}</th>
+                                    <th class="py-3">{{ __('Email') }}</th>
+                                    <th class="py-3">{{ __('Teléfono') }}</th>
+                                    <th class="py-3">{{ __('Rol') }}</th>
+                                    <th class="py-3">{{ __('Estado') }}</th>
+                                    <th class="px-4 py-3 text-end">{{ __('Acciones') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($members as $member)
+                                    <tr>
+                                        <td class="px-4 py-3 fw-medium">
+                                            {{ $member->first_name }} {{ $member->last_name }}
+                                        </td>
+                                        <td>{{ $member->email }}</td>
+                                        <td>{{ $member->phone_number ?? '-' }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ ucfirst($member->role->name) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($member->is_active)
+                                                <span class="badge bg-success">{{ __('Activo') }}</span>
+                                            @else
+                                                <span class="badge bg-danger">{{ __('Inactivo') }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-3 text-end">
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="bi bi-pencil-square me-1"></i>{{ __('Editar') }}
+                                                </a>
+                                                <a href="{{ route('members.show', $member->id) }}" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="bi bi-eye me-1"></i>{{ __('Ver') }}
+                                                </a>
+                                                @if($member->is_active)
+                                                    <form method="POST" action="{{ route('members.destroy', $member->id) }}" onsubmit="return confirm('¿De verdad desea desactivar a este socio?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="bi bi-x-circle me-1"></i>{{ __('Desactivar') }}
+                                                        </button>
+                                                    </form>
+                                                @else($member->is_active)
+
+                                                    <form method="POST" action="{{ route('members.activate', $member->id) }}" onsubmit="return confirm('¿De verdad desea activar a este socio?');">
+                                                        @csrf
+                                                        @method('POST')
+                                                        <button type="submit" class="btn btn-sm btn-outline-success">
+                                                            <i class="bi bi-check-circle me-1"></i>{{ __('Activar') }}
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="bi bi-inbox text-muted d-block mb-2" style="font-size: 2.5rem;"></i>
+                                            {{ __('No se encontraron socios registrados.') }}
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
